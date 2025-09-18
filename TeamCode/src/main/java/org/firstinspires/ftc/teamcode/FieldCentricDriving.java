@@ -70,19 +70,19 @@ public class FieldCentricDriving extends OpMode {
 
         //movement
 
-        right_front_velocity = gamepad1.left_stick_y - gamepad1.left_stick_x;
-        left_front_velocity = gamepad1.left_stick_y + gamepad1.left_stick_x;
+        right_front_velocity = gamepad1.left_stick_y + gamepad1.left_stick_x;
+        left_front_velocity = gamepad1.left_stick_y - gamepad1.left_stick_x;
 
-        left_back_velocity = gamepad1.left_stick_y - gamepad1.left_stick_x;
-        right_back_velocity = gamepad1.left_stick_y + gamepad1.left_stick_x;
+        left_back_velocity = gamepad1.left_stick_y + gamepad1.left_stick_x;
+        right_back_velocity = gamepad1.left_stick_y - gamepad1.left_stick_x;
 
         //rotation
 
-        right_front_velocity += -gamepad1.right_stick_x;
-        right_back_velocity += -gamepad1.right_stick_x;
+        right_front_velocity += gamepad1.right_stick_x;
+        right_back_velocity += gamepad1.right_stick_x;
 
-        left_front_velocity += gamepad1.right_stick_x;
-        left_back_velocity += gamepad1.right_stick_x;
+        left_front_velocity += -gamepad1.right_stick_x;
+        left_back_velocity += -gamepad1.right_stick_x;
 
 
         right_front.setPower(right_front_velocity);
