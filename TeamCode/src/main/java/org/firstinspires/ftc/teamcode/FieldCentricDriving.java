@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @TeleOp
@@ -43,12 +44,14 @@ public class FieldCentricDriving extends OpMode {
         right_front.setDirection(DcMotorSimple.Direction.REVERSE);
         right_back.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        imu = hardwareMap.get(IMU.class, "imu");
+
         IMU.Parameters myIMUparameter;
 
         myIMUparameter = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
                 )
         );
 
@@ -90,12 +93,8 @@ public class FieldCentricDriving extends OpMode {
         left_front.setPower(left_front_velocity);
         left_back.setPower(left_back_velocity);
 
-//        if(gamepad1.left_stick_y != 0) {
-//
-//        }
-//
-//        if(gamepad1.right_stick_y != 0) {
-//
-//        }
+        telemetry.addData("Yaw", robotOrientation.getYaw());
+        telemetry.update();
+
     }
 }
