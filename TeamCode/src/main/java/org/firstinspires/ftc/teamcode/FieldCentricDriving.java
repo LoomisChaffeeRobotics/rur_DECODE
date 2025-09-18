@@ -52,21 +52,21 @@ public class FieldCentricDriving extends OpMode {
                 )
         );
 
-        imu.initialize(myIMUparameter);
+//        imu.initialize(myIMUparameter);
 
-        robotOrientation = imu.getRobotYawPitchRollAngles();
+//        robotOrientation = imu.getRobotYawPitchRollAngles();
 
-        Yaw = robotOrientation.getYaw();
-        Pitch = robotOrientation.getPitch();
-        Roll = robotOrientation.getRoll();
+//        Yaw = robotOrientation.getYaw();
+//        Pitch = robotOrientation.getPitch();
+//        Roll = robotOrientation.getRoll();
 
     }
 
     @Override
     public void loop() {
-        Yaw = robotOrientation.getYaw();
-        Pitch = robotOrientation.getPitch();
-        Roll = robotOrientation.getRoll();
+//        Yaw = robotOrientation.getYaw();
+//        Pitch = robotOrientation.getPitch();
+//        Roll = robotOrientation.getRoll();
 
         //movement
 
