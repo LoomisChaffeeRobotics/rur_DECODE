@@ -31,6 +31,7 @@ public class FieldCentricDriving extends OpMode {
 
     @Override
     public void init() {
+
         left_front = hardwareMap.get(DcMotor.class, "leftFront");
         right_front = hardwareMap.get(DcMotor.class, "rightFront");
         left_back = hardwareMap.get(DcMotor.class, "leftBack");
@@ -50,26 +51,30 @@ public class FieldCentricDriving extends OpMode {
 
         myIMUparameter = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         );
 
-//        imu.initialize(myIMUparameter);
+        imu.initialize(myIMUparameter);
 
-//        robotOrientation = imu.getRobotYawPitchRollAngles();
+        imu.resetYaw();
 
-//        Yaw = robotOrientation.getYaw();
-//        Pitch = robotOrientation.getPitch();
-//        Roll = robotOrientation.getRoll();
+        Yaw = robotOrientation.getYaw();
+        Pitch = robotOrientation.getPitch();
+        Roll = robotOrientation.getRoll();
 
     }
 
     @Override
     public void loop() {
-//        Yaw = robotOrientation.getYaw();
-//        Pitch = robotOrientation.getPitch();
-//        Roll = robotOrientation.getRoll();
+
+
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+
+        Yaw = robotOrientation.getYaw();
+        Pitch = robotOrientation.getPitch();
+        Roll = robotOrientation.getRoll();
 
         //movement
 
