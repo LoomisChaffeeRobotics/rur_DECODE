@@ -58,6 +58,16 @@ public class FieldCentricDriving extends OpMode {
 
         imu.initialize(myIMUparameter);
 
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+        imu.resetYaw();
+        Yaw = robotOrientation.getYaw();
+        Pitch = robotOrientation.getPitch();
+        Roll = robotOrientation.getRoll();
+
+    }
+
+    @Override
+    public void loop() {
 
         robotOrientation = imu.getRobotYawPitchRollAngles();
 
@@ -67,11 +77,11 @@ public class FieldCentricDriving extends OpMode {
 
         //movement
 
-        right_front_velocity = gamepad1.left_stick_y + gamepad1.left_stick_x;
-        left_front_velocity = gamepad1.left_stick_y - gamepad1.left_stick_x;
+        right_front_velocity = (gamepad1.left_stick_y - Math.sin(Math.toRadians(Yaw)) + (gamepad1.left_stick_x - Math.sin(Math.toRadians(Yaw))));
+        left_front_velocity = (gamepad1.left_stick_y + Math.sin(Math.toRadians(Yaw)) - (gamepad1.left_stick_x + Math.sin(Math.toRadians(Yaw))));
 
-        left_back_velocity = gamepad1.left_stick_y + gamepad1.left_stick_x;
-        right_back_velocity = gamepad1.left_stick_y - gamepad1.left_stick_x;
+        left_back_velocity = (gamepad1.left_stick_y - Math.sin(Math.toRadians(Yaw)) + (gamepad1.left_stick_x - Math.sin(Math.toRadians(Yaw))));
+        right_back_velocity = (gamepad1.left_stick_y + Math.sin(Math.toRadians(Yaw)) - (gamepad1.left_stick_x + Math.sin(Math.toRadians(Yaw))));
 
         //rotation
 
