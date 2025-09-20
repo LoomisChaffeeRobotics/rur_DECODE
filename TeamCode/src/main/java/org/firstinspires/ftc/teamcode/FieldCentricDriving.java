@@ -31,6 +31,7 @@ public class FieldCentricDriving extends OpMode {
 
     @Override
     public void init() {
+
         left_front = hardwareMap.get(DcMotor.class, "leftFront");
         right_front = hardwareMap.get(DcMotor.class, "rightFront");
         left_back = hardwareMap.get(DcMotor.class, "leftBack");
@@ -50,34 +51,37 @@ public class FieldCentricDriving extends OpMode {
 
         myIMUparameter = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         );
 
-//        imu.initialize(myIMUparameter);
+        imu.initialize(myIMUparameter);
 
-//        robotOrientation = imu.getRobotYawPitchRollAngles();
-
-//        Yaw = robotOrientation.getYaw();
-//        Pitch = robotOrientation.getPitch();
-//        Roll = robotOrientation.getRoll();
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+        imu.resetYaw();
+        Yaw = robotOrientation.getYaw();
+        Pitch = robotOrientation.getPitch();
+        Roll = robotOrientation.getRoll();
 
     }
 
     @Override
     public void loop() {
-//        Yaw = robotOrientation.getYaw();
-//        Pitch = robotOrientation.getPitch();
-//        Roll = robotOrientation.getRoll();
+
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+
+        Yaw = robotOrientation.getYaw();
+        Pitch = robotOrientation.getPitch();
+        Roll = robotOrientation.getRoll();
 
         //movement
 
-        right_front_velocity = gamepad1.left_stick_y + gamepad1.left_stick_x;
-        left_front_velocity = gamepad1.left_stick_y - gamepad1.left_stick_x;
+        right_front_velocity = (gamepad1.left_stick_y - Math.sin(Math.toRadians(Yaw)) + (gamepad1.left_stick_x - Math.sin(Math.toRadians(Yaw))));
+        left_front_velocity = (gamepad1.left_stick_y + Math.sin(Math.toRadians(Yaw)) - (gamepad1.left_stick_x + Math.sin(Math.toRadians(Yaw))));
 
-        left_back_velocity = gamepad1.left_stick_y + gamepad1.left_stick_x;
-        right_back_velocity = gamepad1.left_stick_y - gamepad1.left_stick_x;
+        left_back_velocity = (gamepad1.left_stick_y - Math.sin(Math.toRadians(Yaw)) + (gamepad1.left_stick_x - Math.sin(Math.toRadians(Yaw))));
+        right_back_velocity = (gamepad1.left_stick_y + Math.sin(Math.toRadians(Yaw)) - (gamepad1.left_stick_x + Math.sin(Math.toRadians(Yaw))));
 
         //rotation
 
