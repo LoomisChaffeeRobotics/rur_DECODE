@@ -108,6 +108,10 @@ public class FieldCentricDriving extends OpMode {
         left_front.setPower(left_front_velocity);
         left_back.setPower(left_back_velocity);
 
+        if (gamepad1.start) {
+            imu.resetYaw();
+        }
+
         telemetry.addData("Yaw", robotOrientation.getYaw());
         telemetry.update();
 
