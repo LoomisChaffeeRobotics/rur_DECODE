@@ -76,7 +76,6 @@ public class FieldCentricDriving extends OpMode {
     public void loop() {
 
         robotOrientation = imu.getRobotYawPitchRollAngles();
-
         Yaw = robotOrientation.getYaw();
         Pitch = robotOrientation.getPitch();
         Roll = robotOrientation.getRoll();
