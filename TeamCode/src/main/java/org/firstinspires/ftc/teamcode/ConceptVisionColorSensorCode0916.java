@@ -94,6 +94,10 @@ public class ConceptVisionColorSensorCode0916 extends LinearOpMode {
      * block around the main, core logic, and an easy way to make that all clear was to separate
      * the former from the latter in separate methods.
      */
+    public enum SensedColor {
+        PURPLE, GREEN, NEITHER;
+    }
+    SensedColor CurrentColor = SensedColor.NEITHER;
     @Override public void runOpMode() {
 
         // Get a reference to the RelativeLayout so we can later change the background
@@ -208,12 +212,12 @@ public class ConceptVisionColorSensorCode0916 extends LinearOpMode {
 //                    .addData("Saturation", "%.3f", hsvValues[1])
 //                    .addData("Value", "%.3f", hsvValues[2]);
 //            telemetry.addData("Alpha", "%.3f", colors.alpha);
-            if (hsvValues[0] > 120 && hsvValues[0] < 180) {
-                telemetry.addData("Color", "green");
-            } else if (hsvValues[0] > 270 && hsvValues[0] < 330) {
-                telemetry.addData("Color", "purple");
+            if (hsvValues[0] >= 100 && hsvValues[0] <= 180) {
+                CurrentColor = SensedColor.GREEN;
+            } else if (hsvValues[0] >= 270 && hsvValues[0] <= 330) {
+                CurrentColor = SensedColor.PURPLE;
             } else {
-                telemetry.addData("Color", "neither");
+                CurrentColor = SensedColor.NEITHER;
             }
 
             /* If this color sensor also has a distance sensor, display the measured distance.
@@ -222,7 +226,7 @@ public class ConceptVisionColorSensorCode0916 extends LinearOpMode {
             if (colorSensor instanceof DistanceSensor) {
                 telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM));
             }
-
+            telemetry.addData("CurrentColor", CurrentColor);
             telemetry.update();
 
             // Change the Robot Controller's background color to match the color detected by the color sensor.
