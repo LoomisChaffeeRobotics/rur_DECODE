@@ -29,6 +29,12 @@ public class FieldCentricDriving extends OpMode {
     double left_back_velocity = 0;
     double right_back_velocity = 0;
 
+
+    double x;
+    double y;
+    double x_altered;
+    double y_altered;
+
     @Override
     public void init() {
 
@@ -70,18 +76,23 @@ public class FieldCentricDriving extends OpMode {
     public void loop() {
 
         robotOrientation = imu.getRobotYawPitchRollAngles();
-
         Yaw = robotOrientation.getYaw();
         Pitch = robotOrientation.getPitch();
         Roll = robotOrientation.getRoll();
 
         //movement
 
-        right_front_velocity = (gamepad1.left_stick_y - Math.sin(Math.toRadians(Yaw)) + (gamepad1.left_stick_x - Math.sin(Math.toRadians(Yaw))));
-        left_front_velocity = (gamepad1.left_stick_y + Math.sin(Math.toRadians(Yaw)) - (gamepad1.left_stick_x + Math.sin(Math.toRadians(Yaw))));
+        x = gamepad1.left_stick_x;
+        y = gamepad1.left_stick_y;
 
-        left_back_velocity = (gamepad1.left_stick_y - Math.sin(Math.toRadians(Yaw)) + (gamepad1.left_stick_x - Math.sin(Math.toRadians(Yaw))));
-        right_back_velocity = (gamepad1.left_stick_y + Math.sin(Math.toRadians(Yaw)) - (gamepad1.left_stick_x + Math.sin(Math.toRadians(Yaw))));
+        x_altered = (x * Math.cos(Math.toRadians(Yaw))) - (y * Math.sin(Math.toRadians(Yaw)));
+        y_altered = (y * Math.cos(Math.toRadians(Yaw))) + (x * Math.sin(Math.toRadians(Yaw)));
+
+        right_front_velocity = y_altered + x_altered;
+        left_front_velocity = y_altered - x_altered;
+
+        left_back_velocity = y_altered + x_altered;
+        right_back_velocity = y_altered - x_altered;
 
         //rotation
 
@@ -96,6 +107,10 @@ public class FieldCentricDriving extends OpMode {
         right_back.setPower(right_back_velocity);
         left_front.setPower(left_front_velocity);
         left_back.setPower(left_back_velocity);
+
+        if (gamepad1.start) {
+            imu.resetYaw();
+        }
 
         telemetry.addData("Yaw", robotOrientation.getYaw());
         telemetry.update();
