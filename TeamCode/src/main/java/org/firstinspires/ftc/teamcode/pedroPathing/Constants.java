@@ -38,8 +38,8 @@ public class Constants {
             .rightFrontEncoderDirection(Encoder.FORWARD)
             .leftRearEncoderDirection(Encoder.FORWARD)
             .rightRearEncoderDirection(Encoder.FORWARD)
-            .robotWidth(42.5)
-            .robotLength(22.5);
+            .robotWidth(16.73)
+            .robotLength(8.86);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
