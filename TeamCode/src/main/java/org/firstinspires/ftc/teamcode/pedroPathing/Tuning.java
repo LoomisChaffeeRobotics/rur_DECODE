@@ -176,6 +176,7 @@ class LocalizationTest extends OpMode {
  * @author Baron Henderson - 20077 The Indubitables
  * @version 1.0, 5/6/2024
  */
+
 class ForwardTuner extends OpMode {
     public static double DISTANCE = 48;
 

@@ -20,26 +20,29 @@ public class Constants {
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
-            .rightFrontMotorName("rf")
-            .leftFrontMotorName("lf")
-            .leftRearMotorName("lr")
-            .rightRearMotorName("rr")
+            .rightFrontMotorName("rightFront")
+            .leftFrontMotorName("leftFront")
+            .leftRearMotorName("leftBack")
+            .rightRearMotorName("rightBack")
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
-            .rightFrontMotorName("rf")
-            .leftFrontMotorName("lf")
-            .leftRearMotorName("lr")
-            .rightRearMotorName("rr")
+            .rightFrontMotorName("rightFront")
+            .leftFrontMotorName("leftFront")
+            .leftRearMotorName("leftBack")
+            .rightRearMotorName("rightBack")
             .leftFrontEncoderDirection(Encoder.FORWARD)
             .rightFrontEncoderDirection(Encoder.FORWARD)
             .leftRearEncoderDirection(Encoder.FORWARD)
             .rightRearEncoderDirection(Encoder.FORWARD)
             .robotWidth(16.73)
-            .robotLength(8.86);
+            .robotLength(8.86)
+            .forwardTicksToInches(4.399456)
+            .strafeTicksToInches(0.12192)
+            .turnTicksToInches(0.27485);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
