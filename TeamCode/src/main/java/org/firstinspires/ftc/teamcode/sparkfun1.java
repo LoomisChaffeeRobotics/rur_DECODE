@@ -3,13 +3,11 @@
 
     Copyright (c) 2024 SparkFun Electronics
 */
-package org.firstinspires.ftc.robotcontroller.external.samples;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -25,15 +23,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * See the sensor's product page: https://www.sparkfun.com/products/24904
  */
 @TeleOp(name = "Sensor: SparkFun OTOS", group = "Sensor")
-@Disabled
-public class SensorSparkFunOTOS extends LinearOpMode {
+public class sparkfun1 extends LinearOpMode {
     // Create an instance of the sensor
     SparkFunOTOS myOtos;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // Get a reference to the sensorpppppppppppppp
-        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        // Get a reference to the sensor
+        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");;
 
         // All the configuration for the OTOS is done in this helper method, check it out!
         configureOtos();
