@@ -41,6 +41,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
@@ -71,7 +72,7 @@ import java.util.List;
 public class LimeLightTesting extends LinearOpMode {
 
     private Limelight3A limelight;
-
+    public static double botposeangle;
     @Override
     public void runOpMode() throws InterruptedException
     {
@@ -102,6 +103,7 @@ public class LimeLightTesting extends LinearOpMode {
             if (result.isValid()) {
                 // Access general information
                 Pose3D botpose = result.getBotpose();
+                botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
                 double captureLatency = result.getCaptureLatency();
                 double targetingLatency = result.getTargetingLatency();
                 double parseLatency = result.getParseLatency();
