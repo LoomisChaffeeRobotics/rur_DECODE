@@ -13,39 +13,43 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Constants {
-    public static FollowerConstants followerConstants = new FollowerConstants().mass(13.63);
+    public static FollowerConstants followerConstants = new FollowerConstants()
+            .mass(13.15);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
-            .rightFrontMotorName("rf")
-            .leftFrontMotorName("lf")
-            .leftRearMotorName("lr")
-            .rightRearMotorName("rr")
+            .rightFrontMotorName("rightFront")
+            .leftFrontMotorName("leftFront")
+            .leftRearMotorName("leftBack")
+            .rightRearMotorName("rightBack")
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
-            .rightFrontMotorName("rf")
-            .leftFrontMotorName("lf")
-            .leftRearMotorName("lr")
-            .rightRearMotorName("rr")
-            .leftFrontEncoderDirection(Encoder.FORWARD)
+            .rightFrontMotorName("rightFront")
+            .leftFrontMotorName("leftFront")
+            .leftRearMotorName("leftBack")
+            .rightRearMotorName("rightBack")
+            .leftFrontEncoderDirection(Encoder.REVERSE)
             .rightFrontEncoderDirection(Encoder.FORWARD)
-            .leftRearEncoderDirection(Encoder.FORWARD)
+            .leftRearEncoderDirection(Encoder.REVERSE)
             .rightRearEncoderDirection(Encoder.FORWARD)
-            .robotWidth(16.73)
-            .robotLength(8.86);
+            .robotWidth(15.5)
+            .robotLength(8.5)
+            .forwardTicksToInches(0.0395)
+            .strafeTicksToInches(0.1167)
+            .turnTicksToInches(0.0114);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
+                .driveEncoderLocalizer(localizerConstants)
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
-                .driveEncoderLocalizer(localizerConstants)
                 .build();
     }
 
