@@ -40,7 +40,9 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
@@ -69,15 +71,19 @@ import java.util.List;
  */
 @TeleOp
 public class LimeLightTesting extends LinearOpMode {
-
+    public double currentangle;
+    CRServo sv;
+    public double targetangle = 135;
+    public double angleerror = targetangle - botposeangle;
     private Limelight3A limelight;
-
+    public double botposeangle;
+    public Pose3D botpose;
     @Override
     public void runOpMode() throws InterruptedException
     {
-
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
         telemetry.setMsTransmissionInterval(11);
-
+        sv = hardwareMap.get(CRServo.class, "sv");
         limelight.pipelineSwitch(0);
 
         /*
@@ -90,6 +96,17 @@ public class LimeLightTesting extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            if (angleerror < 180) {
+                sv.setPower(0.1);
+            } else if (angleerror > 180) {
+                sv.setPower(-0.1);
+            } else {
+                sv.setPower(0);
+            }
+            currentangle = botposeangle;
+            telemetry.addData("angle", botposeangle);
+            telemetry.addData("power",sv.getPower());
+            telemetry.update();
             LLStatus status = limelight.getStatus();
             telemetry.addData("Name", "%s",
                     status.getName());
@@ -97,11 +114,12 @@ public class LimeLightTesting extends LinearOpMode {
                     status.getTemp(), status.getCpu(),(int)status.getFps());
             telemetry.addData("Pipeline", "Index: %d, Type: %s",
                     status.getPipelineIndex(), status.getPipelineType());
-
             LLResult result = limelight.getLatestResult();
+
             if (result.isValid()) {
                 // Access general information
-                Pose3D botpose = result.getBotpose();
+                botpose = result.getBotpose();
+                botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
                 double captureLatency = result.getCaptureLatency();
                 double targetingLatency = result.getTargetingLatency();
                 double parseLatency = result.getParseLatency();
@@ -115,7 +133,7 @@ public class LimeLightTesting extends LinearOpMode {
                 telemetry.addData("tync", result.getTyNC());
 
                 telemetry.addData("Botpose", botpose.toString());
-
+                telemetry.addData("botposeangle", botposeangle);
                 // Access barcode results
                 List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
                 for (LLResultTypes.BarcodeResult br : barcodeResults) {
