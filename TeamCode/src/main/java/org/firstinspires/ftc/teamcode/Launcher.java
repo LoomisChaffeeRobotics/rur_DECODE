@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Launcher extends OpMode {
     DcMotor launcher2;
+    double MotorPower;
 
     DcMotor launcher;
     @Override
@@ -16,18 +17,16 @@ public class Launcher extends OpMode {
     @Override
     public void loop() {
         if(gamepad1.a) {
-            launcher.setPower(1);
+            launcher.setPower(MotorPower);
+            launcher2.setPower(MotorPower);
         }
         if(gamepad1.b) {
-            launcher2.setPower(1);
         }
         else if(gamepad1.y) {
-            launcher.setPower(-1);
+            launcher.setPower(-MotorPower);
+            launcher2.setPower(-MotorPower);
 
             }
-        else if (gamepad1.x) {
-            launcher2.setPower(-1);
-        }
         else {
             launcher.setPower(0);
             launcher2.setPower(0);
