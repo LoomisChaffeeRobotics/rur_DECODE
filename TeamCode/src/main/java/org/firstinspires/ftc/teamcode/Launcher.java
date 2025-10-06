@@ -20,8 +20,6 @@ public class Launcher extends OpMode {
             launcher.setPower(MotorPower);
             launcher2.setPower(MotorPower);
         }
-        if(gamepad1.b) {
-        }
         else if(gamepad1.y) {
             launcher.setPower(-MotorPower);
             launcher2.setPower(-MotorPower);
