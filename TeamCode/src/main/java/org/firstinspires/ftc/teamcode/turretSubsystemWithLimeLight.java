@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 @TeleOp
-public class servoWorkwithLimeLight extends OpMode {
+public class turretSubsystemWithLimeLight extends OpMode {
     public double currentangle;
     public double targetangle = 135;
     public double angleerror = targetangle - currentangle;
@@ -14,12 +14,17 @@ public class servoWorkwithLimeLight extends OpMode {
 
     CRServo sv;
     LimeLightTesting ll;
+    @Override
     public void init() {
         sv = hardwareMap.get(CRServo.class, "sv");
         ll = new LimeLightTesting();
+        ll.init(telemetry, hardwareMap);
+
+        currentangle = ll.botposeangle;
+
 
     }
-
+    @Override
     public void loop() {
         if (angleerror < 180) {
             sv.setPower(0.1);
@@ -29,7 +34,7 @@ public class servoWorkwithLimeLight extends OpMode {
             sv.setPower(0);
         }
         currentangle = ll.botposeangle;
-        telemetry.addData("angle", ll.botposeangle);
+        telemetry.addData("angle", currentangle);
         telemetry.addData("power",sv.getPower());
         telemetry.update();
 

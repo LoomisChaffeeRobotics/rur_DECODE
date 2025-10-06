@@ -37,11 +37,12 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
@@ -69,21 +70,16 @@ import java.util.List;
  *   and the ip address the Limelight device assigned the Control Hub and which is displayed in small text
  *   below the name of the Limelight on the top level configuration screen.
  */
-@TeleOp
-public class LimeLightTesting extends LinearOpMode {
-    public double currentangle;
-    CRServo sv;
-    public double targetangle = 135;
-    public double angleerror = targetangle - botposeangle;
+public class LimeLightTesting extends OpMode{
+    Telemetry telemetry;
     private Limelight3A limelight;
     public double botposeangle;
     public Pose3D botpose;
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void init() {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         telemetry.setMsTransmissionInterval(11);
-        sv = hardwareMap.get(CRServo.class, "sv");
+
         limelight.pipelineSwitch(0);
 
         /*
@@ -93,19 +89,10 @@ public class LimeLightTesting extends LinearOpMode {
 
         telemetry.addData(">", "Robot Ready.  Press Play.");
         telemetry.update();
-        waitForStart();
-
-        while (opModeIsActive()) {
-            if (angleerror < 180) {
-                sv.setPower(0.1);
-            } else if (angleerror > 180) {
-                sv.setPower(-0.1);
-            } else {
-                sv.setPower(0);
-            }
-            currentangle = botposeangle;
+    }
+    @Override
+    public void loop() {
             telemetry.addData("angle", botposeangle);
-            telemetry.addData("power",sv.getPower());
             telemetry.update();
             LLStatus status = limelight.getStatus();
             telemetry.addData("Name", "%s",
@@ -115,7 +102,7 @@ public class LimeLightTesting extends LinearOpMode {
             telemetry.addData("Pipeline", "Index: %d, Type: %s",
                     status.getPipelineIndex(), status.getPipelineType());
             LLResult result = limelight.getLatestResult();
-
+            botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
             if (result.isValid()) {
                 // Access general information
                 botpose = result.getBotpose();
@@ -168,7 +155,7 @@ public class LimeLightTesting extends LinearOpMode {
             }
 
             telemetry.update();
-        }
+
         limelight.stop();
     }
 }
