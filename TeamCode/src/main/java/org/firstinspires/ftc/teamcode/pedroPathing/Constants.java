@@ -41,8 +41,8 @@ public class Constants {
             .rightRearEncoderDirection(Encoder.FORWARD)
             .robotWidth(15.5)
             .robotLength(8.5)
-            .forwardTicksToInches(0.0395)
-            .strafeTicksToInches(0.1167)
+            .forwardTicksToInches(0.00550543269)
+            .strafeTicksToInches(0.00573934426 )
             .turnTicksToInches(0.0114);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
