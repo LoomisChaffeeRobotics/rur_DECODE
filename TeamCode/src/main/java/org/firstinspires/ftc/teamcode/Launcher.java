@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+@TeleOp
 public class Launcher extends OpMode {
     DcMotor launcher2;
-    double MotorPower;
+    double MotorPower = 0.5;
 
     DcMotor launcher;
     @Override
@@ -19,8 +21,6 @@ public class Launcher extends OpMode {
         if(gamepad1.a) {
             launcher.setPower(MotorPower);
             launcher2.setPower(MotorPower);
-        }
-        if(gamepad1.b) {
         }
         else if(gamepad1.y) {
             launcher.setPower(-MotorPower);
