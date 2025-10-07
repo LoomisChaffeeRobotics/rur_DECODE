@@ -80,11 +80,11 @@ public class turretSubsystemWithLimeLight extends OpMode {
             telemetry.addData("Botpose", botpose.toString());
             telemetry.addData("botposeangle", botposeangle);
             telemetry.update();
-            // Access barcode results
-//            List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
-//            for (LLResultTypes.BarcodeResult br : barcodeResults) {
-//                telemetry.addData("Barcode", "Data: %s", br.getData());
-//            }
+//             Access barcode results
+            List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
+            for (LLResultTypes.BarcodeResult br : barcodeResults) {
+                telemetry.addData("Barcode", "Data: %s", br.getData());
+            }
 //
 //            // Access classifier results
 //            List<LLResultTypes.ClassifierResult> classifierResults = result.getClassifierResults();
@@ -93,10 +93,10 @@ public class turretSubsystemWithLimeLight extends OpMode {
 //            }
 //
 //            // Access detector results
-//            List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
-//            for (LLResultTypes.DetectorResult dr : detectorResults) {
-//                telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
-//            }
+            List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
+            for (LLResultTypes.DetectorResult dr : detectorResults) {
+                telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
+            }
 //
 //            // Access fiducial results
 //            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
