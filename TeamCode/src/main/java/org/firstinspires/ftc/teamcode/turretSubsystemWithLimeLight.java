@@ -37,16 +37,20 @@ public class turretSubsystemWithLimeLight extends OpMode {
 
 
     }
+
     @Override
     public void loop() {
         angleerror = targetangle - botposeangle;
         if (angleerror < -1 || angleerror > 180) {
-            sv.setPower(0.1);
-        } else if (angleerror > 1 && angleerror < 165) {
             sv.setPower(-0.1);
-        } else if (Math.abs(angleerror) < 1){
+        } else if (angleerror > 1 && angleerror < 165) {
+            sv.setPower(0.1);
+        } else if (angleerror < 1 && angleerror > -1){
             sv.setPower(0);
         }
+        if (gamepad1.right_bumper) {
+            sv.setPower(0);
+        } // thtey wouldh ave to hold down the button - might not be necessary if a better solution is found or something
         telemetry.addData("angle error", angleerror);
         telemetry.addData("power",sv.getPower());
         telemetry.addData("angle", botposeangle);
