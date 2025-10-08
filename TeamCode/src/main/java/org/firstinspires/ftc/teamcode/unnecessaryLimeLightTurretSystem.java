@@ -1,6 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 
+
+
+//I've already moved all of the code into DriveClass - any changes that need to be made should be made there
+//10-7-25
+
+
+
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
