@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -37,10 +38,10 @@ public class DriveClass extends OpMode {
     }
     SensedColor CurrentColor = SensedColor.NEITHER;
 
-    DcMotor launcher2;
+    DcMotorEx launcher2;
     double MotorPower = 0.5;
 
-    DcMotor launcher;
+    DcMotorEx launcher;
     DcMotor left_front;
     DcMotor right_front;
     DcMotor left_back;
@@ -72,57 +73,43 @@ public class DriveClass extends OpMode {
     public void init() {
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-
-
-        // On the way out, *guarantee* that the background is reasonable. It doesn't actually start off
-        // as pure white, but it's too much work to dig out what actually was used, and this is good
-        // enough to at least make the screen reasonable again.
-        // Set the panel back to the default color
         relativeLayout.post(() -> relativeLayout.setBackgroundColor(Color.WHITE));
-        launcher = hardwareMap.get(DcMotor.class, "launcher");
-        launcher2 = hardwareMap.get(DcMotor.class, "launcher2");
+        gain = 31;
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+
+        launcher = hardwareMap.get(DcMotorEx.class, "launcher");
+        launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
+
         left_front = hardwareMap.get(DcMotor.class, "leftFront");
         right_front = hardwareMap.get(DcMotor.class, "rightFront");
         left_back = hardwareMap.get(DcMotor.class, "leftBack");
         right_back = hardwareMap.get(DcMotor.class, "rightBack");
-
         left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         right_front.setDirection(DcMotorSimple.Direction.REVERSE);
         right_back.setDirection(DcMotorSimple.Direction.REVERSE);
-
         imu = hardwareMap.get(IMU.class, "imu");
-
         IMU.Parameters myIMUparameter;
-
         myIMUparameter = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                         RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         );
-
         imu.initialize(myIMUparameter);
-
         robotOrientation = imu.getRobotYawPitchRollAngles();
         imu.resetYaw();
         Yaw = robotOrientation.getYaw();
         Pitch = robotOrientation.getPitch();
         Roll = robotOrientation.getRoll(); //field-centric setup
+
         sv = hardwareMap.get(CRServo.class, "sv");
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         telemetry.setMsTransmissionInterval(11);
         limelight.pipelineSwitch(0);
         limelight.start();
-        gain = 31;
-
-        // Get a reference to our sensor object. It's recommended to use NormalizedColorSensor over
-        // ColorSensor, because NormalizedColorSensor consistently gives values between 0 and 1, while
-        // the values you get from ColorSensor are dependent on the specific sensor you're using.
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
     }
 
     @Override
@@ -201,8 +188,8 @@ public class DriveClass extends OpMode {
         // Change the Robot Controller's background color to match the color detected by the color sensor.
         relativeLayout.post(() -> relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues))); //color sensor running thing
         if(gamepad1.a) {
-            launcher.setPower(MotorPower);
-            launcher2.setPower(MotorPower);
+            launcher.setVelocity(200);
+            launcher2.setVelocity(200);
         }
         else if(gamepad1.y) {
             launcher.setPower(-MotorPower);
