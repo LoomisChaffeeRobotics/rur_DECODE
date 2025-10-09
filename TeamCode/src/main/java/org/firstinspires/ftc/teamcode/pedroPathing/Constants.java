@@ -7,10 +7,16 @@ import com.pedropathing.ftc.drivetrains.Mecanum;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.ftc.localization.constants.DriveEncoderConstants;
+import com.pedropathing.ftc.localization.constants.OTOSConstants;
 import com.pedropathing.paths.PathConstraints;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
@@ -20,7 +26,12 @@ public class Constants {
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
-
+    public static OTOSConstants localizerConstants = new OTOSConstants()
+            .hardwareMapName("otos")
+            .offset(new SparkFunOTOS.Pose2D(0,0,0))
+            .linearUnit(DistanceUnit.INCH)
+            .angleUnit(AngleUnit.RADIANS);
+    //do tuning
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
             .rightFrontMotorName("rightFront")
@@ -34,7 +45,7 @@ public class Constants {
             .xVelocity(55.69855798065763)
             .yVelocity(49.04440430657071);
 
-    public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
+    public static DriveEncoderConstants driveEncoderConstants = new DriveEncoderConstants()
             .rightFrontMotorName("rightFront")
             .leftFrontMotorName("leftFront")
             .leftRearMotorName("leftBack")
@@ -51,9 +62,11 @@ public class Constants {
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
-                .driveEncoderLocalizer(localizerConstants)
+                .driveEncoderLocalizer(driveEncoderConstants)
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
+                .OTOSLocalizer(localizerConstants)
+                /* other builder steps */
                 .build();
     }
 
