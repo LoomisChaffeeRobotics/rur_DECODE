@@ -1,6 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 
+
+
+//I've already moved all of the code into DriveClass - any changes that need to be made should be made there
+//10-7-25
+
+
+
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
@@ -15,7 +23,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import java.util.List;
 
 @TeleOp
-public class turretSubsystemWithLimeLight extends OpMode {
+public class unnecessaryLimeLightTurretSystem extends OpMode {
     public double targetangle = 165;
     public Limelight3A limelight;
     public Pose3D botpose;
@@ -37,16 +45,20 @@ public class turretSubsystemWithLimeLight extends OpMode {
 
 
     }
+
     @Override
     public void loop() {
         angleerror = targetangle - botposeangle;
         if (angleerror < -1 || angleerror > 180) {
-            sv.setPower(0.1);
-        } else if (angleerror > 1 && angleerror < 165) {
             sv.setPower(-0.1);
-        } else if (Math.abs(angleerror) < 1){
+        } else if (angleerror > 1 && angleerror < 165) {
+            sv.setPower(0.1);
+        } else if (angleerror < 1 && angleerror > -1){
             sv.setPower(0);
         }
+        if (gamepad1.right_bumper) {
+            sv.setPower(0);
+        } // thtey wouldh ave to hold down the button - might not be necessary if a better solution is found or something
         telemetry.addData("angle error", angleerror);
         telemetry.addData("power",sv.getPower());
         telemetry.addData("angle", botposeangle);
@@ -76,11 +88,11 @@ public class turretSubsystemWithLimeLight extends OpMode {
             telemetry.addData("Botpose", botpose.toString());
             telemetry.addData("botposeangle", botposeangle);
             telemetry.update();
-            // Access barcode results
-//            List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
-//            for (LLResultTypes.BarcodeResult br : barcodeResults) {
-//                telemetry.addData("Barcode", "Data: %s", br.getData());
-//            }
+//             Access barcode results
+            List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
+            for (LLResultTypes.BarcodeResult br : barcodeResults) {
+                telemetry.addData("Barcode", "Data: %s", br.getData());
+            }
 //
 //            // Access classifier results
 //            List<LLResultTypes.ClassifierResult> classifierResults = result.getClassifierResults();
@@ -89,10 +101,10 @@ public class turretSubsystemWithLimeLight extends OpMode {
 //            }
 //
 //            // Access detector results
-//            List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
-//            for (LLResultTypes.DetectorResult dr : detectorResults) {
-//                telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
-//            }
+            List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
+            for (LLResultTypes.DetectorResult dr : detectorResults) {
+                telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
+            }
 //
 //            // Access fiducial results
 //            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
