@@ -49,13 +49,13 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
     @Override
     public void loop() {
         angleerror = targetangle - botposeangle;
-        if (angleerror < -1 || angleerror > 180) {
-            sv.setPower(-0.1);
-        } else if (angleerror > 1 && angleerror < 165) {
-            sv.setPower(0.1);
-        } else if (angleerror < 1 && angleerror > -1){
-            sv.setPower(0);
-        }
+//        if (angleerror < -1 || angleerror > 180) {
+//            sv.setPower(-0.1);
+//        } else if (angleerror > 1 && angleerror < 165) {
+//            sv.setPower(0.1);
+//        } else if (angleerror < 1 && angleerror > -1){
+//            sv.setPower(0);
+//        }
         if (gamepad1.right_bumper) {
             sv.setPower(0);
         } // thtey wouldh ave to hold down the button - might not be necessary if a better solution is found or something
@@ -87,31 +87,29 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
 
             telemetry.addData("Botpose", botpose.toString());
             telemetry.addData("botposeangle", botposeangle);
-            telemetry.update();
-//             Access barcode results
+            // Access barcode results
             List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
             for (LLResultTypes.BarcodeResult br : barcodeResults) {
                 telemetry.addData("Barcode", "Data: %s", br.getData());
             }
-//
-//            // Access classifier results
-//            List<LLResultTypes.ClassifierResult> classifierResults = result.getClassifierResults();
-//            for (LLResultTypes.ClassifierResult cr : classifierResults) {
-//                telemetry.addData("Classifier", "Class: %s, Confidence: %.2f", cr.getClassName(), cr.getConfidence());
-//            }
-//
-//            // Access detector results
+
+            // Access classifier results
+            List<LLResultTypes.ClassifierResult> classifierResults = result.getClassifierResults();
+            for (LLResultTypes.ClassifierResult cr : classifierResults) {
+                telemetry.addData("Classifier", "Class: %s, Confidence: %.2f", cr.getClassName(), cr.getConfidence());
+            }
+
+            // Access detector results
             List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
             for (LLResultTypes.DetectorResult dr : detectorResults) {
                 telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
             }
+
+            // Access fiducial results
+
+            telemetry.update();
 //
-//            // Access fiducial results
-//            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
-//            for (LLResultTypes.FiducialResult fr : fiducialResults) {
-//                telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
-//            }
-//
+
 //            // Access color results
 //            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
 //            for (LLResultTypes.ColorResult cr : colorResults) {
