@@ -192,13 +192,13 @@ public class DriveClass extends OpMode {
             launcher2.setVelocity(200);
         }
         else if(gamepad1.y) {
-            launcher.setPower(-MotorPower);
-            launcher2.setPower(-MotorPower);
+            launcher.setVelocity(-200);
+            launcher2.setVelocity(-200);
 
         }
         else {
-            launcher.setPower(0);
-            launcher2.setPower(0);
+            launcher.setVelocity(0);
+            launcher2.setVelocity(0);
         } //launcher thing
         angleerror = targetangle - botposeangle;
         if (angleerror < -1 || angleerror > 180) {

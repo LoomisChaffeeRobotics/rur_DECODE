@@ -26,17 +26,22 @@ public class AutoClass extends LinearOpMode {
         limelight.start();
         waitForStart();
 
-
         while (opModeIsActive()) {
             LLResult result = limelight.getLatestResult();
-            List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
-            for (LLResultTypes.DetectorResult dr : detectorResults) {
-                telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
+            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+            for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+                if (fr.getFiducialId() == 23) {
+                    telemetry.addLine("PPG");
+                } else if (fr.getFiducialId() == 22) {
+                    telemetry.addLine("PGP");
+                } else if (fr.getFiducialId() == 21) {
+                    telemetry.addLine("GPP");
+                } else {
+                    telemetry.addLine("nothing");
+                }
             }
-            List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
-            for (LLResultTypes.BarcodeResult br : barcodeResults) {
-                telemetry.addData("Barcode", "Data: %s", br.getData());
-            }
+            telemetry.update();
 
         }
     }
