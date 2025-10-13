@@ -7,10 +7,16 @@ import com.pedropathing.ftc.drivetrains.Mecanum;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.ftc.localization.constants.DriveEncoderConstants;
+import com.pedropathing.ftc.localization.constants.OTOSConstants;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+//
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
@@ -34,28 +40,12 @@ public class Constants {
             .xVelocity(55.69855798065763)
             .yVelocity(49.04440430657071);
 
-    public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
-            .rightFrontMotorName("rightFront")
-            .leftFrontMotorName("leftFront")
-            .leftRearMotorName("leftBack")
-            .rightRearMotorName("rightBack")
-            .leftFrontEncoderDirection(Encoder.REVERSE)
-            .rightFrontEncoderDirection(Encoder.FORWARD)
-            .leftRearEncoderDirection(Encoder.REVERSE)
-            .rightRearEncoderDirection(Encoder.FORWARD)
-            .robotWidth(15.5)
-            .robotLength(8.5)
-            .forwardTicksToInches(0.00550543269)
-            .strafeTicksToInches(0.00573934426 )
-            .turnTicksToInches(0.0114);
+    public static OTOSConstants localizerConstants = new OTOSConstants()
+            .hardwareMapName("SparkFun")
+            .linearUnit(DistanceUnit.INCH)
+            .angleUnit(AngleUnit.RADIANS);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
-        return new FollowerBuilder(followerConstants, hardwareMap)
-                .driveEncoderLocalizer(localizerConstants)
-                .pathConstraints(pathConstraints)
-                .mecanumDrivetrain(driveConstants)
-                .build();
+        return new FollowerBuilder(followerConstants, hardwareMap).OTOSLocalizer(localizerConstants).build();
     }
-
-
 }
