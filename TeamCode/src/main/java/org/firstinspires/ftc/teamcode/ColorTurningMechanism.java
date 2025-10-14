@@ -115,7 +115,7 @@ public class ColorTurningMechanism extends LinearOpMode {
         SensedColorAll = l;
         return l;
     }
-    public void turnThing(boolean direction) {
+    public void turn(boolean direction) {
         if (direction) {
             while (encoder.getCurrentPosition() < 104) {
                 indexer.setPower(1);
@@ -134,14 +134,26 @@ public class ColorTurningMechanism extends LinearOpMode {
 
         }
     }
-    public void turnBasedOffColor(SensedColor color) {
-        while (CurrentColor != color) {
-            if (CurrentColor2 == color) {
-                turnThing(true);
-            } else if (CurrentColor3 == color) {
-                turnThing(false);
+    public boolean turnBasedOffColor(SensedColor color) {
+
+        //the boolean returned = whether there exists a color
+        //to rotate to.
+
+//        while (CurrentColor != color) {
+            if (CurrentColor == color) {
+                return true;
             }
-        }
+            else if (CurrentColor2 == color) {
+                turn(true);
+                return true;
+            } else if (CurrentColor3 == color) {
+                turn(false);
+                return true;
+            }
+            else {
+                return false;
+            }
+//        }
     }
 
 
