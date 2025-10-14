@@ -77,8 +77,8 @@ public class ColorTurningMechanismThing extends LinearOpMode {
 
     Launcher launcher;
     NormalizedColorSensor colorSensor1;
-    //NormalizedColorSensor colorSensor2;
-    //NormalizedColorSensor colorSensor3;
+    NormalizedColorSensor colorSensor2;
+    NormalizedColorSensor colorSensor3;
 
     View relativeLayout;
     public enum SensedColor {
