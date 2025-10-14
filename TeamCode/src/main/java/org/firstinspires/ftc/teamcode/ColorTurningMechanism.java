@@ -178,7 +178,7 @@ public class ColorTurningMechanism extends LinearOpMode {
         float gain = 31;
         float[] hsvValues1 = new float[3];
 //        float[] hsvValues2 = new float[3];
-//        float[] hsvValues3 = new float[3];
+//        float[] hsvValues3 = new float[3]
         indexer = hardwareMap.get(CRServo.class, "indexer");
         encoder = hardwareMap.get(DcMotorEx.class, "encoder");
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
