@@ -38,8 +38,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,11 +79,17 @@ import java.util.List;
  */
 @Autonomous
 
-public class ColorTurningMechanism extends LinearOpMode {
+public class ColorTurningMechanism {
+    float gain = 31;
+    float[] hsvValues1 = new float[3];
     DcMotorEx encoder;
     CRServo indexer;
     Launcher launcher;
     NormalizedColorSensor colorSensor1;
+    SensedColor CurrentColor = SensedColor.NEITHER;
+    SensedColor CurrentColor2 = SensedColor.NEITHER;
+    SensedColor CurrentColor3 = SensedColor.NEITHER;
+    List<SensedColor> SensedColorAll = new ArrayList<SensedColor>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
 //    NormalizedColorSensor colorSensor2;
 //    NormalizedColorSensor colorSensor3;
 
@@ -134,12 +143,22 @@ public class ColorTurningMechanism extends LinearOpMode {
 
         }
     }
+    public boolean turnRegardlessofColor() {
+        if (CurrentColor != SensedColor.NEITHER) {
+            return true;
+        } else if (CurrentColor2 != SensedColor.NEITHER) {
+            turn(true);
+            return true;
+        } else if (CurrentColor3 != SensedColor.NEITHER) {
+            turn(false);
+            return true;
+        } else return false;
+    }
     public boolean turnBasedOffColor(SensedColor color) {
 
         //the boolean returned = whether there exists a color
         //to rotate to.
 
-//        while (CurrentColor != color) {
         if (CurrentColor == color) {
             return true;
         }
@@ -153,44 +172,29 @@ public class ColorTurningMechanism extends LinearOpMode {
         else {
             return false;
         }
-//        }
     }
 
-
-    SensedColor CurrentColor = SensedColor.NEITHER;
-    SensedColor CurrentColor2 = SensedColor.NEITHER;
-    SensedColor CurrentColor3 = SensedColor.NEITHER;
-    List<SensedColor> SensedColorAll = new ArrayList<SensedColor>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
-    @Override public void runOpMode() {
+    public void init(Telemetry telemetry, HardwareMap hardwareMap) {
+        indexer = hardwareMap.get(CRServo.class, "indexer");
+        encoder = hardwareMap.get(DcMotorEx.class, "encoder");
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        SensedColorAll = shift_list(SensedColorAll, true);
+//        colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color2");
+//        colorSensor3 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color3");
         launcher = new Launcher();
         launcher.init(hardwareMap);
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
         try {
-            runSample(); // actually execute the sample
+            runSample(telemetry); // actually execute the sample
         } finally {
             relativeLayout.post(() -> relativeLayout.setBackgroundColor(Color.WHITE));
         }
     }
 
-    protected void runSample() {
-        float gain = 31;
-        float[] hsvValues1 = new float[3];
-//        float[] hsvValues2 = new float[3];
-//        float[] hsvValues3 = new float[3];
-        indexer = hardwareMap.get(CRServo.class, "indexer");
-        encoder = hardwareMap.get(DcMotorEx.class, "encoder");
-        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-//        colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color2");
-//        colorSensor3 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color3");
-        waitForStart();
-
-        SensedColorAll = shift_list(SensedColorAll, true);
-
-        while (opModeIsActive()) {
-
+    protected void runSample(Telemetry telemetry) {
 
             telemetry.addData("Gain", gain);
             colorSensor1.setGain(gain);
@@ -235,6 +239,5 @@ public class ColorTurningMechanism extends LinearOpMode {
             telemetry.addData("CurrentColor3", CurrentColor3);
             telemetry.addData("SensedColorAll(Array)", SensedColorAll);
             telemetry.update();
-        }
     }
 }
