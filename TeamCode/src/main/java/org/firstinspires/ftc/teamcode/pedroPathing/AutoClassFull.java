@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
-import android.graphics.Color;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine; //this is a straight line
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
@@ -14,16 +11,14 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.ColorTurningMechanism;
-import org.firstinspires.ftc.teamcode.DriveClass;
 import org.firstinspires.ftc.teamcode.Launcher;
 
 import java.util.List;
 
 @Autonomous
-public class SamplePedroAuto extends OpMode {
+public class AutoClassFull extends OpMode {
     Limelight3A limelight;
     ColorTurningMechanism turningthing;
     Launcher launcher;
