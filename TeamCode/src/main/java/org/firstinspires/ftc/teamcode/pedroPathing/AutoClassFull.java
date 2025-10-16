@@ -119,7 +119,7 @@ public class AutoClassFull extends OpMode {
     @Override
     public void init() {
         turningthing = new ColorTurningMechanism();
-        turningthing.init(telemetry, hardwareMap);
+        turningthing.init();
         launcher = new Launcher();
         launcher.init(hardwareMap);
         pathTimer = new Timer();
