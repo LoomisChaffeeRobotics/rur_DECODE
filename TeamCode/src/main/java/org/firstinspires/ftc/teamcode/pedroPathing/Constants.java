@@ -28,9 +28,11 @@ public class Constants {
 
     public static OTOSConstants localizerConstants = new OTOSConstants()
             .hardwareMapName("otos")
-            .offset(new SparkFunOTOS.Pose2D(0,0,0))
+            .offset(new SparkFunOTOS.Pose2D(-8,0,Math.PI/2))
             .linearUnit(DistanceUnit.INCH)
-            .angleUnit(AngleUnit.RADIANS);
+            .angleUnit(AngleUnit.RADIANS)
+            .linearScalar(11.13)
+            .angularScalar(1);
     //do tuning
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -62,10 +64,11 @@ public class Constants {
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
-                .driveEncoderLocalizer(driveEncoderConstants)
+//                .driveEncoderLocalizer(driveEncoderConstants)
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
                 .OTOSLocalizer(localizerConstants)
+
                 /* other builder steps */
                 .build();
     }

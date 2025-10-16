@@ -34,7 +34,7 @@ public class sparkFunTestingClass extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Get a reference to the sensor
-        myOtos = hardwareMap.get(SparkFunOTOS.class, "SparkFUN");;
+        myOtos = hardwareMap.get(SparkFunOTOS.class, "otos");;
 
         // All the configuration for the OTOS is done in this helper method, check it out!
         configureOtos();
