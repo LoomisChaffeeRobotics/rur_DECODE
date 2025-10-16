@@ -147,7 +147,7 @@ public class AutoClassFull extends OpMode {
     public void loop() {
         LLResult result = limelight.getLatestResult();
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
-        fr = fiducialResults.get(0);
+            fr = fiducialResults.get(0);
             telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
             if (fr.getFiducialId() == 23) {
                 telemetry.addLine("PPG");
@@ -163,7 +163,7 @@ public class AutoClassFull extends OpMode {
                 telemetry.addLine("GPP");
                 patternArray[0] = ColorTurningMechanism.SensedColor.GREEN;
                 patternArray[1] = ColorTurningMechanism.SensedColor.PURPLE;
-                patternArray[1] = ColorTurningMechanism.SensedColor.PURPLE;
+                patternArray[2] = ColorTurningMechanism.SensedColor.PURPLE;
                 
             } else {
                 telemetry.addLine("nothing");

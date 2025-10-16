@@ -35,6 +35,7 @@ import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -79,7 +80,7 @@ import java.util.List;
  */
 @Autonomous
 
-public class ColorTurningMechanism {
+public class ColorTurningMechanism extends OpMode {
     float gain = 31;
     float[] hsvValues1 = new float[3];
     DcMotorEx encoder;
@@ -129,19 +130,15 @@ public class ColorTurningMechanism {
             while (encoder.getCurrentPosition() < 104) {
                 indexer.setPower(1);
             }
-            encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            indexer.setPower(0);
-            shift_list(SensedColorAll, direction);
 
         } else {
-            while (encoder.getCurrentPosition() > -104) {
-                indexer.setPower(-1);
+            while (encoder.getCurrentPosition() < 208) {
+                indexer.setPower(1);
             }
-            encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            indexer.setPower(0);
-            shift_list(SensedColorAll, direction);
-
         }
+        indexer.setPower(0);
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shift_list(SensedColorAll, direction);
     }
     public boolean turnRegardlessofColor() {
         if (CurrentColor != SensedColor.NEITHER) {
@@ -173,8 +170,8 @@ public class ColorTurningMechanism {
             return false;
         }
     }
-
-    public void init(Telemetry telemetry, HardwareMap hardwareMap) {
+    @Override
+    public void init() {
         indexer = hardwareMap.get(CRServo.class, "indexer");
         encoder = hardwareMap.get(DcMotorEx.class, "encoder");
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -186,22 +183,17 @@ public class ColorTurningMechanism {
         launcher.init(hardwareMap);
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-
-        try {
-            runSample(telemetry); // actually execute the sample
-        } finally {
-            relativeLayout.post(() -> relativeLayout.setBackgroundColor(Color.WHITE));
-        }
-    }
-
-    protected void runSample(Telemetry telemetry) {
-
-            telemetry.addData("Gain", gain);
-            colorSensor1.setGain(gain);
+        telemetry.addData("Gain", gain);
+        colorSensor1.setGain(gain);
 //            colorSensor2.setGain(gain);
 //            colorSensor3.setGain(gain);
-            NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
-            Color.colorToHSV(colors1.toColor(), hsvValues1);
+        NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
+        Color.colorToHSV(colors1.toColor(), hsvValues1);
+    }
+    @Override
+    public void loop() {
+
+
 //            NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
 //            Color.colorToHSV(colors2.toColor(), hsvValues2);
 //            NormalizedRGBA colors3 = colorSensor3.getNormalizedColors();
@@ -219,20 +211,6 @@ public class ColorTurningMechanism {
             } else {
                 CurrentColor = SensedColor.NEITHER;
             }
-//            if (hsvValues2[0] >= 90 && hsvValues2[0] <= 180) {
-//                CurrentColor2 = SensedColor.GREEN;
-//            } else if (hsvValues1[0] >= 270 && hsvValues2[0] <= 330) {
-//                CurrentColor2 = SensedColor.PURPLE;
-//            } else {
-//                CurrentColor2 = SensedColor.NEITHER;
-//            }
-//            if (hsvValues3[0] >= 90 && hsvValues3[0] <= 180) {
-//                CurrentColor3 = SensedColor.GREEN;
-//            } else if (hsvValues3[0] >= 270 && hsvValues3[0] <= 330) {
-//                CurrentColor3 = SensedColor.PURPLE;
-//            } else {
-//                CurrentColor3 = SensedColor.NEITHER;
-//            }
             SensedColorAll = (Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
             telemetry.addData("CurrentColor", CurrentColor);
             telemetry.addData("CurrentColor2", CurrentColor2);
