@@ -28,10 +28,10 @@ public class Constants {
 
     public static OTOSConstants localizerConstants = new OTOSConstants()
             .hardwareMapName("otos")
-            .offset(new SparkFunOTOS.Pose2D(-8,0,Math.PI/2))
+            .offset(new SparkFunOTOS.Pose2D(-8,0,-Math.PI/2))
             .linearUnit(DistanceUnit.INCH)
             .angleUnit(AngleUnit.RADIANS)
-            .linearScalar(11.13)
+            .linearScalar(3)
             .angularScalar(1);
     //do tuning
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -44,7 +44,7 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(55.69855798065763)
+            .xVelocity(50.449521522822344)
             .yVelocity(49.04440430657071);
 
     public static DriveEncoderConstants driveEncoderConstants = new DriveEncoderConstants()
