@@ -28,11 +28,11 @@ public class Constants {
 
     public static OTOSConstants localizerConstants = new OTOSConstants()
             .hardwareMapName("otos")
-            .offset(new SparkFunOTOS.Pose2D(-8,0,-Math.PI/2))
+            .offset(new SparkFunOTOS.Pose2D(8.5,1,-Math.PI/2))
             .linearUnit(DistanceUnit.INCH)
             .angleUnit(AngleUnit.RADIANS)
-            .linearScalar(3)
-            .angularScalar(1);
+            .linearScalar(-2.0362255659472354)
+            .angularScalar(0.98212174738);
     //do tuning
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
