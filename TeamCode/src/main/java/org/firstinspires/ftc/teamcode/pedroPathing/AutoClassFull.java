@@ -31,7 +31,7 @@ public class AutoClassFull extends OpMode {
     private Path scorePreload, pickup1, pickupMain, score;
     private PathChain movespec1, movespec2, movespec3;
     public void buildPaths() {
-        scorePreload = new Path(new BezierCurve(startPose, scorePose));
+        scorePreload = new Path(new BezierCurve(startPose, scorePose)); //add more control points as needed using thte onlien thing
         scorePreload.setConstantHeadingInterpolation(0);
         //Path chains are chains of paths - so you can add multiple as shown below
         movespec1 = follower.pathBuilder()
