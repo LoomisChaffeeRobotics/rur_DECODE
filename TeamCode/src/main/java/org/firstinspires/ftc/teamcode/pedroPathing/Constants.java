@@ -21,8 +21,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(13.15)
-            .forwardZeroPowerAcceleration(-34.34311294135725)
-            .lateralZeroPowerAcceleration(-92.70228024532133);
+            .forwardZeroPowerAcceleration(-42.00631465376024)
+            .lateralZeroPowerAcceleration(-91.60729080471785);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
@@ -44,8 +44,8 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(50.449521522822344)
-            .yVelocity(49.04440430657071);
+            .xVelocity(41.395773099163385)
+            .yVelocity(37.634541669229826);
 
     public static DriveEncoderConstants driveEncoderConstants = new DriveEncoderConstants()
             .rightFrontMotorName("rightFront")
