@@ -42,10 +42,10 @@ public class DriveClass extends OpMode {
     double MotorPower = 0.5;
 
     DcMotorEx launcher;
-    DcMotor left_front;
-    DcMotor right_front;
-    DcMotor left_back;
-    DcMotor right_back;
+    DcMotorEx left_front;
+    DcMotorEx right_front;
+    DcMotorEx left_back;
+    DcMotorEx right_back;
 
     IMU imu;
     double Yaw;
@@ -80,22 +80,22 @@ public class DriveClass extends OpMode {
         launcher = hardwareMap.get(DcMotorEx.class, "launcher");
         launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
 
-        left_front = hardwareMap.get(DcMotor.class, "leftFront");
-        right_front = hardwareMap.get(DcMotor.class, "rightFront");
-        left_back = hardwareMap.get(DcMotor.class, "leftBack");
-        right_back = hardwareMap.get(DcMotor.class, "rightBack");
-        left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        left_front = hardwareMap.get(DcMotorEx.class, "leftFront");
+        right_front = hardwareMap.get(DcMotorEx.class, "rightFront");
+        left_back = hardwareMap.get(DcMotorEx.class, "leftBack");
+        right_back = hardwareMap.get(DcMotorEx.class, "rightBack");
+        left_front.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        right_front.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        left_back.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        right_back.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         right_front.setDirection(DcMotorSimple.Direction.REVERSE);
         right_back.setDirection(DcMotorSimple.Direction.REVERSE);
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters myIMUparameter;
         myIMUparameter = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
                 )
         );
         imu.initialize(myIMUparameter);

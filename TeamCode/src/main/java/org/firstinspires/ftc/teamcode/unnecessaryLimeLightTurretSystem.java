@@ -24,9 +24,9 @@ import java.util.List;
 
 @TeleOp
 public class unnecessaryLimeLightTurretSystem extends OpMode {
+    public static Pose3D botpose;
     public double targetangle = 165;
     public Limelight3A limelight;
-    public Pose3D botpose;
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
     CRServo sv;
@@ -70,8 +70,14 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
 //        telemetry.addData("Pipeline", "Index: %d, Type: %s",
 //                status.getPipelineIndex(), status.getPipelineType());
         LLResult result = limelight.getLatestResult();
+
             // Access general information
+            //
             botpose = result.getBotpose();
+
+
+
+
             botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
 //            double captureLatency = result.getCaptureLatency();
 //            double targetingLatency = result.getTargetingLatency();
