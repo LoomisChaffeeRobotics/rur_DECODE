@@ -8,15 +8,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-
 import java.util.concurrent.TimeUnit;
 
 public class Launcher {
     ElapsedTime elapsedTime;
-    public double Motor1Velocity;
-    public double Motor2Velocity;
+    public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
     public Servo flap1;
@@ -36,17 +32,9 @@ public class Launcher {
 
     }
     public boolean shoot() {
-
-        Position pos = unnecessaryLimeLightTurretSystem.botpose.getPosition();
-
-        double distance = Math.sqrt(Math.pow(pos.x, 2) + Math.pow(pos.y, 2) + Math.pow(pos.z, 2));
-
         //insert motorvelocity shoot calculations here
-
-        //velocities of each launcher motor CAN BE DIFFERENT!!
-
-        launcher.setVelocity(Motor1Velocity);
-        launcher2.setVelocity(Motor2Velocity);
+        launcher.setVelocity(MotorVelocity);
+        launcher2.setVelocity(MotorVelocity);
         flap1.setPosition(0.2);
         waitAuto(0.5);
         flap1.setPosition(0);
