@@ -94,8 +94,8 @@ public class DriveClass extends OpMode {
         IMU.Parameters myIMUparameter;
         myIMUparameter = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         );
         imu.initialize(myIMUparameter);
