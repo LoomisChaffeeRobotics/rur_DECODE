@@ -35,8 +35,15 @@ import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,95 +80,143 @@ import java.util.List;
  */
 @Autonomous
 
-public class ColorTurningMechanismThing extends LinearOpMode {
-
+public class ColorTurningMechanismThing extends OpMode {
+    float gain = 31;
+    float[] hsvValues1 = new float[3];
+    DcMotorEx encoder;
+    CRServo indexer;
     Launcher launcher;
     NormalizedColorSensor colorSensor1;
-    NormalizedColorSensor colorSensor2;
-    NormalizedColorSensor colorSensor3;
+    SensedColor CurrentColor = SensedColor.NEITHER;
+    SensedColor CurrentColor2 = SensedColor.NEITHER;
+    SensedColor CurrentColor3 = SensedColor.NEITHER;
+    List<SensedColor> SensedColorAll = new ArrayList<SensedColor>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
+//    NormalizedColorSensor colorSensor2;
+//    NormalizedColorSensor colorSensor3;
 
     View relativeLayout;
     public enum SensedColor {
         PURPLE, GREEN, NEITHER;
     }
-    public enum SensedColor2 {
-        PURPLE, GREEN, NEITHER;
-    }
-    public enum SensedColor3 {
-        PURPLE, GREEN, NEITHER;
-    }
+//    public enum SensedColor2 {
+//        PURPLE, GREEN, NEITHER;
+//    }
+//    public enum SensedColor3 {
+//        PURPLE, GREEN, NEITHER;
+//    }
 
+    public List<SensedColor> shift_list(List<SensedColor> l, boolean direction) {
 
-    SensedColor CurrentColor = SensedColor.NEITHER;
-    SensedColor CurrentColor2 = SensedColor.NEITHER;
-    SensedColor CurrentColor3 = SensedColor.NEITHER;
-    List<SensedColor> SensedColorAll = new ArrayList<SensedColor>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
-    @Override public void runOpMode() {
+        SensedColor element_0 = l.get(0);
+        SensedColor element_1 = l.get(1);
+        SensedColor element_2 = l.get(2);
+
+        if (direction) {
+
+            l.set(1, element_0);
+            l.set(2, element_1);
+            l.set(0, element_2);
+        }
+        else {
+            l.set(1, element_2);
+            l.set(2, element_0);
+            l.set(0, element_1);
+        }
+        SensedColorAll = l;
+        return l;
+    }
+    public void turn(boolean direction) {
+        if (direction) {
+            while (encoder.getCurrentPosition() < 104) {
+                indexer.setPower(1);
+            }
+
+        } else {
+            while (encoder.getCurrentPosition() < 208) {
+                indexer.setPower(1);
+            }
+        }
+        indexer.setPower(0);
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shift_list(SensedColorAll, direction);
+    }
+    public boolean turnRegardlessofColor() {
+        if (CurrentColor != SensedColor.NEITHER) {
+            return true;
+        } else if (CurrentColor2 != SensedColor.NEITHER) {
+            turn(true);
+            return true;
+        } else if (CurrentColor3 != SensedColor.NEITHER) {
+            turn(false);
+            return true;
+        } else return false;
+    }
+    public boolean turnBasedOffColor(SensedColor color) {
+
+        //the boolean returned = whether there exists a color
+        //to rotate to.
+
+        if (CurrentColor == color) {
+            return true;
+        }
+        else if (CurrentColor2 == color) {
+            turn(true);
+            return true;
+        } else if (CurrentColor3 == color) {
+            turn(false);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    @Override
+    public void init() {
+        indexer = hardwareMap.get(CRServo.class, "indexer");
+        encoder = hardwareMap.get(DcMotorEx.class, "encoder");
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        SensedColorAll = shift_list(SensedColorAll, true);
+//        colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color2");
+//        colorSensor3 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color3");
         launcher = new Launcher();
         launcher.init(hardwareMap);
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-
-        try {
-            runSample(); // actually execute the sample
-        } finally {
-            relativeLayout.post(() -> relativeLayout.setBackgroundColor(Color.WHITE));
-        }
+        telemetry.addData("Gain", gain);
+        colorSensor1.setGain(gain);
+//            colorSensor2.setGain(gain);
+//            colorSensor3.setGain(gain);
+        NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
+        Color.colorToHSV(colors1.toColor(), hsvValues1);
     }
+    @Override
+    public void loop() {
 
-    protected void runSample() {
-        float gain = 31;
-        float[] hsvValues1 = new float[3];
-        float[] hsvValues2 = new float[3];
-        float[] hsvValues3 = new float[3];
-        colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color2");
-        colorSensor3 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color3");
-        waitForStart();
-        while (opModeIsActive()) {
-            telemetry.addData("Gain", gain);
-            colorSensor1.setGain(gain);
-            colorSensor2.setGain(gain);
-            colorSensor3.setGain(gain);
-            NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
-            Color.colorToHSV(colors1.toColor(), hsvValues1);
-            NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
-            Color.colorToHSV(colors2.toColor(), hsvValues2);
-            NormalizedRGBA colors3 = colorSensor3.getNormalizedColors();
-            Color.colorToHSV(colors3.toColor(), hsvValues3);
-            telemetry.addLine()
-                    .addData("Hue1", "%.3f", hsvValues1[0]);
-            telemetry.addLine()
-                    .addData("Hue2", "%.3f", hsvValues2[0]);
-            telemetry.addLine()
-                    .addData("Hue3", "%.3f", hsvValues3[0]);
-            if (hsvValues1[0] >= 90 && hsvValues1[0] <= 180) {
-                CurrentColor = SensedColor.GREEN;
-            } else if (hsvValues1[0] >= 270 && hsvValues1[0] <= 330) {
-                CurrentColor = SensedColor.PURPLE;
-            } else {
-                CurrentColor = SensedColor.NEITHER;
-            }
-            if (hsvValues2[0] >= 90 && hsvValues2[0] <= 180) {
-                CurrentColor2 = SensedColor.GREEN;
-            } else if (hsvValues1[0] >= 270 && hsvValues2[0] <= 330) {
-                CurrentColor2 = SensedColor.PURPLE;
-            } else {
-                CurrentColor2 = SensedColor.NEITHER;
-            }
-            if (hsvValues3[0] >= 90 && hsvValues3[0] <= 180) {
-                CurrentColor3 = SensedColor.GREEN;
-            } else if (hsvValues3[0] >= 270 && hsvValues3[0] <= 330) {
-                CurrentColor3 = SensedColor.PURPLE;
-            } else {
-                CurrentColor3 = SensedColor.NEITHER;
-            }
-            SensedColorAll = (Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
-            telemetry.addData("CurrentColor", CurrentColor);
-            telemetry.addData("CurrentColor2", CurrentColor2);
-            telemetry.addData("CurrentColor3", CurrentColor3);
-            telemetry.addData("SensedColorAll(Array)", SensedColorAll);
-            telemetry.update();
+
+//            NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
+//            Color.colorToHSV(colors2.toColor(), hsvValues2);
+//            NormalizedRGBA colors3 = colorSensor3.getNormalizedColors();
+//            Color.colorToHSV(colors3.toColor(), hsvValues3);
+        telemetry.addLine()
+                .addData("Hue1", "%.3f", hsvValues1[0]);
+//            telemetry.addLine()
+//                    .addData("Hue2", "%.3f", hsvValues2[0]);
+//            telemetry.addLine()
+//                    .addData("Hue3", "%.3f", hsvValues3[0]);
+        if (hsvValues1[0] >= 90 && hsvValues1[0] <= 180) {
+            CurrentColor = SensedColor.GREEN;
+        } else if (hsvValues1[0] >= 270 && hsvValues1[0] <= 330) {
+            CurrentColor = SensedColor.PURPLE;
+        } else {
+            CurrentColor = SensedColor.NEITHER;
         }
+        SensedColorAll = (Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
+        telemetry.addData("CurrentColor", CurrentColor);
+        telemetry.addData("CurrentColor2", CurrentColor2);
+        telemetry.addData("CurrentColor3", CurrentColor3);
+        telemetry.addData("SensedColorAll(Array)", SensedColorAll);
+        telemetry.update();
     }
 }
+
