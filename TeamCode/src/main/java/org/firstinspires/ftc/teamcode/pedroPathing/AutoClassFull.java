@@ -25,14 +25,33 @@ public class AutoClassFull extends OpMode {
     Follower follower;
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    private Pose startPose = new Pose(12,48 , 0); //heading in radians
+    private Pose startPose = new Pose(56,9 , Math.PI/2); //heading in radians
+    private Pose pickupPose1 =  new Pose(24.0743,35.6656, Math.PI);
+    private Pose controlPoint1 =  new Pose(65.7585,37.226, Math.PI);
+    private Pose endPoint1 = new Pose (61.5232,9.808, Math.PI);
+    private Pose controlPoint2 = new Pose(76.9040,64.421,Math.PI);
+    private Pose pickupPose2 = new Pose (23.8513,60.6315, Math.PI);
+    private Pose endPoint2 = new Pose(64.4210,83.8142,Math.PI);
     public LLResultTypes.FiducialResult fr;
     private Pose scorePose = new Pose(37, 72, 0);
-    private Path scorePreload, pickup1, pickupMain, score;
+    private Path scorePreload, pickup1, run2, pickup2, run3, pickupMain, score;
     private PathChain movespec1, movespec2, movespec3;
     public void buildPaths() {
         scorePreload = new Path(new BezierCurve(startPose, scorePose)); //add more control points as needed using thte onlien thing
         scorePreload.setConstantHeadingInterpolation(0);
+
+        pickup1.setConstantHeadingInterpolation(180);
+        pickup1 =  new Path(new BezierCurve(startPose, controlPoint1, pickupPose1));
+
+        run2.setConstantHeadingInterpolation(180);
+        run2 =  new Path(new BezierCurve(pickupPose1, endPoint1));
+
+        pickup2.setConstantHeadingInterpolation(180);
+        pickup2 = new Path(new BezierCurve(endPoint1, controlPoint2, pickupPose2));
+
+        run3.setConstantHeadingInterpolation(180);
+        run3 = new Path(new BezierCurve(pickupPose2,endPoint2));
+
         //Path chains are chains of paths - so you can add multiple as shown below
         movespec1 = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(startPose, scorePose)))
