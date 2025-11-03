@@ -32,12 +32,12 @@ public class LauncherTuningTest extends OpMode {
         }
         if (gamepad1.dpad_down && elapsedTime.time() > 0.2) {
             bottom_power -= 0.1;
-            bottom_motor.setPower(top_power);
+            bottom_motor.setPower(bottom_power);
             elapsedTime.reset();
         }
         if (gamepad1.y && elapsedTime.time() > 0.2) {
             top_power += 0.1;
-            top_motor.setPower(bottom_power);
+            top_motor.setPower(top_power);
             elapsedTime.reset();
         }
         if (gamepad1.a && elapsedTime.time() > 0.2) {
