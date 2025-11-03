@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,8 +10,8 @@ public class LauncherTuningTest extends OpMode {
 
     DcMotorEx bottom_motor;
     DcMotorEx top_motor;
-    double bottom_power = 0;
-    double top_power = 0;
+    double bottom_velocity = 0;
+    double top_velocity = 0;
 
     ElapsedTime elapsedTime;
 
@@ -26,28 +25,28 @@ public class LauncherTuningTest extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.dpad_up && elapsedTime.time() > 0.2) {
-            bottom_power += 0.1;
-            bottom_motor.setPower(bottom_power);
+            bottom_velocity += 0.1;
+            bottom_motor.setPower(bottom_velocity);
             elapsedTime.reset();
         }
         if (gamepad1.dpad_down && elapsedTime.time() > 0.2) {
-            bottom_power -= 0.1;
-            bottom_motor.setPower(bottom_power);
+            bottom_velocity -= 0.1;
+            bottom_motor.setPower(bottom_velocity);
             elapsedTime.reset();
         }
         if (gamepad1.y && elapsedTime.time() > 0.2) {
-            top_power += 0.1;
-            top_motor.setPower(top_power);
+            top_velocity += 0.1;
+            top_motor.setPower(top_velocity);
             elapsedTime.reset();
         }
         if (gamepad1.a && elapsedTime.time() > 0.2) {
-            top_power -= 0.1;
-            top_motor.setPower(top_power);
+            top_velocity -= 0.1;
+            top_motor.setPower(top_velocity);
             elapsedTime.reset();
         }
 
-        telemetry.addData("top: ",top_motor.getVelocity());
-        telemetry.addData("bottom: ",bottom_motor.getVelocity());
+        telemetry.addData("top: ",top_motor.getVelocity()*15/7);
+        telemetry.addData("bottom: ",bottom_motor.getVelocity()*15/7);
         telemetry.update();
     }
 }
