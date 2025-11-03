@@ -29,6 +29,8 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
     public Pose3D botpose;
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
+
+    public double placeholder_april_tag_distance_in_meters = 0;
     CRServo sv;
     @Override
     public void init() {
@@ -72,7 +74,7 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
         LLResult result = limelight.getLatestResult();
             // Access general information
             botpose = result.getBotpose();
-            botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
+            botposeangle = botpose.getOrientation().getYaw(AngleUnit.RADIANS);
 //            double captureLatency = result.getCaptureLatency();
 //            double targetingLatency = result.getTargetingLatency();
 //            double parseLatency = result.getParseLatency();

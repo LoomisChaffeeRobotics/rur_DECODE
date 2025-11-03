@@ -12,15 +12,29 @@ import java.util.concurrent.TimeUnit;
 
 public class Launcher {
     ElapsedTime elapsedTime;
+    unnecessaryLimeLightTurretSystem limelightsystem;
     public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
+
+    double velocity_towards_target = 0;
+    double time_in_air = 0;
+    double[] between_point_1 = {0, 0};
+    double[] between_point_2 = {0, 0};
+
+    double[] target_ranges = {0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0};
+    double[] lower_motor_speeds = {1179, 1379, 1690, 1993, 2278, 2559, 2836, 3143, 3420, 3768};
+    double[] upper_motor_speeds = {2389, 2155, 2126, 2260, 2406, 2617, 2857, 3126, 3371, 3599};
+    double[] time_in_flights = {0.79, 0.76, 0.81, 0.9, 0.97, 1.05, 1.14, 1.23, 1.29, 1.28};
+
     public Servo flap1;
     public void init(HardwareMap hardwareMap) {
         elapsedTime = new ElapsedTime();
         flap1 = hardwareMap.get(Servo.class, "flap1");
         launcher = hardwareMap.get(DcMotorEx.class, "launcher");
         launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
+        limelightsystem = new unnecessaryLimeLightTurretSystem();
+        limelightsystem.init();
     }
     boolean timerTestStart = false;
     public void waitAuto(double seconds){
@@ -31,7 +45,30 @@ public class Launcher {
         }
 
     }
+
+    public double[] find_closest_x(double target_x) {
+        return new double[] {(Math.ceil(target_x/2)*2) - 0.5, Math.ceil(target_x/2)*2};
+    }
+
+    public double interpolate_points(double targetX, double[] point1, double[] point2) {
+        double slope = (point1[0] - point2[0])/(point1[1] - point2[0]);
+        double x_times_slope = slope * (targetX - point1[0]);
+        double y_intercept = point1[1] - (slope * point1[0]);
+
+        return x_times_slope + y_intercept;
+    }
     public boolean shoot() {
+
+        velocity_towards_target = FieldCentricDriving.velocity_vector * Math.cos(limelightsystem.botposeangle);
+
+        double[] result = find_closest_x(limelightsystem.placeholder_april_tag_distance_in_meters);
+
+        double flight_time_interporation_result = interpolate_points(
+                limelightsystem.placeholder_april_tag_distance_in_meters,
+                new double[] {result[0], time_in_flights[(int)(result[0] * 2) - 1]},
+                new double[] {result[1], time_in_flights[(int)(result[1] * 2) - 1]}
+        );
+
         //insert motorvelocity shoot calculations here
         launcher.setVelocity(MotorVelocity);
         launcher2.setVelocity(MotorVelocity);
