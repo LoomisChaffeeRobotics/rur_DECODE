@@ -25,22 +25,22 @@ public class LauncherTuningTest extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.dpad_up && elapsedTime.time() > 0.2) {
-            bottom_velocity += 0.1;
+            bottom_velocity += 0.01;
             bottom_motor.setPower(bottom_velocity);
             elapsedTime.reset();
         }
         if (gamepad1.dpad_down && elapsedTime.time() > 0.2) {
-            bottom_velocity -= 0.1;
+            bottom_velocity -= 0.01;
             bottom_motor.setPower(bottom_velocity);
             elapsedTime.reset();
         }
         if (gamepad1.y && elapsedTime.time() > 0.2) {
-            top_velocity += 0.1;
+            top_velocity += 0.01;
             top_motor.setPower(top_velocity);
             elapsedTime.reset();
         }
         if (gamepad1.a && elapsedTime.time() > 0.2) {
-            top_velocity -= 0.1;
+            top_velocity -= 0.01;
             top_motor.setPower(top_velocity);
             elapsedTime.reset();
         }
