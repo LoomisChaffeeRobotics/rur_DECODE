@@ -22,10 +22,10 @@ public class Launcher {
     double[] between_point_1 = {0, 0};
     double[] between_point_2 = {0, 0};
 
-    double[] target_ranges = {0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0};
+    double[] target_ranges = {0.5, 1.2, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0};
     double[] lower_motor_speeds = {1017,1032,1159,1405,1615,1819,2029,2246,2454,2697};
     double[] upper_motor_speeds = {2152,1714,1600,1628,1747,1870,2054,2230,2386,2549};
-    double[] time_in_flights = {0.79, 0.76, 0.81, 0.9, 0.97, 1.05, 1.14, 1.23, 1.29, 1.28};
+    double[] time_in_flights = {1.05, 0.9, 0.86, 0.92, 1.01, 1.08, 1.19, 1.27, 1.32, 1.34};
 
     public Servo flap1;
     public void init(HardwareMap hardwareMap) {
@@ -47,7 +47,16 @@ public class Launcher {
     }
 
     public double[] find_closest_x(double target_x) {
-        return new double[] {(Math.ceil(target_x/2)*2) - 0.5, Math.ceil(target_x/2)*2};
+
+        if (target_x >= 0.5 && target_x < 1.2) {
+            return new double[]{0.5, 1.2};
+        }
+        else if (target_x >= 1.2 && target_x < 1.5) {
+            return new double[]{1.2, 1.5};
+        }
+        else {
+            return new double[]{(Math.ceil(target_x * 2) / 2) - 0.5, Math.ceil(target_x * 2) / 2};
+        }
     }
 
     public double interpolate_points(double targetX, double[] point1, double[] point2) {
@@ -63,10 +72,12 @@ public class Launcher {
 
         double[] result = find_closest_x(limelightsystem.distance_from_apritltag);
 
+        double index = result[0] >= 1.5 ? time_in_flights[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
+        
         double flight_time_interporation_result = interpolate_points(
                 limelightsystem.distance_from_apritltag,
-                new double[] {result[0], time_in_flights[(int)(result[0] * 2) - 1]},
-                new double[] {result[1], time_in_flights[(int)(result[1] * 2) - 1]}
+                new double[] {result[0], index},
+                new double[] {result[1], index + 1}
         );
 
         //insert motorvelocity shoot calculations here
