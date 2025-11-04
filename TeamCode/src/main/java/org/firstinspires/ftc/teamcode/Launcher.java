@@ -23,8 +23,8 @@ public class Launcher {
     double[] between_point_2 = {0, 0};
 
     double[] target_ranges = {0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0};
-    double[] lower_motor_speeds = {1179, 1379, 1690, 1993, 2278, 2559, 2836, 3143, 3420, 3768};
-    double[] upper_motor_speeds = {2389, 2155, 2126, 2260, 2406, 2617, 2857, 3126, 3371, 3599};
+    double[] lower_motor_speeds = {1017,1032,1159,1405,1615,1819,2029,2246,2454,2697};
+    double[] upper_motor_speeds = {2152,1714,1600,1628,1747,1870,2054,2230,2386,2549};
     double[] time_in_flights = {0.79, 0.76, 0.81, 0.9, 0.97, 1.05, 1.14, 1.23, 1.29, 1.28};
 
     public Servo flap1;
@@ -61,10 +61,10 @@ public class Launcher {
 
         velocity_towards_target = FieldCentricDriving.velocity_vector * Math.cos(limelightsystem.botposeangle);
 
-        double[] result = find_closest_x(limelightsystem.placeholder_april_tag_distance_in_meters);
+        double[] result = find_closest_x(limelightsystem.distance_from_apritltag);
 
         double flight_time_interporation_result = interpolate_points(
-                limelightsystem.placeholder_april_tag_distance_in_meters,
+                limelightsystem.distance_from_apritltag,
                 new double[] {result[0], time_in_flights[(int)(result[0] * 2) - 1]},
                 new double[] {result[1], time_in_flights[(int)(result[1] * 2) - 1]}
         );

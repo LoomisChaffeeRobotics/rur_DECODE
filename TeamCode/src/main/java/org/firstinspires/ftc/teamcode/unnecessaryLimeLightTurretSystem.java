@@ -18,7 +18,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
 
@@ -27,10 +30,11 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
     public double targetangle = 165;
     public Limelight3A limelight;
     public Pose3D botpose;
+    public Pose3D redATpos = new Pose3D(new Position(DistanceUnit.INCH, 1,1,1,0), new YawPitchRollAngles(AngleUnit.RADIANS,0,0,0,0));
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
 
-    public double placeholder_april_tag_distance_in_meters = 0;
+    public double distance_from_apritltag = 0; //meters
     CRServo sv;
     @Override
     public void init() {
