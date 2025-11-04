@@ -18,7 +18,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
 
@@ -27,10 +30,13 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
     public double targetangle = 165;
     public Limelight3A limelight;
     public Pose3D botpose;
+    public Position positionrelativetoapriltag;
+
+    public Pose3D redATpos = new Pose3D(new Position(DistanceUnit.INCH, 1,1,1,0), new YawPitchRollAngles(AngleUnit.RADIANS,0,0,0,0));
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
 
-    public double placeholder_april_tag_distance_in_meters = 0;
+    public double distance_from_apriltag = 0; //meters
     CRServo sv;
     @Override
     public void init() {
@@ -50,6 +56,10 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
 
     @Override
     public void loop() {
+        positionrelativetoapriltag.x = botpose.getPosition().x + 58.346457;
+        positionrelativetoapriltag.y = botpose.getPosition().y + 55.629921;
+        distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x,2)+Math.pow(positionrelativetoapriltag.y,2));
+
         angleerror = targetangle - botposeangle;
 //        if (angleerror < -1 || angleerror > 180) {
 //            sv.setPower(-0.1);
