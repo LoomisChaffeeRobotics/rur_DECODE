@@ -70,12 +70,12 @@ public class Launcher {
 
         velocity_towards_target = FieldCentricDriving.velocity_vector * Math.cos(limelightsystem.botposeangle);
 
-        double[] result = find_closest_x(limelightsystem.distance_from_apritltag);
+        double[] result = find_closest_x(limelightsystem.distance_from_apriltag);
 
         double index = result[0] >= 1.5 ? time_in_flights[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
-        
+
         double flight_time_interporation_result = interpolate_points(
-                limelightsystem.distance_from_apritltag,
+                limelightsystem.distance_from_apriltag,
                 new double[] {result[0], index},
                 new double[] {result[1], index + 1}
         );
