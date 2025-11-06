@@ -58,7 +58,7 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
         //BLUEEEEEEEEE
         positionrelativetoapriltag.x = botpose.getPosition().x + 58.346457;
         positionrelativetoapriltag.y = botpose.getPosition().y + 55.629921;
-        distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x,2)+Math.pow(positionrelativetoapriltag.y,2));
+        distance_from_apriltag = (Math.sqrt(Math.pow(positionrelativetoapriltag.x,2)+Math.pow(positionrelativetoapriltag.y,2))) * 0.00254;
 
         angleerror = targetangle - botposeangle;
 //        if (angleerror < -1 || angleerror > 180) {
