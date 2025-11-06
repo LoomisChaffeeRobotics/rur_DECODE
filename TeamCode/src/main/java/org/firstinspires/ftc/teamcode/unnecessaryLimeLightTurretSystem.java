@@ -32,7 +32,6 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
     public Pose3D botpose;
     public Position positionrelativetoapriltag;
 
-    public Pose3D redATpos = new Pose3D(new Position(DistanceUnit.INCH, 1,1,1,0), new YawPitchRollAngles(AngleUnit.RADIANS,0,0,0,0));
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
 
@@ -56,6 +55,7 @@ public class unnecessaryLimeLightTurretSystem extends OpMode {
 
     @Override
     public void loop() {
+        //BLUEEEEEEEEE
         positionrelativetoapriltag.x = botpose.getPosition().x + 58.346457;
         positionrelativetoapriltag.y = botpose.getPosition().y + 55.629921;
         distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x,2)+Math.pow(positionrelativetoapriltag.y,2));

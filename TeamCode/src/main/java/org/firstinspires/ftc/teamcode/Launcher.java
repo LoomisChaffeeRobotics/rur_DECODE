@@ -28,6 +28,21 @@ public class Launcher {
     double[] time_in_flights = {1.05, 0.9, 0.86, 0.92, 1.01, 1.08, 1.19, 1.27, 1.32, 1.34};
 
     public Servo flap1;
+
+
+    double[] result = {0.0, 0.0};
+
+    double time_in_flight_index = 0.0;
+    double lower_motor_index = 0.0;
+    double upper_motor_index = 0.0;
+
+    double flight_time_interporation_result = 0.0;
+
+    double lower_motor_interporation_result = 0.0;
+
+    double upper_motor_interporation_result = 0.0;
+
+
     public void init(HardwareMap hardwareMap) {
         elapsedTime = new ElapsedTime();
         flap1 = hardwareMap.get(Servo.class, "flap1");
@@ -70,22 +85,36 @@ public class Launcher {
 
         velocity_towards_target = FieldCentricDriving.velocity_vector * Math.cos(limelightsystem.botposeangle);
 
-        double[] result = find_closest_x(limelightsystem.distance_from_apriltag);
+        result = find_closest_x(limelightsystem.distance_from_apriltag);
 
-        double index = result[0] >= 1.5 ? time_in_flights[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
+        time_in_flight_index = result[0] >= 1.5 ? time_in_flights[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
+        lower_motor_index = result[0] >= 1.5 ? lower_motor_speeds[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
+        upper_motor_index = result[0] >= 1.5 ? upper_motor_speeds[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
 
-        double flight_time_interporation_result = interpolate_points(
+        flight_time_interporation_result = interpolate_points(
                 limelightsystem.distance_from_apriltag,
-                new double[] {result[0], index},
-                new double[] {result[1], index + 1}
+                new double[] {result[0], time_in_flight_index},
+                new double[] {result[1], time_in_flight_index + 1}
         );
 
+        lower_motor_interporation_result = interpolate_points(
+                limelightsystem.distance_from_apriltag,
+                new double[] {result[0], lower_motor_index},
+                new double[] {result[1], lower_motor_index + 1}
+        ) * (7.0/15.0);
+
+        upper_motor_interporation_result = interpolate_points(
+                limelightsystem.distance_from_apriltag,
+                new double[] {result[0], upper_motor_index},
+                new double[] {result[1], upper_motor_index + 1}
+        ) * (7.0/15.0);
+
         //insert motorvelocity shoot calculations here
-        launcher.setVelocity(MotorVelocity);
-        launcher2.setVelocity(MotorVelocity);
-        flap1.setPosition(0.2);
-        waitAuto(0.5);
-        flap1.setPosition(0);
+        launcher.setVelocity(lower_motor_interporation_result);
+        launcher2.setVelocity(upper_motor_interporation_result);
+//        flap1.setPosition(0.2);
+//        waitAuto(0.5);
+//        flap1.setPosition(0);
 
         return true;
     }
