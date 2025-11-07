@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.util.concurrent.TimeUnit;
 
 public class Launcher {
@@ -27,7 +29,7 @@ public class Launcher {
     double[] upper_motor_speeds = {2152,1714,1600,1628,1747,1870,2054,2230,2386,2549};
     double[] time_in_flights = {1.05, 0.9, 0.86, 0.92, 1.01, 1.08, 1.19, 1.27, 1.32, 1.34};
 
-    public Servo flap1;
+//    public Servo flap1;
 
 
     double[] result = {0.0, 0.0};
@@ -43,13 +45,13 @@ public class Launcher {
     double upper_motor_interporation_result = 0.0;
 
 
-    public void init(HardwareMap hardwareMap) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         elapsedTime = new ElapsedTime();
-        flap1 = hardwareMap.get(Servo.class, "flap1");
+//        flap1 = hardwareMap.get(Servo.class, "flap1");
         launcher = hardwareMap.get(DcMotorEx.class, "launcher");
         launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
         limelightsystem = new unnecessaryLimeLightTurretSystem();
-        limelightsystem.init();
+        limelightsystem.init(hardwareMap, telemetry);
     }
     boolean timerTestStart = false;
     public void waitAuto(double seconds){

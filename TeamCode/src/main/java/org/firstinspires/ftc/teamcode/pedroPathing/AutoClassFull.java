@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.ColorTurningMechanismThing;
 import org.firstinspires.ftc.teamcode.Launcher;
 
 import java.util.List;
+//change paths to pathcnages sometimes
 
 @Autonomous
 public class AutoClassFull extends OpMode {
@@ -37,21 +38,19 @@ public class AutoClassFull extends OpMode {
     private Path scorePreload, pickup1, run2, pickup2, run3, pickupMain, score;
     private PathChain movespec1, movespec2, movespec3;
     public void buildPaths() {
-        scorePreload = new Path(new BezierCurve(startPose, scorePose)); //add more control points as needed using thte onlien thing
-        scorePreload.setConstantHeadingInterpolation(0);
 
-        pickup1.setConstantHeadingInterpolation(180);
+
         pickup1 =  new Path(new BezierCurve(startPose, controlPoint1, pickupPose1));
+        pickup1.setConstantHeadingInterpolation(180);
 
-        run2.setConstantHeadingInterpolation(180);
         run2 =  new Path(new BezierCurve(pickupPose1, endPoint1));
+        run2.setConstantHeadingInterpolation(180);
 
-        pickup2.setConstantHeadingInterpolation(180);
         pickup2 = new Path(new BezierCurve(endPoint1, controlPoint2, pickupPose2));
+        pickup2.setConstantHeadingInterpolation(180);
 
-        run3.setConstantHeadingInterpolation(180);
         run3 = new Path(new BezierCurve(pickupPose2,endPoint2));
-
+        run3.setConstantHeadingInterpolation(180);
         //Path chains are chains of paths - so you can add multiple as shown below
         movespec1 = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(startPose, scorePose)))
@@ -140,7 +139,7 @@ public class AutoClassFull extends OpMode {
         turningthing = new ColorTurningMechanismThing();
         turningthing.init();
         launcher = new Launcher();
-        launcher.init(hardwareMap);
+        launcher.init(hardwareMap, telemetry);
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();

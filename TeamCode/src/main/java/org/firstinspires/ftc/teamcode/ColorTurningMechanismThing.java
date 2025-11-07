@@ -183,7 +183,7 @@ public class ColorTurningMechanismThing extends OpMode {
 //        colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color2");
 //        colorSensor3 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color3");
         launcher = new Launcher();
-        launcher.init(hardwareMap);
+        launcher.init(hardwareMap, telemetry);
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
         telemetry.addData("Gain", gain);
