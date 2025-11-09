@@ -10,11 +10,8 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -23,15 +20,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-
-import java.util.List;
 
 public class unnecessaryLimeLightTurretSystem{
     public double targetangle = 165;
     public Limelight3A limelight;
     public Pose3D botpose;
     public Position positionrelativetoapriltag;
+    public double xrelativetoat;
+    public double yrelativetoat;
     public LLResult result;
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
@@ -56,11 +52,13 @@ public class unnecessaryLimeLightTurretSystem{
     }
 
 
-    public void dosomething() {
+    public double getDistance_from_apriltag() {
         //BLUEEEEEEEEE
-        positionrelativetoapriltag.x = botpose.getPosition().x + 58.346457;
-        positionrelativetoapriltag.y = botpose.getPosition().y + 55.629921;
-        distance_from_apriltag = (Math.sqrt(Math.pow(positionrelativetoapriltag.x,2)+Math.pow(positionrelativetoapriltag.y,2))) * 0.00254;
+        result = limelight.getLatestResult();
+        botpose = result.getBotpose();
+        botposeangle = botpose.getOrientation().getYaw(AngleUnit.RADIANS);
+        positionrelativetoapriltag = new Position(DistanceUnit.INCH, botpose.getPosition().x + 58.346457,botpose.getPosition().y + 55.629921, 0, 0);
+        distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2)) * 0.00254;
 
         angleerror = targetangle - botposeangle;
 //        if (angleerror < -1 || angleerror > 180) {
@@ -80,9 +78,6 @@ public class unnecessaryLimeLightTurretSystem{
 //                status.getTemp(), status.getCpu(),(int)status.getFps());
 //        telemetry.addData("Pipeline", "Index: %d, Type: %s",
 //                status.getPipelineIndex(), status.getPipelineType());
-        result = limelight.getLatestResult();
-        botpose = result.getBotpose();
-        botposeangle = botpose.getOrientation().getYaw(AngleUnit.RADIANS);
 //            double captureLatency = result.getCaptureLatency();
 //            double targetingLatency = result.getTargetingLatency();
 //            double parseLatency = result.getParseLatency();
@@ -125,7 +120,7 @@ public class unnecessaryLimeLightTurretSystem{
 //                telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
 //            }
 
-
+            return distance_from_apriltag;
     }
 }
 

@@ -2,15 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import static java.lang.Thread.sleep;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import java.util.concurrent.TimeUnit;
 
 public class Launcher {
     ElapsedTime elapsedTime;
@@ -83,37 +79,36 @@ public class Launcher {
 
         return x_times_slope + y_intercept;
     }
-    public boolean shoot() {
+    public boolean shoot(Telemetry telemetry) {
+        limelightsystem.getDistance_from_apriltag();
+        //velocity_towards_target = FieldCentricDriving.velocity_vector * Math.cos(limelightsystem.botposeangle);
 
-        velocity_towards_target = FieldCentricDriving.velocity_vector * Math.cos(limelightsystem.botposeangle);
-
-        result = find_closest_x(limelightsystem.distance_from_apriltag);
+        result = find_closest_x(limelightsystem.getDistance_from_apriltag());
 
         time_in_flight_index = result[0] >= 1.5 ? time_in_flights[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
         lower_motor_index = result[0] >= 1.5 ? lower_motor_speeds[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
         upper_motor_index = result[0] >= 1.5 ? upper_motor_speeds[(int)(result[0] * 2) - 1] : (result[0] == 0.5 ? 0 : 1);
 
         flight_time_interporation_result = interpolate_points(
-                limelightsystem.distance_from_apriltag,
+                limelightsystem.getDistance_from_apriltag(),
                 new double[] {result[0], time_in_flight_index},
                 new double[] {result[1], time_in_flight_index + 1}
         );
 
         lower_motor_interporation_result = interpolate_points(
-                limelightsystem.distance_from_apriltag,
+                limelightsystem.getDistance_from_apriltag(),
                 new double[] {result[0], lower_motor_index},
                 new double[] {result[1], lower_motor_index + 1}
         ) * (7.0/15.0);
 
         upper_motor_interporation_result = interpolate_points(
-                limelightsystem.distance_from_apriltag,
+                limelightsystem.getDistance_from_apriltag(),
                 new double[] {result[0], upper_motor_index},
                 new double[] {result[1], upper_motor_index + 1}
         ) * (7.0/15.0);
 
-        //insert motorvelocity shoot calculations here
-        launcher.setVelocity(lower_motor_interporation_result);
-        launcher2.setVelocity(upper_motor_interporation_result);
+        telemetry.addData("lower motor power: ", lower_motor_interporation_result);
+        telemetry.addData("upper motor power: ", upper_motor_interporation_result);
 //        flap1.setPosition(0.2);
 //        waitAuto(0.5);
 //        flap1.setPosition(0);

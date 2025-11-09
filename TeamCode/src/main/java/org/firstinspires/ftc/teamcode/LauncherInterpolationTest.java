@@ -13,14 +13,17 @@ public class LauncherInterpolationTest extends OpMode {
     public void init() {
         launcherClass = new Launcher();
         launcherClass.init(hardwareMap, telemetry);
+        limelight = new unnecessaryLimeLightTurretSystem();
+        limelight.init(hardwareMap, telemetry);
 
     }
 
     @Override
     public void loop() {
-        launcherClass.shoot();
-        telemetry.addData("Distance from APrilag", limelight.distance_from_apriltag);
+        launcherClass.shoot(telemetry);
+        telemetry.addData("Distance from APrilag", limelight.getDistance_from_apriltag());
        telemetry.addData("botpose", limelight.botpose);
+       telemetry.update();
     }
 
 }

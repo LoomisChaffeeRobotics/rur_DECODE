@@ -81,7 +81,7 @@ public class AutoClassFull extends OpMode {
                     turningthing.turnBasedOffColor(patternArray[0]);
                     turningthing.turnBasedOffColor(patternArray[1]);
                     turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
-                    launcher.shoot(); //actually shoots
+                    launcher.shoot(telemetry); //actually shoots
                     setPathState(2);
                 }
                 break;
