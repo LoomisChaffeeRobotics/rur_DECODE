@@ -40,7 +40,6 @@ public class unnecessaryLimeLightTurretSystem{
 //        sv = hardwareMap.get(CRServo.class, "sv");
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         telemetry.setMsTransmissionInterval(11);
-
         limelight.pipelineSwitch(0);
 
         /*
@@ -55,10 +54,11 @@ public class unnecessaryLimeLightTurretSystem{
     public double getDistance_from_apriltag() {
         //BLUEEEEEEEEE
         result = limelight.getLatestResult();
-        botpose = result.getBotpose();
+        botpose = (result != null) ? result.getBotpose() : botpose;
+
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.RADIANS);
-        positionrelativetoapriltag = new Position(DistanceUnit.INCH, botpose.getPosition().x + 58.346457,botpose.getPosition().y + 55.629921, 0, 0);
-        distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2)) * 0.00254;
+        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + 1.413, 0, 0);
+        distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2)) ;
 
         angleerror = targetangle - botposeangle;
 //        if (angleerror < -1 || angleerror > 180) {

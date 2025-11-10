@@ -30,13 +30,13 @@ public class Launcher {
 
     double[] result = {0.0, 0.0};
 
-    double time_in_flight_index_0 = 0.0;
-    double lower_motor_index_0 = 0.0;
-    double upper_motor_index_0 = 0.0;
+    double time_in_flight_value_0 = 0.0;
+    double lower_motor_value_0 = 0.0;
+    double upper_motor_value_0 = 0.0;
 
-    double time_in_flight_index_1 = 0.0;
-    double lower_motor_index_1 = 0.0;
-    double upper_motor_index_1 = 0.0;
+    double time_in_flight_value_1 = 0.0;
+    double lower_motor_value_1 = 0.0;
+    double upper_motor_value_1 = 0.0;
     double flight_time_interporation_result = 0.0;
 
     double lower_motor_interporation_result = 0.0;
@@ -76,8 +76,8 @@ public class Launcher {
     }
 
     public double interpolate_points(double targetX, double[] point1, double[] point2) {
-        double slope = (point1[1] - point2[1])/(point1[0] - point2[0]);
-        double x_times_slope = slope * (targetX - point1[0]);
+        double slope = (point2[1] - point1[1])/(point2[0] - point1[0]);
+        double x_times_slope = slope * (targetX);
         double y_intercept = point1[1] - (slope * point1[0]);
 
         return x_times_slope + y_intercept;
@@ -89,36 +89,44 @@ public class Launcher {
 
         result = find_closest_x(limelightsystem.getDistance_from_apriltag()); //finds distance from apriltag - two numbers: upper and lower bound
 
-        time_in_flight_index_0 = result[0] >= 1.5 ? time_in_flights[(int)(result[0] * 2) - 1] : time_in_flights[(result[0] == 0.5 ? 0 : 1)]; // finds the time in flight for both upper and lower bound
-        lower_motor_index_0 = result[0] >= 1.5 ? lower_motor_speeds[(int)(result[0] * 2) - 1] : lower_motor_speeds[(result[0] == 0.5 ? 0 : 1)]; // lower motor speed for upper and lower
-        upper_motor_index_0 = result[0] >= 1.5 ? upper_motor_speeds[(int)(result[0] * 2) - 1] : upper_motor_speeds[(result[0] == 0.5 ? 0 : 1)]; // upper motor speed for upper and lower
+        time_in_flight_value_0 = result[0] >= 1.5 ? time_in_flights[(int)(result[0] * 2) - 1] : time_in_flights[(result[0] == 0.5 ? 0 : 1)]; // finds the time in flight for both upper and lower bound
+        lower_motor_value_0 = result[0] >= 1.5 ? lower_motor_speeds[(int)(result[0] * 2) - 1] : lower_motor_speeds[(result[0] == 0.5 ? 0 : 1)]; // lower motor speed for upper and lower
+        upper_motor_value_0 = result[0] >= 1.5 ? upper_motor_speeds[(int)(result[0] * 2) - 1] : upper_motor_speeds[(result[0] == 0.5 ? 0 : 1)]; // upper motor speed for upper and lower
 
-        time_in_flight_index_1 = result[1] >= 2 ? time_in_flights[(int)(result[1] * 2)] : time_in_flights[(result[1] == 0.5 ? 1 : 2)]; // finds the time in flight for both upper and lower bound
-        lower_motor_index_1 = result[1] >= 2 ? lower_motor_speeds[(int)(result[1] * 2)] : lower_motor_speeds[(result[1] == 0.5 ? 1 : 2)]; // lower motor speed for upper and lower
-        upper_motor_index_1 = result[1] >= 2 ? upper_motor_speeds[(int)(result[1] * 2)] : upper_motor_speeds[(result[1] == 0.5 ? 1 : 2)]; // upper motor speed for upper and lower
+        time_in_flight_value_1 = result[1] >= 2 ? time_in_flights[(int)(result[1] * 2)] : time_in_flights[(result[1] == 0.5 ? 1 : 2)]; // finds the time in flight for both upper and lower bound
+        lower_motor_value_1 = result[1] >= 2 ? lower_motor_speeds[(int)(result[1] * 2)] : lower_motor_speeds[(result[1] == 0.5 ? 1 : 2)]; // lower motor speed for upper and lower
+        upper_motor_value_1 = result[1] >= 2 ? upper_motor_speeds[(int)(result[1] * 2)] : upper_motor_speeds[(result[1] == 0.5 ? 1 : 2)]; // upper motor speed for upper and lower
 
 
         //legit no idea if thats going tow ork
         flight_time_interporation_result = interpolate_points(
                 limelightsystem.getDistance_from_apriltag(), // distance
-                new double[] {result[0], time_in_flight_index_0}, //first (x,y) is (lower distance bound, flight time)
-                new double[] {result[1], time_in_flight_index_1} // second (x,y) is (upper distance bound, flight time)
+                new double[] {result[0], time_in_flight_value_0}, //first (x,y) is (lower distance bound, flight time)
+                new double[] {result[1], time_in_flight_value_1} // second (x,y) is (upper distance bound, flight time)
         );
 
         lower_motor_interporation_result = interpolate_points(
                 limelightsystem.getDistance_from_apriltag(),
-                new double[] {result[0], lower_motor_index_0},
-                new double[] {result[1], lower_motor_index_1}
+                new double[] {result[0], lower_motor_value_0},
+                new double[] {result[1], lower_motor_value_1}
         ) * (7.0/15.0);
 
         upper_motor_interporation_result = interpolate_points(
                 limelightsystem.getDistance_from_apriltag(),
-                new double[] {result[0], upper_motor_index_0},
-                new double[] {result[1], upper_motor_index_1}
+                new double[] {result[0], upper_motor_value_0},
+                new double[] {result[1], upper_motor_value_1}
         ) * (7.0/15.0);
-
+        launcher.setVelocity(-lower_motor_interporation_result);
+        launcher2.setVelocity(-upper_motor_interporation_result);
         telemetry.addData("lower motor power: ", lower_motor_interporation_result);
+
+        telemetry.addData("lower motor 0: ", lower_motor_value_0 * (7.0/15.0));
+        telemetry.addData("lower motor 1: ", lower_motor_value_1 * (7.0/15.0));
+
         telemetry.addData("upper motor power: ", upper_motor_interporation_result);
+
+        telemetry.addData("upper motor 0: ", upper_motor_value_0 * (7.0/15.0));
+        telemetry.addData("upper motor 1: ", upper_motor_value_1 * (7.0/15.0));
 //        flap1.setPosition(0.2);
 //        waitAuto(0.5);
 //        flap1.setPosition(0);
