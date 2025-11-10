@@ -29,6 +29,8 @@ public class FieldCentricDriving extends OpMode {
     double left_back_velocity = 0;
     double right_back_velocity = 0;
 
+    public static double velocity_vector = 0;
+
 
     double x;
     double y;
@@ -84,6 +86,8 @@ public class FieldCentricDriving extends OpMode {
 
         x = gamepad1.left_stick_x;
         y = gamepad1.left_stick_y;
+
+        velocity_vector = Math.sqrt(Math.pow(x * 55.69855798065763, 2) + Math.pow(y * 49.04440430657071, 2));
 
         x_altered = (x * Math.cos(Math.toRadians(Yaw))) - (y * Math.sin(Math.toRadians(Yaw)));
         y_altered = (y * Math.cos(Math.toRadians(Yaw))) + (x * Math.sin(Math.toRadians(Yaw)));

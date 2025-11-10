@@ -44,6 +44,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +85,8 @@ public class ColorTurningMechanismThing extends OpMode {
     float gain = 31;
     float[] hsvValues1 = new float[3];
     DcMotorEx encoder;
+
+
     CRServo indexer;
     Launcher launcher;
     NormalizedColorSensor colorSensor1;
@@ -180,7 +183,7 @@ public class ColorTurningMechanismThing extends OpMode {
 //        colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color2");
 //        colorSensor3 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color3");
         launcher = new Launcher();
-        launcher.init(hardwareMap);
+        launcher.init(hardwareMap, telemetry);
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
         telemetry.addData("Gain", gain);
@@ -192,7 +195,6 @@ public class ColorTurningMechanismThing extends OpMode {
     }
     @Override
     public void loop() {
-
 
 //            NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
 //            Color.colorToHSV(colors2.toColor(), hsvValues2);
