@@ -51,14 +51,19 @@ public class unnecessaryLimeLightTurretSystem{
     }
 
 
-    public double getDistance_from_apriltag() {
+    public double getDistance_from_apriltag(double value) {
         //BLUEEEEEEEEE
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
 
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.RADIANS);
         positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + 1.413, 0, 0);
-        distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2)) ;
+        if (value == 0) {
+            distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
+        } else {
+            distance_from_apriltag = value;
+        }
+
 
         angleerror = targetangle - botposeangle;
 //        if (angleerror < -1 || angleerror > 180) {

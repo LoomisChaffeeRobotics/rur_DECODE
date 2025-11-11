@@ -8,7 +8,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -27,41 +29,42 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * See the sensor's product page: https://www.sparkfun.com/products/24904
  */
 @TeleOp(name = "Sensor: SparkFun OTOS", group = "Sensor")
-public class sparkFunTestingClass extends LinearOpMode {
+public class sparkFunTestingClass{
     // Create an instance of the sensor
     SparkFunOTOS myOtos;
-
-    @Override
-    public void runOpMode() throws InterruptedException {
+    SparkFunOTOS.Pose2D pos;
+    SparkFunOTOS.Pose2D velocity;
+    double velocitymag;
+    KineticLauncherThing launcherbutmoving;
+    double angleerror;
+    double flight_time;
+    double distanceAT;
+    public double expecteddistance;
+    public void init(HardwareMap hardwareMap, Telemetry telemetry){
         // Get a reference to the sensor
-        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");;
+        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        launcherbutmoving = new KineticLauncherThing();
+        launcherbutmoving.init(hardwareMap, telemetry);
 
         // All the configuration for the OTOS is done in this helper method, check it out!
-        configureOtos();
-
+        configureOtos(telemetry);
         // Wait for the start button to be pressed
-        waitForStart();
 
         // Loop until the OpMode ends
-        while (opModeIsActive()) {
+
+    }
+    public void runKineticStuff(Telemetry telemetry) {
+            launcherbutmoving.calculatevalues(telemetry);
             // Get the latest position, which includes the x and y coordinates, plus the
             // heading angle
-            SparkFunOTOS.Pose2D pos = myOtos.getPosition();
+            pos = myOtos.getPosition();  //in meters and radians
+            velocity = myOtos.getVelocity(); // like meters per second  possibly
+            velocitymag = Math.sqrt(Math.pow(velocity.x, 2) + Math.pow(velocity.y, 2));
 
-            // Reset the tracking if the user requests it
-            if (gamepad1.y) {
-                myOtos.resetTracking();
-            }
-
-            // Re-calibrate the IMU if the user requests it
-            if (gamepad1.x) {
-                myOtos.calibrateImu();
-            }
-
-            // Inform user of available controls
-            telemetry.addLine("Press Y (triangle) on Gamepad to reset tracking");
-            telemetry.addLine("Press X (square) on Gamepad to calibrate the IMU");
-            telemetry.addLine();
+            angleerror = pos.h - 2.87979; //i literaly dont know it might be 165 degrees
+            flight_time = launcherbutmoving.flight_time_interporation_result;
+            distanceAT = launcherbutmoving.distancefromat;
+            expecteddistance = distanceAT - (velocitymag * flight_time);
 
             // Log the position to the telemetry
             telemetry.addData("X coordinate", pos.x);
@@ -71,9 +74,8 @@ public class sparkFunTestingClass extends LinearOpMode {
             // Update the telemetry on the driver station
             telemetry.update();
         }
-    }
 
-    private void configureOtos() {
+    private void configureOtos(Telemetry telemetry) {
         telemetry.addLine("Configuring OTOS...");
         telemetry.update();
 
@@ -98,7 +100,7 @@ public class sparkFunTestingClass extends LinearOpMode {
         // clockwise (negative rotation) from the robot's orientation, the offset
         // would be {-5, 10, -90}. These can be any value, even the angle can be
         // tweaked slightly to compensate for imperfect mounting (eg. 1.3 degrees).
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(6.3, 1.4, Math.PI/2); //cjhange for new robot
         myOtos.setOffset(offset);
 
         // Here we can set the linear and angular scalars, which can compensate for
@@ -117,8 +119,8 @@ public class sparkFunTestingClass extends LinearOpMode {
         // multiple speeds to get an average, then set the linear scalar to the
         // inverse of the error. For example, if you move the robot 100 inches and
         // the sensor reports 103 inches, set the linear scalar to 100/103 = 0.971
-        myOtos.setLinearScalar(1.0);
-        myOtos.setAngularScalar(1.0);
+        myOtos.setLinearScalar(1.02833322007722);
+        myOtos.setAngularScalar(0.978101568);
 
         // The IMU on the OTOS includes a gyroscope and accelerometer, which could
         // have an offset. Note that as of firmware version 1.0, the calibration
@@ -148,10 +150,6 @@ public class sparkFunTestingClass extends LinearOpMode {
         SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
         myOtos.getVersionInfo(hwVersion, fwVersion);
 
-        telemetry.addLine("OTOS configured! Press start to get position data!");
-        telemetry.addLine();
-        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
-        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
         telemetry.update();
     }
 }
