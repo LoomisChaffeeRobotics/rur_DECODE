@@ -15,8 +15,8 @@ public class Servoturnertester extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.dpad_down){number = number + .01;}
-        else if (gamepad1.dpad_up){number = number -.01;}
+        if (gamepad1.dpad_down){number = number + .001;}
+        else if (gamepad1.dpad_up){number = number -.001;}
 
 supercoolservo.setPosition(number);
 

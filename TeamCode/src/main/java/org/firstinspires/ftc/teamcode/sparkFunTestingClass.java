@@ -28,7 +28,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  *
  * See the sensor's product page: https://www.sparkfun.com/products/24904
  */
-@TeleOp(name = "Sensor: SparkFun OTOS", group = "Sensor")
 public class sparkFunTestingClass{
     // Create an instance of the sensor
     SparkFunOTOS myOtos;
