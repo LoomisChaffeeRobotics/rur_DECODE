@@ -9,6 +9,7 @@ import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.ftc.localization.constants.DriveEncoderConstants;
 import com.pedropathing.ftc.localization.constants.OTOSConstants;
 import com.pedropathing.paths.PathConstraints;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -43,7 +44,11 @@ public class Constants {
     public static OTOSConstants localizerConstants = new OTOSConstants()
             .hardwareMapName("SparkFun")
             .linearUnit(DistanceUnit.INCH)
-            .angleUnit(AngleUnit.RADIANS);
+            .angleUnit(AngleUnit.RADIANS)
+            .offset(new SparkFunOTOS.Pose2D(6.3,1.4,Math.PI/2))
+            .linearScalar(1.02833322007722)
+            .angularScalar(0.978101568);
+
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap).OTOSLocalizer(localizerConstants).build();

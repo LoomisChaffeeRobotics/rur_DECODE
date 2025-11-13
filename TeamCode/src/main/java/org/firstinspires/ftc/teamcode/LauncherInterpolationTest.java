@@ -21,7 +21,7 @@ public class LauncherInterpolationTest extends OpMode {
     @Override
     public void loop() {
         launcherClass.shoot(hardwareMap, telemetry);
-        telemetry.addData("Distance from APrilag", limelight.getDistance_from_apriltag());
+        telemetry.addData("Distance from APrilag", limelight.getDistance_from_apriltag(0));
        telemetry.addData("botpose", limelight.botpose);
        telemetry.update();
     }
