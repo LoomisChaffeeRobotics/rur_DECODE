@@ -84,7 +84,7 @@ public class CherryDrive extends OpMode {
         telemetry.addData("intake power: ",power);
     }
     void startTurret(double power){
-        // move
+        // move,
         telemetry.addData("turret power: ", power);
     }
     void flipper(boolean up){
