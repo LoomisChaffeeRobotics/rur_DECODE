@@ -4,7 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 public class CherryDrive extends OpMode {
 
-    enum Colors{GREEN, PUPRLE, EMPTY} //TODO: fix spelling error in 'puprel'
+    enum Colors{GREEN, PUPRLE, EMPTY}; //TODO: fix spelling error in 'puprel'
+
+    boolean autoTurn = true;
 
     @Override
     public void init() {
@@ -49,23 +51,56 @@ public class CherryDrive extends OpMode {
             switchColor(Colors.PUPRLE);
         }
 
+        if(autoTurn){
+            autoTurn();
+        }
+
+        if (gamepad2.dpad_left){
+            autoTurn = false;
+            manuTurn(-1);
+        } else if (gamepad2.dpad_right){
+            autoTurn = false;
+            manuTurn(1);
+        } else if (!autoTurn){
+            manuTurn(0);
+        }
+        if (gamepad1.dpad_up){
+            autoTurn = true;
+        }
+
 
     }
 
 
     void fieldCentricDriving(double leftX, double leftY, double rightX, double rightY){
         // FCD and turning
+        telemetry.addData("leftX: ", leftX);
+        telemetry.addData("leftY: ", leftY);
+        telemetry.addData("rightX: ", rightX);
+        telemetry.addData("rightY: ", rightY);
     }
     void runIntake(double power){
         //run Intake
+        telemetry.addData("intake power: ",power);
     }
     void startTurret(double power){
         // move
+        telemetry.addData("turret power: ", power);
     }
     void flipper(boolean up){
         //flip
+        telemetry.addData("flipper upness: ", up);
     }
     void switchColor(Colors colors){
        //COLOUR STUFFER
+        telemetry.addData("color switched: ", colors);
+    }
+    void autoTurn(){
+        //turn automatically
+        telemetry.addLine("auto Turning");
+    }
+    void manuTurn(double direction){
+        //turn manually
+        telemetry.addData("manuturn Direction:", direction);
     }
 }
