@@ -29,11 +29,9 @@ public class FieldCentricDriving extends OpMode {
     double left_back_velocity = 0;
     double right_back_velocity = 0;
 
-    public static double velocity_vector = 0;
-
-
     double x;
     double y;
+    double rx;
     double x_altered;
     double y_altered;
 
@@ -86,26 +84,18 @@ public class FieldCentricDriving extends OpMode {
 
         x = gamepad1.left_stick_x;
         y = gamepad1.left_stick_y;
-
-        velocity_vector = Math.sqrt(Math.pow(x * 55.69855798065763, 2) + Math.pow(y * 49.04440430657071, 2));
+        rx = gamepad1.right_stick_x;
 
         x_altered = (x * Math.cos(Math.toRadians(Yaw))) - (y * Math.sin(Math.toRadians(Yaw)));
         y_altered = (y * Math.cos(Math.toRadians(Yaw))) + (x * Math.sin(Math.toRadians(Yaw)));
 
-        right_front_velocity = y_altered + x_altered;
-        left_front_velocity = y_altered - x_altered;
+        right_front_velocity = y_altered + x_altered + rx;
+        left_front_velocity = y_altered - x_altered - rx;
 
-        left_back_velocity = y_altered + x_altered;
-        right_back_velocity = y_altered - x_altered;
+        left_back_velocity = y_altered + x_altered + rx;
+        right_back_velocity = y_altered - x_altered - rx;
 
         //rotation
-
-        right_front_velocity += gamepad1.right_stick_x;
-        right_back_velocity += gamepad1.right_stick_x;
-
-        left_front_velocity += -gamepad1.right_stick_x;
-        left_back_velocity += -gamepad1.right_stick_x;
-
 
         right_front.setPower(right_front_velocity);
         right_back.setPower(right_back_velocity);
