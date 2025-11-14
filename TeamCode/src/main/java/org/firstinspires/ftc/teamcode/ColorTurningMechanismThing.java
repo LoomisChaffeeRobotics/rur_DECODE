@@ -81,7 +81,7 @@ import java.util.List;
  */
 @Autonomous
 
-public class ColorTurningMechanismThing extends OpMode {
+public class ColorTurningMechanismThing {
     float gain = 31;
     float[] hsvValues1 = new float[3];
     DcMotorEx encoder;
@@ -173,15 +173,12 @@ public class ColorTurningMechanismThing extends OpMode {
             return false;
         }
     }
-    @Override
-    public void init() {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         indexer = hardwareMap.get(CRServo.class, "indexer");
         encoder = hardwareMap.get(DcMotorEx.class, "encoder");
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         SensedColorAll = shift_list(SensedColorAll, true);
-//        colorSensor2 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color2");
-//        colorSensor3 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color3");
         launcher = new Launcher();
         launcher.init(hardwareMap, telemetry);
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
@@ -193,8 +190,7 @@ public class ColorTurningMechanismThing extends OpMode {
         NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
     }
-    @Override
-    public void loop() {
+    public void sensecolor(Telemetry telemetry) {
 
 //            NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
 //            Color.colorToHSV(colors2.toColor(), hsvValues2);
