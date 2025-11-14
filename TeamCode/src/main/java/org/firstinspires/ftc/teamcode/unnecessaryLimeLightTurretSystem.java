@@ -6,6 +6,8 @@ package org.firstinspires.ftc.teamcode;
 //I've already moved all of the code into DriveClass - any changes that need to be made should be made there
 //10-7-25
 
+//to do uncomment otu the sv stuff
+
 
 
 
@@ -34,7 +36,7 @@ public class unnecessaryLimeLightTurretSystem{
     public LLStatus status;
 
     public double distance_from_apriltag = 0; //meters
-    CRServo sv;
+//    public CRServo sv;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
 //        sv = hardwareMap.get(CRServo.class, "sv");
@@ -55,11 +57,11 @@ public class unnecessaryLimeLightTurretSystem{
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.RADIANS);
         angleerror = targetangle - botposeangle;
         if (angleerror < -1 || angleerror > 180) {
-            sv.setPower(-0.1);
+//            sv.setPower(-0.1);
         } else if (angleerror > 1 && angleerror < 165) {
-            sv.setPower(0.1);
+//            sv.setPower(0.1);
         } else if (angleerror < 1 && angleerror > -1){
-            sv.setPower(0);
+//            sv.setPower(0);
         }
     }
 

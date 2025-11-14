@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@TeleOp
-public class FieldCentricDriving extends OpMode {
+
+public class FieldCentricDriving extends OpMode{
 
     DcMotor left_front;
     DcMotor right_front;
@@ -35,7 +35,6 @@ public class FieldCentricDriving extends OpMode {
     double x_altered;
     double y_altered;
 
-    @Override
     public void init() {
 
         left_front = hardwareMap.get(DcMotor.class, "leftFront");
@@ -71,8 +70,6 @@ public class FieldCentricDriving extends OpMode {
         Roll = robotOrientation.getRoll();
 
     }
-
-    @Override
     public void loop() {
 
         robotOrientation = imu.getRobotYawPitchRollAngles();

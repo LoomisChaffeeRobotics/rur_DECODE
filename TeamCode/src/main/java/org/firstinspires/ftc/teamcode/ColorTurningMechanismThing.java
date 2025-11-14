@@ -90,9 +90,9 @@ public class ColorTurningMechanismThing {
     CRServo indexer;
     Launcher launcher;
     NormalizedColorSensor colorSensor1;
-    SensedColor CurrentColor = SensedColor.NEITHER;
-    SensedColor CurrentColor2 = SensedColor.NEITHER;
-    SensedColor CurrentColor3 = SensedColor.NEITHER;
+    public SensedColor CurrentColor = SensedColor.NEITHER;
+    public SensedColor CurrentColor2 = SensedColor.NEITHER;
+    public SensedColor CurrentColor3 = SensedColor.NEITHER;
     List<SensedColor> SensedColorAll = new ArrayList<SensedColor>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
 //    NormalizedColorSensor colorSensor2;
 //    NormalizedColorSensor colorSensor3;
