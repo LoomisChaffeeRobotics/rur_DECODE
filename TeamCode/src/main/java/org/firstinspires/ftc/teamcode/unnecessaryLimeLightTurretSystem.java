@@ -36,10 +36,10 @@ public class unnecessaryLimeLightTurretSystem{
     public LLStatus status;
 
     public double distance_from_apriltag = 0; //meters
-//    public CRServo sv;
+    public CRServo sv;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-//        sv = hardwareMap.get(CRServo.class, "sv");
+        sv = hardwareMap.get(CRServo.class, "sv");
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         telemetry.setMsTransmissionInterval(11);
         limelight.pipelineSwitch(0);
@@ -52,16 +52,17 @@ public class unnecessaryLimeLightTurretSystem{
 
     }
     public void turntoAT() {
+        targetangle = 225;
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
-        botposeangle = botpose.getOrientation().getYaw(AngleUnit.RADIANS);
+        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
         angleerror = targetangle - botposeangle;
         if (angleerror < -1 || angleerror > 180) {
-//            sv.setPower(-0.1);
-        } else if (angleerror > 1 && angleerror < 165) {
-//            sv.setPower(0.1);
+            sv.setPower(-0.1);
+        } else if (angleerror > 1 && angleerror < 180) {
+            sv.setPower(0.1);
         } else if (angleerror < 1 && angleerror > -1){
-//            sv.setPower(0);
+            sv.setPower(0);
         }
     }
 
@@ -71,7 +72,7 @@ public class unnecessaryLimeLightTurretSystem{
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
 
-        botposeangle = botpose.getOrientation().getYaw(AngleUnit.RADIANS);
+        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
         positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + 1.413, 0, 0);
         if (value == 0) {
             distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));

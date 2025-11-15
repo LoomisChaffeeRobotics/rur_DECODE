@@ -3,8 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-
+@TeleOp
 public class CherryDrive extends OpMode {
 
 
@@ -84,37 +85,37 @@ public class CherryDrive extends OpMode {
     }
 
 
-    void fieldCentricDriving(double leftX, double leftY, double rightX, double rightY){
+    public void fieldCentricDriving(double leftX, double leftY, double rightX, double rightY){
         // FCD and turning
         telemetry.addData("leftX: ", leftX);
         telemetry.addData("leftY: ", leftY);
         telemetry.addData("rightX: ", rightX);
         telemetry.addData("rightY: ", rightY);
     }
-    void runIntake(double power){
+    public void runIntake(double power){
         //run Intake
         telemetry.addData("intake power: ",power);
     }
-    void startTurret(double power){
+    public void startTurret(double power){
         // move,
         telemetry.addData("turret power: ", power);
     }
-    void flipper(boolean up){
+    public void flipper(boolean up){
         //flip
         telemetry.addData("flipper upness: ", up);
     }
-    void switchColor(ColorTurningMechanismThing.SensedColor color){
+    public void switchColor(ColorTurningMechanismThing.SensedColor color){
        //COLOUR STUFFEs
 //        colorsensor.turnBasedOffColor(color);
         telemetry.addData("color switched: ", color);
     }
-    void autoTurn(){
+    public void autoTurn(){
         //turn automatically
         limelightsystem.turntoAT();
         autoTurn = true;
-        telemetry.addLine("auto Turning");
+        telemetry.addData("auto Turning", limelightsystem.angleerror);
     }
-    void manuTurn(double power){
+    public void manuTurn(double power){
         //turn manually
 //        sv.setPower(power);
         telemetry.addData("manuturn Direction:", power);
