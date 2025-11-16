@@ -24,6 +24,43 @@ public class CherryDrive extends OpMode {
 //        colorsensor = new ColorTurningMechanismThing();
 //        colorsensor.init(hardwareMap, telemetry);
 //        sv = hardwareMap.get(CRServo.class, "sv");
+
+        /*
+        //FCD INIT
+
+        left_front = hardwareMap.get(DcMotor.class, "leftFront");
+        right_front = hardwareMap.get(DcMotor.class, "rightFront");
+        left_back = hardwareMap.get(DcMotor.class, "leftBack");
+        right_back = hardwareMap.get(DcMotor.class, "rightBack");
+
+        left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        right_front.setDirection(DcMotorSimple.Direction.REVERSE);
+        right_back.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        IMU.Parameters myIMUparameter;
+
+        myIMUparameter = new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
+                        RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                )
+        );
+
+        imu.initialize(myIMUparameter);
+
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+        imu.resetYaw();
+        Yaw = robotOrientation.getYaw();
+        Pitch = robotOrientation.getPitch();
+        Roll = robotOrientation.getRoll();
+
+         */
     }
 
     @Override
@@ -91,6 +128,8 @@ public class CherryDrive extends OpMode {
         telemetry.addData("leftY: ", leftY);
         telemetry.addData("rightX: ", rightX);
         telemetry.addData("rightY: ", rightY);
+
+
     }
     public void runIntake(double power){
         //run Intake
