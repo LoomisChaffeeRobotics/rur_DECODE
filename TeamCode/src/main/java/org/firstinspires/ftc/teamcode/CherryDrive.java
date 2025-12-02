@@ -5,6 +5,8 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 @TeleOp
 public class CherryDrive extends OpMode {
 
@@ -16,11 +18,13 @@ public class CherryDrive extends OpMode {
 //    CRServo sv;
 
     boolean autoTurn = true;
+    DcMotor intake
 
     @Override
     public void init() {
         limelightsystem = new unnecessaryLimeLightTurretSystem();
         limelightsystem.init(hardwareMap, telemetry);
+        intake = hardwareMap.get(DcMotor.class,"intake");
 //        colorsensor = new ColorTurningMechanismThing();
 //        colorsensor.init(hardwareMap, telemetry);
 //        sv = hardwareMap.get(CRServo.class, "sv");
@@ -91,15 +95,15 @@ public class CherryDrive extends OpMode {
             flipper(false);
         }
 
-        if (gamepad2.x){
-            switchColor(ColorTurningMechanismThing.SensedColor.GREEN);
-        }
-        if (gamepad2.a){
-            switchColor(ColorTurningMechanismThing.SensedColor.NEITHER);
-        }
-        if (gamepad2.b){
-            switchColor(ColorTurningMechanismThing.SensedColor.PURPLE);
-        }
+//        if (gamepad2.x){
+//            switchColor(ColorTurningMechanismThing.SensedColor.GREEN);
+//        }
+//        if (gamepad2.a){
+//            switchColor(ColorTurningMechanismThing.SensedColor.NEITHER);
+//        }
+//        if (gamepad2.b){
+//            switchColor(ColorTurningMechanismThing.SensedColor.PURPLE);
+//        }
 
         if(autoTurn){
             autoTurn();
@@ -134,6 +138,7 @@ public class CherryDrive extends OpMode {
     public void runIntake(double power){
         //run Intake
         telemetry.addData("intake power: ",power);
+        intake.setPower(power);
     }
     public void startTurret(double power){
         // move,
