@@ -18,7 +18,7 @@ public class CherryDrive extends OpMode {
 //    CRServo sv;
 
     boolean autoTurn = true;
-    DcMotor intake
+    DcMotor intake;
 
     @Override
     public void init() {
@@ -53,8 +53,8 @@ public class CherryDrive extends OpMode {
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
                         RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-                )
-        );
+//                )
+//        );
 
         imu.initialize(myIMUparameter);
 
