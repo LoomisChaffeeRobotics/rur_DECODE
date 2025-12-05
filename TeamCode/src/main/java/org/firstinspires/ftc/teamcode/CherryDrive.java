@@ -10,12 +10,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp
 public class CherryDrive extends OpMode {
 
-
+    //name of spinning turret is turretSpin
+    //name of indexer is indexer
     //uncomment out the stuff later
 
     unnecessaryLimeLightTurretSystem limelightsystem;
     ColorTurningMechanismThing colorsensor;
-//    CRServo sv;
+//    CRServo indexer;
 
     boolean autoTurn = true;
     DcMotor intake;
@@ -27,7 +28,7 @@ public class CherryDrive extends OpMode {
         intake = hardwareMap.get(DcMotor.class,"intake");
 //        colorsensor = new ColorTurningMechanismThing();
 //        colorsensor.init(hardwareMap, telemetry);
-//        sv = hardwareMap.get(CRServo.class, "sv");
+//        indexer = hardwareMap.get(CRServo.class, "indexer");
 
         /*
         //FCD INIT
@@ -149,7 +150,7 @@ public class CherryDrive extends OpMode {
         telemetry.addData("flipper upness: ", up);
     }
     public void switchColor(ColorTurningMechanismThing.SensedColor color){
-       //COLOUR STUFFEs
+       //COLOUR STUFFs
 //        colorsensor.turnBasedOffColor(color);
         telemetry.addData("color switched: ", color);
     }
@@ -157,11 +158,11 @@ public class CherryDrive extends OpMode {
         //turn automatically
         limelightsystem.turntoAT();
         autoTurn = true;
-        telemetry.addData("auto Turning", limelightsystem.angleerror);
+        telemetry.addData("angel error", limelightsystem.angleerror);
     }
     public void manuTurn(double power){
         //turn manually
-//        sv.setPower(power);
-        telemetry.addData("manuturn Direction:", power);
+//        indexer.setPower(power);
+        telemetry.addData("manuturn power", power);
     }
 }

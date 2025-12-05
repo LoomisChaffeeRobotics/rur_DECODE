@@ -6,7 +6,7 @@ package org.firstinspires.ftc.teamcode;
 //I've already moved all of the code into DriveClass - any changes that need to be made should be made there
 //10-7-25
 
-//to do uncomment otu the sv stuff
+//to do uncomment otu the turretSpin stuff
 
 
 
@@ -24,7 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 public class unnecessaryLimeLightTurretSystem{
-    public double targetangle = 165;
+    public double targetangle = 165; //chnsge
     public Limelight3A limelight;
     public Pose3D botpose;
     public Position positionrelativetoapriltag;
@@ -36,10 +36,10 @@ public class unnecessaryLimeLightTurretSystem{
     public LLStatus status;
 
     public double distance_from_apriltag = 0; //meters
-    public CRServo sv;
+    public CRServo turretSpin;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        sv = hardwareMap.get(CRServo.class, "sv");
+        turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         telemetry.setMsTransmissionInterval(11);
         limelight.pipelineSwitch(0);
@@ -58,11 +58,11 @@ public class unnecessaryLimeLightTurretSystem{
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
         angleerror = targetangle - botposeangle;
         if (angleerror < -1 || angleerror > 180) {
-            sv.setPower(-0.1);
+            turretSpin.setPower(-0.1);
         } else if (angleerror > 1 && angleerror < 180) {
-            sv.setPower(0.1);
+            turretSpin.setPower(0.1);
         } else if (angleerror < 1 && angleerror > -1){
-            sv.setPower(0);
+            turretSpin.setPower(0);
         }
     }
 
@@ -83,11 +83,11 @@ public class unnecessaryLimeLightTurretSystem{
 
         angleerror = targetangle - botposeangle;
 //        if (angleerror < -1 || angleerror > 180) {
-//            sv.setPower(-0.1);
+//            turretSpin.setPower(-0.1);
 //        } else if (angleerror > 1 && angleerror < 165) {
-//            sv.setPower(0.1);
+//            turretSpin.setPower(0.1);
 //        } else if (angleerror < 1 && angleerror > -1){
-//            sv.setPower(0);
+//            turretSpin.setPower(0);
 //        }
         status = limelight.getStatus();
         return distance_from_apriltag;

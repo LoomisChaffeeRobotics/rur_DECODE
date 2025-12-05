@@ -92,7 +92,7 @@ public class ColorTurningMechanismThing {
     public SensedColor CurrentColor = SensedColor.NEITHER;
     public SensedColor CurrentColor2 = SensedColor.NEITHER;
     public SensedColor CurrentColor3 = SensedColor.NEITHER;
-    List<SensedColor> SensedColorAll = new ArrayList<SensedColor>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
+    List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
 //    NormalizedColorSensor colorSensor2;
 //    NormalizedColorSensor colorSensor3;
 
@@ -127,7 +127,7 @@ public class ColorTurningMechanismThing {
         SensedColorAll = l;
         return l;
     }
-    public void turn(boolean direction) {
+    public void turn(boolean direction) { //we dotnhaveanencoder panic
         if (direction) {
             while (encoder.getCurrentPosition() < 104) {
                 indexer.setPower(1);
