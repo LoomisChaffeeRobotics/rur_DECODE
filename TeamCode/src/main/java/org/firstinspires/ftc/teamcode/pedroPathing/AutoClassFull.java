@@ -78,9 +78,9 @@ public class AutoClassFull extends OpMode {
             case 1:
                 if (!follower.isBusy()) {
                     follower.followPath(movespec1,true);
-                    turningthing.turnBasedOffColor(patternArray[0]);
-                    turningthing.turnBasedOffColor(patternArray[1]);
-                    turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
+                    turningthing.turnBasedOfColor(patternArray[0]);
+                    turningthing.turnBasedOfColor(patternArray[1]);
+                    turningthing.turnBasedOfColor(patternArray[2]); //these make it turns
                     launcher.shoot(hardwareMap, telemetry); //actually shoots
                     setPathState(2);
                 }

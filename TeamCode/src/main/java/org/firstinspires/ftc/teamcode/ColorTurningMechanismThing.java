@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
@@ -83,9 +84,8 @@ import java.util.List;
 public class ColorTurningMechanismThing {
     float gain = 31;
     float[] hsvValues1 = new float[3];
-    DcMotorEx encoder;
 
-
+    ElapsedTime timer;
     CRServo indexer;
     Launcher launcher;
     NormalizedColorSensor colorSensor1;
@@ -106,8 +106,12 @@ public class ColorTurningMechanismThing {
 //    public enum SensedColor3 {
 //        PURPLE, GREEN, NEITHER;
 //    }
+    public void waitAuto(double seconds) {
+        timer.reset();
+        while (timer.seconds() < seconds ) {}
 
-    public List<SensedColor> shift_list(List<SensedColor> l, boolean direction) {
+    }
+    public List<SensedColor> shift_list(List<SensedColor> l, boolean direction) { //true is right, must be same as turn()
 
         SensedColor element_0 = l.get(0);
         SensedColor element_1 = l.get(1);
@@ -127,42 +131,40 @@ public class ColorTurningMechanismThing {
         SensedColorAll = l;
         return l;
     }
-    public void turn(boolean direction) { //we dotnhaveanencoder panic
+    public void turn(boolean direction) { // true is right
         if (direction) {
-            while (encoder.getCurrentPosition() < 104) {
-                indexer.setPower(1);
-            }
+                indexer.setPower(1); //switch if need
+                waitAuto(12390);
 
         } else {
-            while (encoder.getCurrentPosition() < 208) {
-                indexer.setPower(1);
-            }
+                indexer.setPower(-1); //switch if need switch direction
+                waitAuto(12390); //i hope the wait function doesn't make it stop literally everything
         }
         indexer.setPower(0);
-        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         shift_list(SensedColorAll, direction);
     }
     public boolean turnRegardlessofColor() {
+        sensecolor();
         if (CurrentColor != SensedColor.NEITHER) {
             return true;
         } else if (CurrentColor2 != SensedColor.NEITHER) {
-            turn(true);
+            turn(true); //turn to slot 2 - change if needed
             return true;
         } else if (CurrentColor3 != SensedColor.NEITHER) {
-            turn(false);
+            turn(false); //turn to slot 3 - change if needed
             return true;
-        } else return false;
+        } else return false; //empty
     }
-    public boolean turnBasedOffColor(SensedColor color) {
-
+    public boolean turnBasedOfColor(SensedColor color) { //PURPLE, GREEN, or NEITHER
         //the boolean returned = whether there exists a color
         //to rotate to.
-
+        sensecolor();
         if (CurrentColor == color) {
             return true;
         }
         else if (CurrentColor2 == color) {
-            turn(true);
+            turn(true); //same as turnRegardlessOfColor
             return true;
         } else if (CurrentColor3 == color) {
             turn(false);
@@ -173,15 +175,17 @@ public class ColorTurningMechanismThing {
         }
     }
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+        timer = new ElapsedTime();
+        timer.reset();
         indexer = hardwareMap.get(CRServo.class, "indexer");
-        encoder = hardwareMap.get(DcMotorEx.class, "encoder");
-        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         SensedColorAll = shift_list(SensedColorAll, true);
         launcher = new Launcher();
         launcher.init(hardwareMap, telemetry);
+
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId); //idk if these two lines are needed
+
         telemetry.addData("Gain", gain);
         colorSensor1.setGain(gain);
 //            colorSensor2.setGain(gain);
@@ -189,14 +193,14 @@ public class ColorTurningMechanismThing {
         NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
     }
-    public void sensecolor(Telemetry telemetry) {
+    public void sensecolor() { //must be run at all times
 
 //            NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
 //            Color.colorToHSV(colors2.toColor(), hsvValues2);
 //            NormalizedRGBA colors3 = colorSensor3.getNormalizedColors();
 //            Color.colorToHSV(colors3.toColor(), hsvValues3);
-        telemetry.addLine()
-                .addData("Hue1", "%.3f", hsvValues1[0]);
+//        telemetry.addLine()
+//                .addData("Hue1", "%.3f", hsvValues1[0]);
 //            telemetry.addLine()
 //                    .addData("Hue2", "%.3f", hsvValues2[0]);
 //            telemetry.addLine()
@@ -209,11 +213,11 @@ public class ColorTurningMechanismThing {
             CurrentColor = SensedColor.NEITHER;
         }
         SensedColorAll = (Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
-        telemetry.addData("CurrentColor", CurrentColor);
-        telemetry.addData("CurrentColor2", CurrentColor2);
-        telemetry.addData("CurrentColor3", CurrentColor3);
-        telemetry.addData("SensedColorAll(Array)", SensedColorAll);
-        telemetry.update();
+//        telemetry.addData("CurrentColor", CurrentColor);
+//        telemetry.addData("CurrentColor2", CurrentColor2);
+//        telemetry.addData("CurrentColor3", CurrentColor3);
+//        telemetry.addData("SensedColorAll(Array)", SensedColorAll);
+//        telemetry.update();
     }
 }
 
