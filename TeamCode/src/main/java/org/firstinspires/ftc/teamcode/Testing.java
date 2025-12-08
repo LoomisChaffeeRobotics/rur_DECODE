@@ -51,7 +51,7 @@ public class Testing extends OpMode {
             flip(-0.0001d);
             telemetry.addData("Flipper position: ",flipper.getPosition());
         }
-        if (gamepad2.left_trigger > 0.2){
+        if (gamepad1.left_trigger > 0.2){
             startTurret(-1d);
         } else {
             startTurret(0d);
