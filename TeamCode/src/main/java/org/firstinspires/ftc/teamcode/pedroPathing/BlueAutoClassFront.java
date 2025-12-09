@@ -19,42 +19,41 @@ import java.util.List;
 //change paths to pathcnages sometimes
 
 @Autonomous
-public class AutoClassFull extends OpMode {
+public class BlueAutoClassFront extends OpMode {
     Limelight3A limelight;
     ColorTurningMechanismThing turningthing;
     Launcher launcher;
     Follower follower;
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    private Pose startPose = new Pose(56,9 , Math.PI/2); //heading in radians
-    private Pose pickupPose1 =  new Pose(24.0743,35.6656, Math.PI);
-    private Pose controlPoint1 =  new Pose(65.7585,37.226, Math.PI);
-    private Pose endPoint1 = new Pose (61.5232,9.808, Math.PI);
-    private Pose controlPoint2 = new Pose(76.9040,64.421,Math.PI);
-    private Pose pickupPose2 = new Pose (23.8513,60.6315, Math.PI);
-    private Pose endPoint2 = new Pose(64.4210,83.8142,Math.PI);
+    private Pose startPose = new Pose(21.36630602782071,123.52395672333849, Math.toRadians(323)); //heading in radians
+    private Pose launchPose1 =  new Pose(37.39103554868624,108.16692426584235, Math.toRadians(323));
+    private Pose launchPoseMain = new Pose (45.40340030911901,97.706336939721788, Math.PI);
+    private Pose controlPoint1 = new Pose(60.53786707882535,82.34930448222565,Math.PI);
+    private Pose pickupPose1 = new Pose (16.024729520865534,83.68469860896445, Math.PI);
+    private Pose controlPoint2 = new Pose(50.07727975270479,54.30602782071097,Math.PI);
+    private Pose pickupPose2 = new Pose (17.13755795981453,60.09273570324575, Math.PI);
+    private Pose launchPoint2 = new Pose(64.4210,83.8142,Math.PI);
     public LLResultTypes.FiducialResult fr;
     private Pose scorePose = new Pose(37, 72, 0);
-    private Path scorePreload, pickup1, run2, pickup2, run3, pickupMain, score;
-    private PathChain movespec1, movespec2, movespec3;
+    private Path scorePreload, pickup1, launch1, pickup2, launch2, pickupMain, score;
+    private PathChain runAuto, movespec2, movespec3;
     public void buildPaths() {
 
+        scorePreload = new Path(new BezierCurve(startPose, launchPose1));
+        scorePreload.setConstantHeadingInterpolation(Math.toRadians(323));
+        pickup1 =  new Path(new BezierCurve(launchPose1, controlPoint1, pickupPose1));
+        pickup1.setTangentHeadingInterpolation();
 
-        pickup1 =  new Path(new BezierCurve(startPose, controlPoint1, pickupPose1));
-        pickup1.setConstantHeadingInterpolation(180);
+        launch1 =  new Path(new BezierCurve(pickupPose1, launchPoseMain));
+        launch1.setConstantHeadingInterpolation(180);
 
-        run2 =  new Path(new BezierCurve(pickupPose1, endPoint1));
-        run2.setConstantHeadingInterpolation(180);
-
-        pickup2 = new Path(new BezierCurve(endPoint1, controlPoint2, pickupPose2));
+        pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
         pickup2.setConstantHeadingInterpolation(180);
 
-        run3 = new Path(new BezierCurve(pickupPose2,endPoint2));
-        run3.setConstantHeadingInterpolation(180);
+        launch2 = new Path(new BezierCurve(pickupPose2,launchPoseMain));
+        launch2.setConstantHeadingInterpolation(180);
         //Path chains are chains of paths - so you can add multiple as shown below
-        movespec1 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(startPose, scorePose)))
-                .build();
         //i didn't import stuff because pepa 1.0.8 which we used to build this sample code last year uses different formatting and stuff so i had to change it
 
     }
@@ -77,9 +76,11 @@ public class AutoClassFull extends OpMode {
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    follower.followPath(movespec1,true);
+                    follower.followPath(runAuto,true); //bad runatuo doesnt do anything
                     turningthing.turnBasedOfColor(patternArray[0]);
+                    launcher.shoot(hardwareMap, telemetry); //actually shoots
                     turningthing.turnBasedOfColor(patternArray[1]);
+                    launcher.shoot(hardwareMap, telemetry); //actually shoots
                     turningthing.turnBasedOfColor(patternArray[2]); //these make it turns
                     launcher.shoot(hardwareMap, telemetry); //actually shoots
                     setPathState(2);
@@ -87,19 +88,19 @@ public class AutoClassFull extends OpMode {
                 break;
             case 2:
                 if (!follower.isBusy()) {
-                    follower.followPath(movespec2);
+                    follower.followPath(movespec2); //all broken
                     setPathState(3);
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    follower.followPath(movespec3);
+                    follower.followPath(movespec3); //no
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    follower.followPath(pickup1);
+                    follower.followPath(pickup1); //change ltierally all of these
                     setPathState(5);
                 }
                 break;
