@@ -37,9 +37,9 @@ public class Testing extends OpMode {
             runIntake(0d);
         }
         if (gamepad1.dpad_left) {
-            runIndexer(0.2d);
+            runIndexer(.2d);
         } else if (gamepad1.dpad_right) {
-            runIndexer(-0.2d);
+            runIndexer(-.2d);
         }
         else {
             runIndexer(0d);
@@ -61,7 +61,7 @@ public class Testing extends OpMode {
     }
 
     public void runIntake(double power) {
-        intake.setPower(power);
+        intake.setPower(-power);
     }
     public void runIndexer(double power){
         indexer.setPower(power);
