@@ -25,7 +25,7 @@ public class Testing extends OpMode {
         turret2 = hardwareMap.get(DcMotor.class,"Turret2");
         indexer = hardwareMap.get(CRServo.class,"indexer");
         flipper = hardwareMap.get(Servo.class,"flipper");
-        flipper.setPosition(0.5);
+        flipper.setPosition(0.3661);
     }
 
     @Override
@@ -46,9 +46,9 @@ public class Testing extends OpMode {
             runIndexer(0d);
         }
         if (gamepad1.dpad_up) {
-            flip(0.1d);
+            flip(0);
         } else if (gamepad1.dpad_down) {
-            flip(-0.1d);
+            flip(0.3661);
         }
         if (gamepad1.left_trigger > 0.2){
             startTurret(-1d);
@@ -56,7 +56,8 @@ public class Testing extends OpMode {
             startTurret(0d);
         }
 
-    telemetry.update();
+        telemetry.addData("Flipper position: ",flipper.getPosition());
+        telemetry.update();
     }
 
     public void runIntake(double power) {
@@ -66,14 +67,17 @@ public class Testing extends OpMode {
         indexer.setPower(power);
     }
     public void flip(double power){
-        flipper.setPosition(flipper.getPosition() + power);
+        flipper.setPosition(power);
     }
     public void startTurret(double power){
         turret1.setPower(power);
         turret2.setPower(power);
-        telemetry.addData("Flipper position: ",flipper.getPosition());
+
         telemetry.addData("turret power: ", power);
     }
 
 }
 //indexer v, flipper v, intake v, turret v
+
+//0.113 top
+//0.3661 bottom
