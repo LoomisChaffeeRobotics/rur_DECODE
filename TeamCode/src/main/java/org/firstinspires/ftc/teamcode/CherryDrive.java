@@ -1,14 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class CherryDrive extends OpMode {
+public class CherryDrive extends OpMode { //this clas is called CherryDrive because the bot's name is Cherry that is final grrrrr
+
 
     //name of spinning turret is turretSpin
     //name of indexer is indexer
@@ -20,12 +20,22 @@ public class CherryDrive extends OpMode {
 
     boolean autoTurn = true;
     DcMotor intake;
+    DcMotor turret1; // top
+    DcMotor turret2; // bottom (i think)
+    CRServo indexer;
+    Servo flipper;
 
     @Override
     public void init() {
         limelightsystem = new unnecessaryLimeLightTurretSystem();
         limelightsystem.init(hardwareMap, telemetry);
+
+
         intake = hardwareMap.get(DcMotor.class,"intake");
+        turret1 = hardwareMap.get(DcMotor.class,"Turret1");
+        turret2 = hardwareMap.get(DcMotor.class,"Turret2");
+        indexer = hardwareMap.get(CRServo.class,"indexer");
+        flipper = hardwareMap.get(Servo.class,"flipper");
 //        colorsensor = new ColorTurningMechanismThing();
 //        colorsensor.init(hardwareMap, telemetry);
 //        indexer = hardwareMap.get(CRServo.class, "indexer");
@@ -66,6 +76,8 @@ public class CherryDrive extends OpMode {
         Roll = robotOrientation.getRoll();
 
          */
+
+        flipper(false);
     }
 
     @Override
@@ -139,7 +151,7 @@ public class CherryDrive extends OpMode {
     public void runIntake(double power){
         //run Intake
         telemetry.addData("intake power: ",power);
-        intake.setPower(power);
+        intake.setPower(-power);
     }
     public void startTurret(double power){
         // move,
@@ -147,6 +159,9 @@ public class CherryDrive extends OpMode {
     }
     public void flipper(boolean up){
         //flip
+        double flipDown = 0.3661d;
+        double flipUP = 0d;
+        flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
     }
     public void switchColor(ColorTurningMechanismThing.SensedColor color){

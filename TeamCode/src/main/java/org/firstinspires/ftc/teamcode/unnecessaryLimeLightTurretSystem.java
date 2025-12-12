@@ -39,7 +39,7 @@ public class unnecessaryLimeLightTurretSystem{
     public CRServo turretSpin;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
+        //turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         telemetry.setMsTransmissionInterval(11);
         limelight.pipelineSwitch(0);
@@ -51,19 +51,19 @@ public class unnecessaryLimeLightTurretSystem{
 
 
     }
-    public void turntoAT() {
+    public double turntoAT() {
         targetangle = 225;
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
         angleerror = targetangle - botposeangle;
         if (angleerror < -1 || angleerror > 180) {
-            turretSpin.setPower(-0.1);
-        } else if (angleerror > 1 && angleerror < 180) {
-            turretSpin.setPower(0.1);
-        } else if (angleerror < 1 && angleerror > -1){
-            turretSpin.setPower(0);
+            return -0.1;
+        } if (angleerror > 1 && angleerror < 180) {
+            return 0.1;
         }
+            return 0;
+
     }
 
 

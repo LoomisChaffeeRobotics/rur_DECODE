@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.ftc.localization.Encoder;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import java.util.Base64;
 
 @TeleOp
 public class Testing extends OpMode {
@@ -14,17 +18,20 @@ public class Testing extends OpMode {
     DcMotor intake;
     DcMotor turret1;
     DcMotor turret2;
+    DcMotor turretSpinEncoder;
     CRServo indexer;
     Servo flipper;
+
 
 
     @Override
     public void init() {
         intake = hardwareMap.get(DcMotor.class,"intake");
-        turret1 = hardwareMap.get(DcMotor.class,"Turret1");
-        turret2 = hardwareMap.get(DcMotor.class,"Turret2");
+        turret1 = hardwareMap.get(DcMotor.class,"Bottom");
+        turret2 = hardwareMap.get(DcMotor.class,"Top");
         indexer = hardwareMap.get(CRServo.class,"indexer");
         flipper = hardwareMap.get(Servo.class,"flipper");
+        turretSpinEncoder = hardwareMap.get(DcMotor.class, "turretSpinning");
         flipper.setPosition(0.3661);
     }
 
@@ -57,6 +64,7 @@ public class Testing extends OpMode {
         }
 
         telemetry.addData("Flipper position: ",flipper.getPosition());
+        telemetry.addData("Spinny: ",turretSpinEncoder.getCurrentPosition());
         telemetry.update();
     }
 
