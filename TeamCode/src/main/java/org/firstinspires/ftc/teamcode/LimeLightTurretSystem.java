@@ -23,7 +23,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
-public class unnecessaryLimeLightTurretSystem{
+public class LimeLightTurretSystem {
     public double targetangle = 165; //chnsge
     public Limelight3A limelight;
     public Pose3D botpose;
@@ -50,6 +50,11 @@ public class unnecessaryLimeLightTurretSystem{
         limelight.start();
 
 
+    }
+    public void turnWithKinetic() { //help
+        result = limelight.getLatestResult();
+        botpose = (result != null) ? result.getBotpose() : botpose;
+        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
     }
     public void turntoAT() {
         targetangle = 225;

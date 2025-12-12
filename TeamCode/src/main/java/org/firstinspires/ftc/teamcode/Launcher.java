@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Launcher {
     ElapsedTime elapsedTime;
-    unnecessaryLimeLightTurretSystem limelightsystem;
+    LimeLightTurretSystem limelightsystem;
     public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
@@ -49,7 +49,7 @@ public class Launcher {
 //        flap1 = hardwareMap.get(Servo.class, "flap1");
         launcher = hardwareMap.get(DcMotorEx.class, "launcher");
         launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
-        limelightsystem = new unnecessaryLimeLightTurretSystem();
+        limelightsystem = new LimeLightTurretSystem();
         limelightsystem.init(hardwareMap, telemetry);
     }
     boolean timerTestStart = false;

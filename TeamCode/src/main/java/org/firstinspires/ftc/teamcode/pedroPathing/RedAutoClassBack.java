@@ -4,7 +4,6 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
@@ -12,7 +11,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.ColorTurningMechanismThing;
+import org.firstinspires.ftc.teamcode.Indexer;
 import org.firstinspires.ftc.teamcode.Launcher;
 
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
 public class RedAutoClassBack extends OpMode {
     Limelight3A limelight;
     public LLResultTypes.FiducialResult fr;
-    ColorTurningMechanismThing turningthing;
+    Indexer turningthing;
     Launcher launcher;
     Follower follower;
     Timer pathTimer, actionTimer, opmodeTimer;
@@ -53,8 +52,8 @@ public class RedAutoClassBack extends OpMode {
         //i didn't import stuff because pepa 1.0.8 which we used to build this sample code last year uses different formatting and stuff so i had to change it
 
     }
-    public ColorTurningMechanismThing.SensedColor[] patternArray = {
-            ColorTurningMechanismThing.SensedColor.PURPLE,ColorTurningMechanismThing.SensedColor.PURPLE,ColorTurningMechanismThing.SensedColor.PURPLE
+    public Indexer.SensedColor[] patternArray = {
+            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE
     };
     public void setPathState(int state) { //allows it to know where in tihe code it is
         pathState = state;
@@ -133,7 +132,7 @@ public class RedAutoClassBack extends OpMode {
     }
     @Override
     public void init() {
-        turningthing = new ColorTurningMechanismThing();
+        turningthing = new Indexer();
         turningthing.init(hardwareMap, telemetry);
         launcher = new Launcher();
         launcher.init(hardwareMap, telemetry);
@@ -166,19 +165,19 @@ public class RedAutoClassBack extends OpMode {
         telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
         if (fr.getFiducialId() == 23) {
             telemetry.addLine("PPG");
-            patternArray[0] = ColorTurningMechanismThing.SensedColor.PURPLE;
-            patternArray[1] = ColorTurningMechanismThing.SensedColor.PURPLE;
-            patternArray[2] = ColorTurningMechanismThing.SensedColor.GREEN;
+            patternArray[0] = Indexer.SensedColor.PURPLE;
+            patternArray[1] = Indexer.SensedColor.PURPLE;
+            patternArray[2] = Indexer.SensedColor.GREEN;
         } else if (fr.getFiducialId() == 22) {
             telemetry.addLine("PGP");
-            patternArray[0] = ColorTurningMechanismThing.SensedColor.PURPLE;
-            patternArray[1] = ColorTurningMechanismThing.SensedColor.GREEN;
-            patternArray[2] = ColorTurningMechanismThing.SensedColor.PURPLE;
+            patternArray[0] = Indexer.SensedColor.PURPLE;
+            patternArray[1] = Indexer.SensedColor.GREEN;
+            patternArray[2] = Indexer.SensedColor.PURPLE;
         } else if (fr.getFiducialId() == 21) {
             telemetry.addLine("GPP");
-            patternArray[0] = ColorTurningMechanismThing.SensedColor.GREEN;
-            patternArray[1] = ColorTurningMechanismThing.SensedColor.PURPLE;
-            patternArray[2] = ColorTurningMechanismThing.SensedColor.PURPLE;
+            patternArray[0] = Indexer.SensedColor.GREEN;
+            patternArray[1] = Indexer.SensedColor.PURPLE;
+            patternArray[2] = Indexer.SensedColor.PURPLE;
 
         } else {
             telemetry.addLine("nothing");

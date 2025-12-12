@@ -30,9 +30,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  */
 public class sparkFunTestingClass{
     // Create an instance of the sensor
-    SparkFunOTOS myOtos;
-    SparkFunOTOS.Pose2D pos;
-    SparkFunOTOS.Pose2D velocity;
+    public SparkFunOTOS myOtos;
+    public SparkFunOTOS.Pose2D pos;
+    public SparkFunOTOS.Pose2D velocity;
     double velocitymag;
     KineticLauncherThing launcherbutmoving;
     double angleerror;
@@ -68,7 +68,7 @@ public class sparkFunTestingClass{
             // Log the position to the telemetry
             telemetry.addData("X coordinate", pos.x);
             telemetry.addData("Y coordinate", pos.y);
-            telemetry.addData("Heading angle", pos.h);
+            telemetry.addData("Heading angle", pos.h); //use to check radians vs degrees
 
             // Update the telemetry on the driver station
             telemetry.update();

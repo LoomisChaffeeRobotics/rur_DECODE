@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp
@@ -14,8 +11,8 @@ public class CherryDrive extends OpMode {
     //name of indexer is indexer
     //uncomment out the stuff later
 
-    unnecessaryLimeLightTurretSystem limelightsystem;
-    ColorTurningMechanismThing colorsensor;
+    LimeLightTurretSystem limelightsystem;
+    Indexer colorsensor;
 //    CRServo indexer;
 
     boolean autoTurn = true;
@@ -23,7 +20,7 @@ public class CherryDrive extends OpMode {
 
     @Override
     public void init() {
-        limelightsystem = new unnecessaryLimeLightTurretSystem();
+        limelightsystem = new LimeLightTurretSystem();
         limelightsystem.init(hardwareMap, telemetry);
         intake = hardwareMap.get(DcMotor.class,"intake");
 //        colorsensor = new ColorTurningMechanismThing();
@@ -149,7 +146,7 @@ public class CherryDrive extends OpMode {
         //flip
         telemetry.addData("flipper upness: ", up);
     }
-    public void switchColor(ColorTurningMechanismThing.SensedColor color){
+    public void switchColor(Indexer.SensedColor color){
        //COLOUR STUFFs
 //        colorsensor.turnBasedOffColor(color);
         telemetry.addData("color switched: ", color);
