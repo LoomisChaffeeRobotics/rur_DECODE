@@ -3,11 +3,6 @@ package org.firstinspires.ftc.teamcode;
 
 
 
-//I've already moved all of the code into DriveClass - any changes that need to be made should be made there
-//10-7-25
-
-//to do uncomment otu the turretSpin stuff
-
 
 
 
@@ -15,6 +10,8 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -24,6 +21,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 public class LimeLightTurretSystem {
+    public DcMotor encoder;
+    sparkFunTestingClass sparkfun;
     public double targetangle = 165; //chnsge
     public Limelight3A limelight;
     public Pose3D botpose;
@@ -34,16 +33,20 @@ public class LimeLightTurretSystem {
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
     public LLStatus status;
-
+    public double velocityheading;
+    public double kineticerror;
     public double distance_from_apriltag = 0; //meters
     public CRServo turretSpin;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        encoder = hardwareMap.get(DcMotor.class, "encoder");
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.setMsTransmissionInterval(11);
         limelight.pipelineSwitch(0);
-
+        sparkfun = new sparkFunTestingClass();
+        sparkfun.init(hardwareMap,telemetry);
         /*
          * Starts polling for data.  If you neglect to call start(), getLatestResult() will return null.
          */
@@ -55,13 +58,9 @@ public class LimeLightTurretSystem {
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-    }
-    public void turntoAT() {
-        targetangle = 225;
-        result = limelight.getLatestResult();
-        botpose = (result != null) ? result.getBotpose() : botpose;
-        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        angleerror = targetangle - botposeangle;
+        velocityheading = sparkfun.velocity.h; //i dont know what velocity.h is but im hoping it's the angle of the velocity
+        kineticerror = targetangle-velocityheading;
+        angleerror = (targetangle - botposeangle) + kineticerror; //you might need to add kineticerror or subtract (targetangle-botposeangle) from it
         if (angleerror < -1 || angleerror > 180) {
             turretSpin.setPower(-0.1);
         } else if (angleerror > 1 && angleerror < 180) {
@@ -69,6 +68,30 @@ public class LimeLightTurretSystem {
         } else if (angleerror < 1 && angleerror > -1){
             turretSpin.setPower(0);
         }
+
+
+    }
+    public void turntoAT() {
+
+        targetangle = 225;
+        result = limelight.getLatestResult();
+        botpose = (result != null) ? result.getBotpose() : botpose;
+        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
+        angleerror = targetangle - botposeangle;
+        if (encoder.getCurrentPosition() < 19208374 || encoder.getCurrentPosition() > -128934) { //change the big number
+            if (angleerror < -1 || angleerror > 180) {
+                turretSpin.setPower(-0.1);
+            } else if (angleerror > 1 && angleerror < 180) {
+                turretSpin.setPower(0.1);
+            } else if (angleerror < 1 && angleerror > -1) {
+                turretSpin.setPower(0);
+            }
+        } else if (encoder.getCurrentPosition() > 0) { //so if the encoder is past a certain point either way turn back the other way 
+            turretSpin.setPower(0.5);
+        } else if (encoder.getCurrentPosition() < 0) {
+            turretSpin.setPower(-0.5);
+        }
+
     }
 
 
@@ -85,16 +108,7 @@ public class LimeLightTurretSystem {
             distance_from_apriltag = value;
         }
 
-
         angleerror = targetangle - botposeangle;
-//        if (angleerror < -1 || angleerror > 180) {
-//            turretSpin.setPower(-0.1);
-//        } else if (angleerror > 1 && angleerror < 165) {
-//            turretSpin.setPower(0.1);
-//        } else if (angleerror < 1 && angleerror > -1){
-//            turretSpin.setPower(0);
-//        }
-        status = limelight.getStatus();
         return distance_from_apriltag;
     }
 }
