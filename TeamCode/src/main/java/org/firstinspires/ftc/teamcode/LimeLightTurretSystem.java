@@ -86,8 +86,8 @@ public class LimeLightTurretSystem {
             } else if (angleerror < 1 && angleerror > -1) {
                 turretSpin.setPower(0);
             }
-        } else if (encoder.getCurrentPosition() > 0) { //so if the encoder is past a certain point either way turn back the other way 
-            turretSpin.setPower(0.5);
+        } else if (encoder.getCurrentPosition() > 0) { //so if the encoder is past a certain point either way turn back the other way
+            turretSpin.setPower(0.5); //idk which direction is right
         } else if (encoder.getCurrentPosition() < 0) {
             turretSpin.setPower(-0.5);
         }
