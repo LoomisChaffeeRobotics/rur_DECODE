@@ -21,9 +21,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(13.15)
-            .forwardZeroPowerAcceleration(-34.34311294135725)
-            .lateralZeroPowerAcceleration(-92.70228024532133);
+//            .mass(13.15)
+//            .forwardZeroPowerAcceleration(-34.34311294135725)
+//            .lateralZeroPowerAcceleration(-92.70228024532133)
+            ;
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
@@ -34,23 +35,30 @@ public class Constants {
             .leftFrontMotorName("leftFront")
             .leftRearMotorName("leftBack")
             .rightRearMotorName("rightBack")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(55.69855798065763)
-            .yVelocity(49.04440430657071);
+//            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+//            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+//            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+//            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+//            .xVelocity(55.69855798065763)
+//            .yVelocity(49.04440430657071)
+            ;
 
     public static OTOSConstants localizerConstants = new OTOSConstants()
-            .hardwareMapName("SparkFun")
+            .hardwareMapName("sensor_otos")
             .linearUnit(DistanceUnit.INCH)
             .angleUnit(AngleUnit.RADIANS)
-            .offset(new SparkFunOTOS.Pose2D(6.3,1.4,Math.PI/2))
-            .linearScalar(1.02833322007722)
-            .angularScalar(0.978101568);
+            .offset(new SparkFunOTOS.Pose2D(6.5,5.5,Math.PI/2))
+//            .linearScalar(1.02833322007722)
+//            .angularScalar(0.978101568)
+            ;
 
 
     public static Follower createFollower(HardwareMap hardwareMap) {
-        return new FollowerBuilder(followerConstants, hardwareMap).OTOSLocalizer(localizerConstants).build();
+        return new FollowerBuilder(followerConstants, hardwareMap)
+                .OTOSLocalizer(localizerConstants)
+                .pathConstraints(pathConstraints)
+                .mecanumDrivetrain(driveConstants)
+                .OTOSLocalizer(localizerConstants)
+                .build();
     }
 }
