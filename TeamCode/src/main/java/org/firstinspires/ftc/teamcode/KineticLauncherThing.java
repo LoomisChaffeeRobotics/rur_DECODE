@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class KineticLauncherThing {
-    unnecessaryLimeLightTurretSystem limelightsystem;
+    LimeLightTurretSystem limelightsystem;
     Launcher thingthatlaunches;
     sparkFunTestingClass sparkfun;
     double velocity_towards_target = 0;
@@ -41,7 +41,7 @@ public class KineticLauncherThing {
 
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        limelightsystem = new unnecessaryLimeLightTurretSystem();
+        limelightsystem = new LimeLightTurretSystem();
         limelightsystem.init(hardwareMap, telemetry);
         thingthatlaunches = new Launcher();
         thingthatlaunches.init(hardwareMap, telemetry);
@@ -49,8 +49,8 @@ public class KineticLauncherThing {
         sparkfun.init(hardwareMap, telemetry);
     }
     public void calculatevalues(Telemetry telemetry) {
-        sparkfun.runKineticStuff(telemetry);
-        //velocity_towards_target = FieldCentricDriving.velocity_vector * Math.cos(limelightsystem.botposeangle);
+        sparkfun.runKineticStuff(telemetry); //actually literally doesn't do antyhgin
+        velocity_towards_target = sparkfun.velocitymag * Math.cos(limelightsystem.botposeangle); //i think works
         distancefromat = limelightsystem.getDistance_from_apriltag(0);
         result = thingthatlaunches.find_closest_x(limelightsystem.getDistance_from_apriltag(0)); //finds distance from apriltag - two numbers: upper and lower bound
 

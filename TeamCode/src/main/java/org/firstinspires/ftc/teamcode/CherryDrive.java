@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -14,8 +13,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     //name of indexer is indexer
     //uncomment out the stuff later
 
-    unnecessaryLimeLightTurretSystem limelightsystem;
-    ColorTurningMechanismThing colorsensor;
+    LimeLightTurretSystem limelightsystem;
+    Indexer colorsensor;
 //    CRServo indexer;
 
     boolean autoTurn = true;
@@ -27,7 +26,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
     @Override
     public void init() {
-        limelightsystem = new unnecessaryLimeLightTurretSystem();
+        limelightsystem = new LimeLightTurretSystem();
         limelightsystem.init(hardwareMap, telemetry);
 
 
@@ -164,7 +163,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
     }
-    public void switchColor(ColorTurningMechanismThing.SensedColor color){
+    public void switchColor(Indexer.SensedColor color){
        //COLOUR STUFFs
 //        colorsensor.turnBasedOffColor(color);
         telemetry.addData("color switched: ", color);

@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class LauncherInterpolationTest extends OpMode {
 
     Launcher launcherClass;
-    unnecessaryLimeLightTurretSystem limelight;
+    LimeLightTurretSystem limelight;
 
     @Override
     public void init() {
         launcherClass = new Launcher();
         launcherClass.init(hardwareMap, telemetry);
-        limelight = new unnecessaryLimeLightTurretSystem();
+        limelight = new LimeLightTurretSystem();
         limelight.init(hardwareMap, telemetry);
 
     }
