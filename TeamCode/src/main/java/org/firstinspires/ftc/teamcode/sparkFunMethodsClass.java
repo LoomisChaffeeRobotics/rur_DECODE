@@ -6,8 +6,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -28,7 +26,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  *
  * See the sensor's product page: https://www.sparkfun.com/products/24904
  */
-public class sparkFunTestingClass{
+public class sparkFunMethodsClass {
     // Create an instance of the sensor
     public SparkFunOTOS myOtos;
     public SparkFunOTOS.Pose2D pos;
@@ -47,8 +45,6 @@ public class sparkFunTestingClass{
 
         // All the configuration for the OTOS is done in this helper method, check it out!
         configureOtos(telemetry);
-        // Wait for the start button to be pressed
-
         // Loop until the OpMode ends
 
     }
@@ -74,7 +70,7 @@ public class sparkFunTestingClass{
             telemetry.update();
         }
 
-    private void configureOtos(Telemetry telemetry) {
+    public void configureOtos(Telemetry telemetry) {
         telemetry.addLine("Configuring OTOS...");
         telemetry.update();
 

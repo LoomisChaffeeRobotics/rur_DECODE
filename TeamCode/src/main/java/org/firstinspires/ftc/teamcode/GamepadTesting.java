@@ -6,10 +6,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 @TeleOp
-public class Testing extends OpMode {
+public class GamepadTesting extends OpMode {
 
     DcMotor intake;
     DcMotor turret1;

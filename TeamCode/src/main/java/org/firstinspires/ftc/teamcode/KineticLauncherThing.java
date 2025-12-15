@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class KineticLauncherThing {
     LimeLightTurretSystem limelightsystem;
     Launcher thingthatlaunches;
-    sparkFunTestingClass sparkfun;
+    sparkFunMethodsClass sparkfun;
     double velocity_towards_target = 0;
     double time_in_air = 0;
     double[] between_point_1 = {0, 0};
@@ -45,7 +45,7 @@ public class KineticLauncherThing {
         limelightsystem.init(hardwareMap, telemetry);
         thingthatlaunches = new Launcher();
         thingthatlaunches.init(hardwareMap, telemetry);
-        sparkfun = new sparkFunTestingClass();
+        sparkfun = new sparkFunMethodsClass();
         sparkfun.init(hardwareMap, telemetry);
     }
     public void calculatevalues(Telemetry telemetry) {

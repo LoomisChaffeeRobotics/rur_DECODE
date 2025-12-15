@@ -11,7 +11,6 @@ import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -22,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 public class LimeLightTurretSystem {
     public DcMotor encoder;
-    sparkFunTestingClass sparkfun;
+    sparkFunMethodsClass sparkfun;
     public double targetangle = 165; //chnsge
     public Limelight3A limelight;
     public Pose3D botpose;
@@ -45,7 +44,7 @@ public class LimeLightTurretSystem {
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.setMsTransmissionInterval(11);
         limelight.pipelineSwitch(0);
-        sparkfun = new sparkFunTestingClass();
+        sparkfun = new sparkFunMethodsClass();
         sparkfun.init(hardwareMap,telemetry);
         /*
          * Starts polling for data.  If you neglect to call start(), getLatestResult() will return null.
