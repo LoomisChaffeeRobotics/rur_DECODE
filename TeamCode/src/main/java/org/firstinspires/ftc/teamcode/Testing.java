@@ -68,9 +68,9 @@ public class Testing extends OpMode {
             runIndexer(0d);
         }
         if (gamepad1.dpad_up) {
-            flip(0);
+            flip(0.53);
         } else if (gamepad1.dpad_down) {
-            flip(0.3661);
+            flip(0.91);
         }
         if (gamepad1.left_trigger > 0.2){
             startTurret(-1d);
