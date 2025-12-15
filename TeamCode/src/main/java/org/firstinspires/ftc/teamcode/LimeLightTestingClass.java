@@ -25,17 +25,9 @@ public class LimeLightTestingClass extends OpMode {
         LLResult result = limelight.getLatestResult();
          botpose = (result != null) ? result.getBotpose() : botpose;
 
-        double botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + 1.413, 0, 0);
-        if (value == 0) {
-            distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
-        } else {
-            distance_from_apriltag = value;
-        }
+        Position positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + 1.413, 0, 0);
+        double distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
 
-
-        angleerror = targetangle - botposeangle;
-        status = limelight.getStatus();
-        return distance_from_apriltag;
+        telemetry.addData("Distance: ", distance_from_apriltag);
     }
 }
