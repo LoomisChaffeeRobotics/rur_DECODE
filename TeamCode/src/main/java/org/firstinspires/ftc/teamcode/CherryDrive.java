@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
@@ -25,22 +28,31 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     CRServo indexer;
     Servo flipper;
 
+    DcMotor left_front;
+    DcMotor right_front;
+    DcMotor left_back;
+    DcMotor right_back;
+    IMU imu;
+
+
+
     @Override
     public void init() {
-        limelightsystem = new LimeLightTurretSystem();
-        limelightsystem.init(hardwareMap, telemetry);
+//        limelightsystem = new LimeLightTurretSystem();
+//        limelightsystem.init(hardwareMap, telemetry);
+//        TODO: FIX LIMELIGHT INIT!!!!!! NOW!!!!!!!!!! PELASE OMG I HATE LIMELIGHTG ADSLKFGHJGFDIPOK:L
 
 
         intake = hardwareMap.get(DcMotor.class,"intake");
-        turret1 = hardwareMap.get(DcMotor.class,"Turret1");
-        turret2 = hardwareMap.get(DcMotor.class,"Turret2");
+        turret1 = hardwareMap.get(DcMotor.class,"launcher");
+        turret2 = hardwareMap.get(DcMotor.class,"launcher2");
         indexer = hardwareMap.get(CRServo.class,"indexer");
         flipper = hardwareMap.get(Servo.class,"flipper");
 //        colorsensor = new ColorTurningMechanismThing();
 //        colorsensor.init(hardwareMap, telemetry);
 //        indexer = hardwareMap.get(CRServo.class, "indexer");
 
-        /*
+
         //FCD INIT
 
         left_front = hardwareMap.get(DcMotor.class, "leftFront");
@@ -53,8 +65,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        right_front.setDirection(DcMotorSimple.Direction.REVERSE);
-        right_back.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_front.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_back.setDirection(DcMotorSimple.Direction.REVERSE);
 
         imu = hardwareMap.get(IMU.class, "imu");
 
@@ -64,18 +76,13 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
                         RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-//                )
-//        );
+                )
+        );
 
         imu.initialize(myIMUparameter);
-
-        robotOrientation = imu.getRobotYawPitchRollAngles();
         imu.resetYaw();
-        Yaw = robotOrientation.getYaw();
-        Pitch = robotOrientation.getPitch();
-        Roll = robotOrientation.getRoll();
 
-         */
+
 
         flipper(false);
     }
@@ -83,10 +90,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     @Override
     public void loop() {
 //        colorsensor.sensecolor(telemetry);
-//        fieldCentricDriving(gamepad1.left_stick_x,gamepad1.left_stick_y,
-//                gamepad1.right_stick_x,gamepad1.right_stick_y);
 
-
+        //  INTAKE
         if (gamepad1.right_trigger > 0.2) {
             runIntake(1d);
         }
@@ -94,14 +99,14 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             runIntake(0d);
         }
 
-
+        //  TURRET
         if (gamepad2.left_trigger > 0.2){
             startTurret(1d);
         } else {
             startTurret(0d);
         }
 
-
+        //  FLIPPER
         if (gamepad2.right_trigger > 0.2){
             flipper(true);
         } else {
@@ -118,6 +123,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //            switchColor(ColorTurningMechanismThing.SensedColor.PURPLE);
 //        }
 
+        //  TURNING THE HEAD
         if(autoTurn){
             autoTurn();
         }
@@ -135,17 +141,46 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             autoTurn = true;
         }
 
+        // Driving
+        fieldCentricDriving();
+        if (gamepad1.start){
+            imu.resetYaw();
+        }
 
     }
 
 
-    public void fieldCentricDriving(double leftX, double leftY, double rightX, double rightY){
-        // FCD and turning
-        telemetry.addData("leftX: ", leftX);
-        telemetry.addData("leftY: ", leftY);
-        telemetry.addData("rightX: ", rightX);
-        telemetry.addData("rightY: ", rightY);
+    public void fieldCentricDriving(){
 
+        //inputs
+        double x = gamepad1.left_stick_x;
+        double y = -gamepad1.left_stick_y;
+        double rx = gamepad1.right_stick_x;
+        double Yaw = imu.getRobotYawPitchRollAngles().getYaw();
+
+        //rotation
+        double x_altered = (x * Math.cos(Math.toRadians(Yaw))) + (y * Math.sin(Math.toRadians(Yaw)));
+        double y_altered = (y * Math.cos(Math.toRadians(Yaw))) - (x * Math.sin(Math.toRadians(Yaw)));
+
+        //adding it all together
+        double right_front_velocity = y_altered - x_altered - rx;
+        double left_front_velocity = y_altered + x_altered + rx;
+        double left_back_velocity = y_altered - x_altered + rx;
+        double right_back_velocity = y_altered + x_altered - rx;
+
+        //denominator (keep ratio of speeds)
+        double denominator = 1d;
+        double max = Math.max(Math.max(Math.abs(right_back_velocity),Math.abs(right_front_velocity)), Math.max(Math.abs(left_back_velocity),Math.abs(left_front_velocity)));
+
+        if(max > 1){
+            denominator = max;
+        }
+
+        right_front.setPower(right_front_velocity/denominator);
+        right_back.setPower(right_back_velocity/denominator);
+        left_front.setPower(left_front_velocity/denominator);
+        left_back.setPower(left_back_velocity/denominator);
+//        telemetry.addData("yaw: ", Yaw);
 
     }
     public void runIntake(double power){
@@ -159,8 +194,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     public void flipper(boolean up){
         //flip
-        double flipDown = 0.3661d;
-        double flipUP = 0d;
+        double flipDown = 0.91d;
+        double flipUP = 0.53d;
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
     }
@@ -171,9 +206,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     public void autoTurn(){
         //turn automatically
-        limelightsystem.turntoAT();
-        autoTurn = true;
-        telemetry.addData("angel error", limelightsystem.angleerror);
+//        limelightsystem.turntoAT();
+//        autoTurn = true;
+//        telemetry.addData("angel error", limelightsystem.angleerror);
     }
     public void manuTurn(double power){
         //turn manually
