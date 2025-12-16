@@ -48,27 +48,6 @@ public class sparkFunMethodsClass {
         // Loop until the OpMode ends
 
     }
-    public void runKineticStuff(Telemetry telemetry) {
-            launcherbutmoving.calculatevalues(telemetry);
-            // Get the latest position, which includes the x and y coordinates, plus the
-            // heading angle
-            pos = myOtos.getPosition();  //in meters and radians
-            velocity = myOtos.getVelocity(); // like meters per second  possibly
-            velocitymag = Math.sqrt(Math.pow(velocity.x, 2) + Math.pow(velocity.y, 2));
-
-            angleerror = pos.h - 2.87979; //i literaly dont know it might be 165 degrees
-            flight_time = launcherbutmoving.flight_time_interporation_result;
-            distanceAT = launcherbutmoving.distancefromat;
-            expecteddistance = distanceAT - (velocitymag * flight_time);
-
-            // Log the position to the telemetry
-            telemetry.addData("X coordinate", pos.x);
-            telemetry.addData("Y coordinate", pos.y);
-            telemetry.addData("Heading angle", pos.h); //use to check radians vs degrees
-
-            // Update the telemetry on the driver station
-            telemetry.update();
-        }
 
     public void configureOtos(Telemetry telemetry) {
         telemetry.addLine("Configuring OTOS...");

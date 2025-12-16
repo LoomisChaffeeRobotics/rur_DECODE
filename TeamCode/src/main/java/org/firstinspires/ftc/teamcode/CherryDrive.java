@@ -38,8 +38,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
     @Override
     public void init() {
-//        limelightsystem = new LimeLightTurretSystem();
-//        limelightsystem.init(hardwareMap, telemetry);
+        limelightsystem = new LimeLightTurretSystem();
+        limelightsystem.init(hardwareMap, telemetry);
 //        TODO: FIX LIMELIGHT INIT!!!!!! NOW!!!!!!!!!! PELASE OMG I HATE LIMELIGHTG ADSLKFGHJGFDIPOK:L
 
 

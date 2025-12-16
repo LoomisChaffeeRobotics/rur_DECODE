@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-//            .mass(13.15)
+            .mass(10.5)
 //            .forwardZeroPowerAcceleration(-34.34311294135725)
 //            .lateralZeroPowerAcceleration(-92.70228024532133)
             ;
@@ -47,8 +47,8 @@ public class Constants {
             .hardwareMapName("sensor_otos")
             .linearUnit(DistanceUnit.INCH)
             .angleUnit(AngleUnit.RADIANS)
-            .offset(new SparkFunOTOS.Pose2D(6.5,5.5,Math.PI/2))
-//            .linearScalar(1.02833322007722)
+            .offset(new SparkFunOTOS.Pose2D(6.5,5.5,-Math.PI/2))
+            .linearScalar(1.31)
 //            .angularScalar(0.978101568)
             ;
 

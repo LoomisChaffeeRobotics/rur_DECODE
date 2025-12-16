@@ -1,12 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class KineticLauncherThing {
+    public SparkFunOTOS.Pose2D pos;
+    public SparkFunOTOS.Pose2D velocity;
+    double angleerror;
+    double flight_time;
+    double velocitymag;
+    public double expecteddistance;
     LimeLightTurretSystem limelightsystem;
-    Launcher thingthatlaunches;
+    Launcher launcher;
     sparkFunMethodsClass sparkfun;
     double velocity_towards_target = 0;
     double time_in_air = 0;
@@ -41,18 +48,33 @@ public class KineticLauncherThing {
 
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        limelightsystem = new LimeLightTurretSystem();
-        limelightsystem.init(hardwareMap, telemetry);
-        thingthatlaunches = new Launcher();
-        thingthatlaunches.init(hardwareMap, telemetry);
+        launcher = new Launcher();
+        launcher.init(hardwareMap, telemetry);
         sparkfun = new sparkFunMethodsClass();
         sparkfun.init(hardwareMap, telemetry);
     }
+    public void runKineticStuff(Telemetry telemetry) {
+        calculatevalues(telemetry);
+        // Get the latest position, which includes the x and y coordinates, plus the
+        // heading angle
+        pos = sparkfun.myOtos.getPosition();  //in meters and radians
+        velocity = sparkfun.myOtos.getVelocity(); // like meters per second  possibly
+        velocitymag = Math.sqrt(Math.pow(velocity.x, 2) + Math.pow(velocity.y, 2));
+        angleerror = pos.h - 2.87979; //i literaly dont know it might be 165 degrees
+        flight_time = flight_time_interporation_result;
+        expecteddistance = distancefromat - (velocitymag * flight_time);
+
+        // Log the position to the telemetry
+        telemetry.addData("X coordinate", pos.x);
+        telemetry.addData("Y coordinate", pos.y);
+        telemetry.addData("Heading angle", pos.h); //use to check radians vs degrees
+
+        // Update the telemetry on the driver station
+        telemetry.update();
+    }
     public void calculatevalues(Telemetry telemetry) {
-        sparkfun.runKineticStuff(telemetry); //actually literally doesn't do antyhgin
-        velocity_towards_target = sparkfun.velocitymag * Math.cos(limelightsystem.botposeangle); //i think works
         distancefromat = limelightsystem.getDistance_from_apriltag(0);
-        result = thingthatlaunches.find_closest_x(limelightsystem.getDistance_from_apriltag(0)); //finds distance from apriltag - two numbers: upper and lower bound
+        result = launcher.find_closest_x(distancefromat); //finds distance from apriltag - two numbers: upper and lower bound
 
         time_in_flight_value_0 = result[0] >= 1.5 ? time_in_flights[(int) (result[0] * 2) - 1] : time_in_flights[(result[0] == 0.5 ? 0 : 1)]; // finds the time in flight for both upper and lower bound
         lower_motor_value_0 = result[0] >= 1.5 ? lower_motor_speeds[(int) (result[0] * 2) - 1] : lower_motor_speeds[(result[0] == 0.5 ? 0 : 1)]; // lower motor speed for upper and lower
@@ -64,19 +86,19 @@ public class KineticLauncherThing {
 
 
         //legit no idea if thats going tow ork
-        flight_time_interporation_result = thingthatlaunches.interpolate_points(
+        flight_time_interporation_result = launcher.interpolate_points(
                 limelightsystem.getDistance_from_apriltag(0), // distance
                 new double[]{result[0], time_in_flight_value_0}, //first (x,y) is (lower distance bound, flight time)
                 new double[]{result[1], time_in_flight_value_1} // second (x,y) is (upper distance bound, flight time)
         );
 
-        lower_motor_interporation_result = thingthatlaunches.interpolate_points(
+        lower_motor_interporation_result = launcher.interpolate_points(
                 limelightsystem.getDistance_from_apriltag(sparkfun.expecteddistance),
                 new double[]{result[0], lower_motor_value_0},
                 new double[]{result[1], lower_motor_value_1}
         ) * (7.0 / 15.0);
 
-        upper_motor_interporation_result = thingthatlaunches.interpolate_points(
+        upper_motor_interporation_result = launcher.interpolate_points(
                 limelightsystem.getDistance_from_apriltag(sparkfun.expecteddistance),
                 new double[]{result[0], upper_motor_value_0},
                 new double[]{result[1], upper_motor_value_1}
@@ -96,6 +118,10 @@ public class KineticLauncherThing {
         telemetry.addData("upper motor 1: ", upper_motor_value_1 * (7.0/15.0));
     }
 
+    public void calculatekineticvalues() {
+        runKineticStuff(telemetry); //actually literally doesn't do antyhgin
+        velocity_towards_target = velocitymag * Math.cos(limelightsystem.botposeangle); //i think works
 
+    }
 
 }
