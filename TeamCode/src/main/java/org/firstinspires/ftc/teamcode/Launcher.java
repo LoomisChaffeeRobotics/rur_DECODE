@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Launcher {
     ElapsedTime elapsedTime;
-    LimeLightTurretSystem limelightsystem;
     public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
@@ -49,8 +48,6 @@ public class Launcher {
 //        flap1 = hardwareMap.get(Servo.class, "flap1");
         launcher = hardwareMap.get(DcMotorEx.class, "launcher");
         launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
-        limelightsystem = new LimeLightTurretSystem();
-        limelightsystem.init(hardwareMap, telemetry);
     }
     boolean timerTestStart = false;
     public void waitAuto(double seconds){
@@ -82,12 +79,9 @@ public class Launcher {
 
         return x_times_slope + y_intercept;
     }
-    public boolean shoot(HardwareMap hardwareMap, Telemetry telemetry) {
-        limelightsystem.init(hardwareMap, telemetry);
-        limelightsystem.getDistance_from_apriltag(0);
-        //velocity_towards_target = FieldCentricDriving.velocity_vector * Math.cos(limelightsystem.botposeangle);
-
-        result = find_closest_x(limelightsystem.getDistance_from_apriltag(0)); //finds distance from apriltag - two numbers: upper and lower bound
+    public boolean shoot(HardwareMap hardwareMap, Telemetry telemetry, double distance) {
+       
+        result = find_closest_x(distance); //finds distance from apriltag - two numbers: upper and lower bound
 
         time_in_flight_value_0 = result[0] >= 1.5 ? time_in_flights[(int) (result[0] * 2) - 1] : time_in_flights[(result[0] == 0.5 ? 0 : 1)]; // finds the time in flight for both upper and lower bound
         lower_motor_value_0 = result[0] >= 1.5 ? lower_motor_speeds[(int) (result[0] * 2) - 1] : lower_motor_speeds[(result[0] == 0.5 ? 0 : 1)]; // lower motor speed for upper and lower
@@ -100,19 +94,19 @@ public class Launcher {
 
         //legit no idea if thats going tow ork
         flight_time_interporation_result = interpolate_points(
-                limelightsystem.getDistance_from_apriltag(0), // distance
+                distance, // distance
                 new double[]{result[0], time_in_flight_value_0}, //first (x,y) is (lower distance bound, flight time)
                 new double[]{result[1], time_in_flight_value_1} // second (x,y) is (upper distance bound, flight time)
         );
 
         lower_motor_interporation_result = interpolate_points(
-                limelightsystem.getDistance_from_apriltag(0),
+                distance,
                 new double[]{result[0], lower_motor_value_0},
                 new double[]{result[1], lower_motor_value_1}
         ) * (7.0 / 15.0);
 
         upper_motor_interporation_result = interpolate_points(
-                limelightsystem.getDistance_from_apriltag(0),
+                distance,
                 new double[]{result[0], upper_motor_value_0},
                 new double[]{result[1], upper_motor_value_1}
         ) * (7.0 / 15.0);

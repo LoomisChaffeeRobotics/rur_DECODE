@@ -54,7 +54,6 @@ public class KineticLauncherThing {
         sparkfun.init(hardwareMap, telemetry);
     }
     public void runKineticStuff(Telemetry telemetry) {
-        calculatevalues(telemetry);
         // Get the latest position, which includes the x and y coordinates, plus the
         // heading angle
         pos = sparkfun.myOtos.getPosition();  //in meters and radians
@@ -81,9 +80,8 @@ public class KineticLauncherThing {
         // Update the telemetry on the driver station
         telemetry.update();
     }
-    public void calculatevalues(Telemetry telemetry) {
-        distancefromat = limelightsystem.getDistance_from_apriltag(0);
-        result = launcher.find_closest_x(distancefromat); //finds distance from apriltag - two numbers: upper and lower bound
+    public void calculateKINETICvalues(Telemetry telemetry) {
+        result = launcher.find_closest_x(limelightsystem.getDistance_from_apriltag(0)); //finds distance from apriltag - two numbers: upper and lower bound
 
         time_in_flight_value_0 = result[0] >= 1.5 ? time_in_flights[(int) (result[0] * 2) - 1] : time_in_flights[(result[0] == 0.5 ? 0 : 1)]; // finds the time in flight for both upper and lower bound
         lower_motor_value_0 = result[0] >= 1.5 ? lower_motor_speeds[(int) (result[0] * 2) - 1] : lower_motor_speeds[(result[0] == 0.5 ? 0 : 1)]; // lower motor speed for upper and lower

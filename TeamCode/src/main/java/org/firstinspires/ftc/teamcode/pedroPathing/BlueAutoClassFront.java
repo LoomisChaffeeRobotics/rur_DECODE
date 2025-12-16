@@ -14,12 +14,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Indexer;
 import org.firstinspires.ftc.teamcode.Launcher;
+import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
 
 import java.util.List;
 //change paths to pathcnages sometimes
 
 @Autonomous
 public class BlueAutoClassFront extends OpMode {
+    LimeLightTurretSystem limelightclass;
     Limelight3A limelight;
     Indexer turningthing;
     Launcher launcher;
@@ -78,11 +80,11 @@ public class BlueAutoClassFront extends OpMode {
                 if (!follower.isBusy()) {
                     follower.followPath(runAuto,true); //bad runatuo doesnt do anything
                     turningthing.turnBasedOfColor(patternArray[0]);
-                    launcher.shoot(hardwareMap, telemetry); //actually shoots
+                    launcher.shoot(hardwareMap, telemetry, limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     turningthing.turnBasedOfColor(patternArray[1]);
-                    launcher.shoot(hardwareMap, telemetry); //actually shoots
+                    launcher.shoot(hardwareMap, telemetry, limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     turningthing.turnBasedOfColor(patternArray[2]); //these make it turns
-                    launcher.shoot(hardwareMap, telemetry); //actually shoots
+                    launcher.shoot(hardwareMap, telemetry, limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     setPathState(2);
                 }
                 break;
@@ -141,6 +143,8 @@ public class BlueAutoClassFront extends OpMode {
         turningthing.init(hardwareMap, telemetry);
         launcher = new Launcher();
         launcher.init(hardwareMap, telemetry);
+        limelightclass = new LimeLightTurretSystem();
+        limelightclass.init(hardwareMap, telemetry);
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
