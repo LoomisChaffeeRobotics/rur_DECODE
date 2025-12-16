@@ -49,7 +49,7 @@ public class Constants {
             .angleUnit(AngleUnit.RADIANS)
             .offset(new SparkFunOTOS.Pose2D(6.5,5.5,-Math.PI/2))
             .linearScalar(1.31)
-//            .angularScalar(0.978101568)
+            .angularScalar(0.96)
             ;
 
 
