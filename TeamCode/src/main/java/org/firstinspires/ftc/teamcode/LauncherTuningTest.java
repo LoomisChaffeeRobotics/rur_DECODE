@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
@@ -10,6 +11,7 @@ public class LauncherTuningTest extends OpMode {
 
     DcMotorEx bottom_motor;
     DcMotorEx top_motor;
+    Servo flipper;
     double bottom_velocity = 0;
     double top_velocity = 0;
 
@@ -17,13 +19,22 @@ public class LauncherTuningTest extends OpMode {
 
     @Override
     public void init() {
-        bottom_motor = hardwareMap.get(DcMotorEx.class, "launcher1"); // port 2
-        top_motor = hardwareMap.get(DcMotorEx.class, "launcher2"); // port 0
+        flipper = hardwareMap.get(Servo.class, "flipper");
+        bottom_motor = hardwareMap.get(DcMotorEx.class, "launcher");
+        top_motor = hardwareMap.get(DcMotorEx.class, "launcher2"); //
         elapsedTime = new ElapsedTime();
     }
 
     @Override
     public void loop() {
+        if(gamepad1.x){
+            flipper.setPosition(0.91);
+//            leftFront.setPower(gamepad1.left_stick_y);
+        }
+        if(gamepad1.b){
+            flipper.setPosition(0.53);
+//            leftRear.setPower(gamepad1.left_stick_y);
+        }
         if (gamepad1.dpad_up && elapsedTime.time() > 0.2) {
             bottom_velocity += 0.01;
             bottom_motor.setPower(bottom_velocity);
@@ -47,6 +58,7 @@ public class LauncherTuningTest extends OpMode {
 
         telemetry.addData("top: ",top_motor.getVelocity()*15/7);
         telemetry.addData("bottom: ",bottom_motor.getVelocity()*15/7);
+        telemetry.addData("servo pos", flipper.getPosition());
         telemetry.update();
     }
 }
