@@ -11,16 +11,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class CherryDrive extends OpMode { //this clas is called CherryDrive because the bot's name is Cherry that is final grrrrr
-
+    //RUN SENSECOLOR BEFORE EVERY TURNING THING AAHHH
 
     //name of spinning turret is turretSpin
     //name of indexer is indexer
     //uncomment out the stuff later
 
     LimeLightTurretSystem limelightsystem;
-    Indexer colorsensor;
+    Indexer indexclass;
 //    CRServo indexer;
-
     boolean autoTurn = true;
     DcMotor intake;
     DcMotor turret1; // top
@@ -40,6 +39,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     public void init() {
         limelightsystem = new LimeLightTurretSystem();
         limelightsystem.init(hardwareMap, telemetry);
+        indexclass = new Indexer();
+        indexclass.init(hardwareMap, telemetry);
 //        TODO: FIX LIMELIGHT INIT!!!!!! NOW!!!!!!!!!! PELASE OMG I HATE LIMELIGHTG ADSLKFGHJGFDIPOK:L
 
 
@@ -48,8 +49,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         turret2 = hardwareMap.get(DcMotor.class,"launcher2");
         indexer = hardwareMap.get(CRServo.class,"indexer");
         flipper = hardwareMap.get(Servo.class,"flipper");
-//        colorsensor = new ColorTurningMechanismThing();
-//        colorsensor.init(hardwareMap, telemetry);
 //        indexer = hardwareMap.get(CRServo.class, "indexer");
 
 
@@ -199,10 +198,20 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
     }
-    public void switchColor(Indexer.SensedColor color){
+    public boolean switchColor(Indexer.SensedColor color){
        //COLOUR STUFFs
-//        colorsensor.turnBasedOffColor(color);
+
+        if (indexclass.canTurn != 2) {
+            indexclass.sensecolor();
+        }
+        else {
+            indexclass.turnBasedOfColor(color);
+            if (indexclass.canTurn == 0) {
+                return true;
+            }
+        }
         telemetry.addData("color switched: ", color);
+        return false;
     }
     public void autoTurn(){
         //turn automatically
