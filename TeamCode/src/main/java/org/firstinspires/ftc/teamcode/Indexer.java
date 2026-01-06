@@ -34,6 +34,7 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -78,7 +79,8 @@ import java.util.List;
 public class Indexer {
     float gain = 31;
     float[] hsvValues1 = new float[3];
-
+    int canTurn = 0;
+    DcMotor encoder;
     ElapsedTime timer;
     CRServo indexer;
     Launcher launcher;
@@ -111,7 +113,7 @@ public class Indexer {
         SensedColor element_1 = l.get(1);
         SensedColor element_2 = l.get(2);
 
-        if (direction) {
+        if (direction) { //everything direction-wise is dep[endent on this
 
             l.set(1, element_0);
             l.set(2, element_1);
@@ -126,21 +128,39 @@ public class Indexer {
         return l;
     }
     public void turn(boolean direction) { // true is right
+
+//        if (Math.abs(encoder.getCurrentPosition()) < 0.67) {
+////            return true;
+//        }
+//
         if (direction) {
-                indexer.setPower(1); //switch if need
-                waitAuto(12390);
+                if (encoder.getCurrentPosition()  < 120) {
+                    indexer.setPower(0.67);
+                }
+                else {
+                    canTurn = 0;
+                    indexer.setPower(0);
+                    encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    shift_list(SensedColorAll, direction);
+                }
+
 
         } else {
-                indexer.setPower(-1); //switch if need switch direction
-                waitAuto(12390); //i hope the wait function doesn't make it stop literally everything
+                if (encoder.getCurrentPosition() > -120) {
+                    indexer.setPower(-0.67);
+                }
+                else {
+                    canTurn = 0;
+                    indexer.setPower(0);
+                    encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    shift_list(SensedColorAll, direction);
+                }
         }
-        indexer.setPower(0);
 
-        shift_list(SensedColorAll, direction);
     }
     public boolean turnRegardlessofColor() {
-        sensecolor();
         if (CurrentColor != SensedColor.NEITHER) {
+            turn(true); //idk what way this is bro
             return true;
         } else if (CurrentColor2 != SensedColor.NEITHER) {
             turn(true); //turn to slot 2 - change if needed
@@ -153,7 +173,6 @@ public class Indexer {
     public boolean turnBasedOfColor(SensedColor color) { //PURPLE, GREEN, or NEITHER
         //the boolean returned = whether there exists a color
         //to rotate to.
-        sensecolor();
         if (CurrentColor == color) {
             return true;
         }
@@ -173,6 +192,7 @@ public class Indexer {
         timer.reset();
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        encoder = hardwareMap.get(DcMotor.class, "encoder");
         SensedColorAll = shift_list(SensedColorAll, true);
         launcher = new Launcher();
         launcher.init(hardwareMap, telemetry);
@@ -188,17 +208,15 @@ public class Indexer {
         Color.colorToHSV(colors1.toColor(), hsvValues1);
     }
     public void sensecolor() { //must be run at all times
+        if (canTurn != 1) {
+            canTurn = 0;
+        }
+        if (encoder.getCurrentPosition() < 60 && canTurn == 0) {
+            indexer.setPower(0.5);
+        } else if (canTurn == 0) {
+            canTurn = 1;
+        }
 
-//            NormalizedRGBA colors2 = colorSensor2.getNormalizedColors();
-//            Color.colorToHSV(colors2.toColor(), hsvValues2);
-//            NormalizedRGBA colors3 = colorSensor3.getNormalizedColors();
-//            Color.colorToHSV(colors3.toColor(), hsvValues3);
-//        telemetry.addLine()
-//                .addData("Hue1", "%.3f", hsvValues1[0]);
-//            telemetry.addLine()
-//                    .addData("Hue2", "%.3f", hsvValues2[0]);
-//            telemetry.addLine()
-//                    .addData("Hue3", "%.3f", hsvValues3[0]);
         if (hsvValues1[0] >= 90 && hsvValues1[0] <= 180) {
             CurrentColor = SensedColor.GREEN;
         } else if (hsvValues1[0] >= 270 && hsvValues1[0] <= 330) {
@@ -206,12 +224,15 @@ public class Indexer {
         } else {
             CurrentColor = SensedColor.NEITHER;
         }
+
+
+        if (encoder.getCurrentPosition() > 0 && canTurn == 1) {
+            indexer.setPower(-0.5);
+        }
+        else if (canTurn == 1) {
+            canTurn = 2;
+        }
         SensedColorAll = (Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
-//        telemetry.addData("CurrentColor", CurrentColor);
-//        telemetry.addData("CurrentColor2", CurrentColor2);
-//        telemetry.addData("CurrentColor3", CurrentColor3);
-//        telemetry.addData("SensedColorAll(Array)", SensedColorAll);
-//        telemetry.update();
     }
 }
 
