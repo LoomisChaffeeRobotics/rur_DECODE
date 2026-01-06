@@ -205,10 +205,16 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("color switched: ", color);
     }
     public void autoTurn(){
-        //turn automatically
-//        limelightsystem.turntoAT();
-//        autoTurn = true;
-//        telemetry.addData("angel error", limelightsystem.angleerror);
+        boolean seeAprilTag = true; //TODO: ya actually change this
+        if (seeAprilTag){
+            double aprilTagAngle = 1;
+            turretTurnTo(aprilTagAngle);
+        } else {
+            turretTurnTo(0); // 0 might not be forward
+        }
+    }
+    public void turretTurnTo(double angle){
+        //turns to angle TODO: turn
     }
     public void manuTurn(double power){
         //turn manually

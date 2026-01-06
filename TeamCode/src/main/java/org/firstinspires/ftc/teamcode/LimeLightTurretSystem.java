@@ -72,24 +72,32 @@ public class LimeLightTurretSystem {
     }
     public void turntoAT() {
 
+        double encoderDegreesPerTick = 1; //TODO: find this coeficiantt!!!!! // ratio is 4.53:1
         targetangle = 225;
         result = limelight.getLatestResult();
-        botpose = (result != null) ? result.getBotpose() : botpose;
+
+        if (result == null){
+            turretSpin.setPower(0);
+            return;
+        }
+
+        botpose = result.getBotpose();
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
         angleerror = targetangle - botposeangle;
-        if (encoder.getCurrentPosition() < 19208374 || encoder.getCurrentPosition() > -128934) { //change the big number
+        if (encoder.getCurrentPosition() < 6757 && encoder.getCurrentPosition() > -128934) { //change the big number
             if (angleerror < -1 || angleerror > 180) {
                 turretSpin.setPower(-0.1);
             } else if (angleerror > 1 && angleerror < 180) {
                 turretSpin.setPower(0.1);
             } else if (angleerror < 1 && angleerror > -1) {
                 turretSpin.setPower(0);
-            }
-        } else if (encoder.getCurrentPosition() > 0) { //so if the encoder is past a certain point either way turn back the other way
+            } //TODO: Dylan Doorman wants a PID here but this is fine for now I GUESS>:c
+        } else if (encoder.getCurrentPosition() > 12340) { //so if the encoder is past a certain point either way turn back the other way
             turretSpin.setPower(0.5); //idk which direction is right
-        } else if (encoder.getCurrentPosition() < 0) {
+        } else if (encoder.getCurrentPosition() < 30) {
             turretSpin.setPower(-0.5);
         }
+
 
     }
 
