@@ -94,7 +94,7 @@ public class Indexer {
 
     View relativeLayout;
     public enum SensedColor {
-        PURPLE, GREEN, NEITHER;
+        PURPLE, GREEN, NEITHER
     }
 //    public enum SensedColor2 {
 //        PURPLE, GREEN, NEITHER;
@@ -213,6 +213,7 @@ public class Indexer {
             canTurn = 0;
         }
         if (encoder.getCurrentPosition() < 60 && canTurn == 0) {
+
 
             indexer.setPower(0.5);
 

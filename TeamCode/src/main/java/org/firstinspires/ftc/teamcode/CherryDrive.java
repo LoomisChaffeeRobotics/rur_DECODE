@@ -17,6 +17,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     //name of indexer is indexer
     //uncomment out the stuff later
 
+
+    //need to make when shoot it removes a thing from the thing (makes it neither) (idk which slot it would change)
     LimeLightTurretSystem limelightsystem;
     Indexer indexclass;
 //    CRServo indexer;
