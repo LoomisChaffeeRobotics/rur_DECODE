@@ -94,7 +94,7 @@ public class Indexer {
 
     View relativeLayout;
     public enum SensedColor {
-        PURPLE, GREEN, NEITHER;
+        PURPLE, GREEN, NEITHER
     }
 //    public enum SensedColor2 {
 //        PURPLE, GREEN, NEITHER;
@@ -207,18 +207,18 @@ public class Indexer {
         NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
     }
-    public void sensecolor() { //must be run at all times
-<<<<<<< HEAD
+    public void sensecolor() { //must be run at all times OUTSIDE of the turn methods in thsi class
+
 //        if (canTurn != 1) {
 //            canTurn = 0;
 //        }
-        if (encoder.getCurrentPosition() < 60 && canTurn == 0) {
-=======
+//        if (encoder.getCurrentPosition() < 60 && canTurn == 0) {
+//
+//        }
         if (canTurn != 1) {
             canTurn = 0;
         }
         if (encoder.getCurrentPosition() < 30 && canTurn == 0) {
->>>>>>> 307f8794c1e0262a608c8639dbe340df4454bc23
             indexer.setPower(0.5);
 
             if (hsvValues1[0] >= 90 && hsvValues1[0] <= 180) {
