@@ -208,10 +208,17 @@ public class Indexer {
         Color.colorToHSV(colors1.toColor(), hsvValues1);
     }
     public void sensecolor() { //must be run at all times
+<<<<<<< HEAD
 //        if (canTurn != 1) {
 //            canTurn = 0;
 //        }
         if (encoder.getCurrentPosition() < 60 && canTurn == 0) {
+=======
+        if (canTurn != 1) {
+            canTurn = 0;
+        }
+        if (encoder.getCurrentPosition() < 30 && canTurn == 0) {
+>>>>>>> 307f8794c1e0262a608c8639dbe340df4454bc23
             indexer.setPower(0.5);
 
             if (hsvValues1[0] >= 90 && hsvValues1[0] <= 180) {
