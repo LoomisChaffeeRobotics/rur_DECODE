@@ -211,7 +211,7 @@ public class Indexer {
         if (canTurn != 1) {
             canTurn = 0;
         }
-        if (encoder.getCurrentPosition() < 60 && canTurn == 0) {
+        if (encoder.getCurrentPosition() < 30 && canTurn == 0) {
             indexer.setPower(0.5);
         } else if (canTurn == 0) {
             canTurn = 1;
