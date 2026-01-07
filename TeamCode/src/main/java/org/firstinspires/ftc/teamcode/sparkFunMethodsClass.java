@@ -32,7 +32,6 @@ public class sparkFunMethodsClass {
     public SparkFunOTOS.Pose2D pos;
     public SparkFunOTOS.Pose2D velocity;
     double velocitymag;
-    KineticLauncherThing launcherbutmoving;
     double angleerror;
     double flight_time;
     double distanceAT;
@@ -40,8 +39,6 @@ public class sparkFunMethodsClass {
     public void init(HardwareMap hardwareMap, Telemetry telemetry){
         // Get a reference to the sensor
         myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
-        launcherbutmoving = new KineticLauncherThing();
-        launcherbutmoving.init(hardwareMap, telemetry);
 
         // All the configuration for the OTOS is done in this helper method, check it out!
         configureOtos(telemetry);
