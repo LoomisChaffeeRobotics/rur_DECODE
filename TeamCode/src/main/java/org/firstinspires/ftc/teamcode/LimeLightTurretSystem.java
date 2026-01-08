@@ -107,6 +107,10 @@ public class LimeLightTurretSystem {
 
     }
 
+    public void turnToNotAT(double power){
+        turretSpin.setPower(power);
+    }
+
 
     public double getDistance_from_apriltag(double value) {
         //BLUEEEEEEEEE

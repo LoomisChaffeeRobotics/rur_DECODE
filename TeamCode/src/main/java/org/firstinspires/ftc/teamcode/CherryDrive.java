@@ -131,10 +131,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         if (gamepad2.dpad_left){
             autoTurn = false;
-            manuTurn(-1);
+            manuTurn(-0.2);
         } else if (gamepad2.dpad_right){
             autoTurn = false;
-            manuTurn(1);
+            manuTurn(0.2);
         } else if (!autoTurn){
             manuTurn(0);
         }
@@ -225,8 +225,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         //idk if we'll use ts
     }
     public void manuTurn(double power){
-        //turn manually
-//        indexer.setPower(power);
-        telemetry.addData("manuturn power", power);
+        limelightsystem.turnToNotAT(power);
     }
 }
