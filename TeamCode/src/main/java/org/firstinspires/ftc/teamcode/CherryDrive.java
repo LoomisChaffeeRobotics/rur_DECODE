@@ -191,7 +191,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         intake.setPower(-power);
     }
     public void startTurret(double power){
-        launchclass.shoot(limelightsystem.getDistance_from_apriltag());
+        launchclass.shoot(limelightsystem.getDistance_from_apriltag(0));
         telemetry.addData("turret power: ", power);
     }
     public void flipper(boolean up){
@@ -217,13 +217,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         return false;
     }
     public void autoTurn(){
-        boolean seeAprilTag = true; //TODO: ya actually change this
-        if (seeAprilTag){
-            double aprilTagAngle = 1;
-            turretTurnTo(aprilTagAngle);
-        } else {
-            turretTurnTo(0); // 0 might not be forward
-        }
+        limelightsystem.turntoAT();
     }
     public void turretTurnTo(double angle){
         //turns to angle TODO: turn
