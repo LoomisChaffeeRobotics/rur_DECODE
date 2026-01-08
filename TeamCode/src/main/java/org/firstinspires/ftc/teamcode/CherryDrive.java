@@ -21,6 +21,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     //need to make when shoot it removes a thing from the thing (makes it neither) (idk which slot it would change)
     LimeLightTurretSystem limelightsystem;
     Indexer indexclass;
+    Launcher launchclass;
 //    CRServo indexer;
     boolean autoTurn = true;
     DcMotor intake;
@@ -43,8 +44,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         limelightsystem.init(hardwareMap, telemetry);
         indexclass = new Indexer();
         indexclass.init(hardwareMap, telemetry);
-//        TODO: FIX LIMELIGHT INIT!!!!!! NOW!!!!!!!!!! PELASE OMG I HATE LIMELIGHTG ADSLKFGHJGFDIPOK:L
-
+        launchclass = new Launcher();
+        launchclass.init(hardwareMap, telemetry);
 
         intake = hardwareMap.get(DcMotor.class,"intake");
         turret1 = hardwareMap.get(DcMotor.class,"launcher");
@@ -114,15 +115,15 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             flipper(false);
         }
 
-//        if (gamepad2.x){
-//            switchColor(ColorTurningMechanismThing.SensedColor.GREEN);
-//        }
-//        if (gamepad2.a){
-//            switchColor(ColorTurningMechanismThing.SensedColor.NEITHER);
-//        }
-//        if (gamepad2.b){
-//            switchColor(ColorTurningMechanismThing.SensedColor.PURPLE);
-//        }
+        if (gamepad2.x){
+            switchColor(Indexer.SensedColor.GREEN);
+        }
+        if (gamepad2.a){
+            switchColor(Indexer.SensedColor.NEITHER);
+        }
+        if (gamepad2.b){
+            switchColor(Indexer.SensedColor.PURPLE);
+        }
 
         //  TURNING THE HEAD
         if(autoTurn){
@@ -190,7 +191,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         intake.setPower(-power);
     }
     public void startTurret(double power){
-        // move,
+        launchclass.shoot(limelightsystem.getDistance_from_apriltag());
         telemetry.addData("turret power: ", power);
     }
     public void flipper(boolean up){
