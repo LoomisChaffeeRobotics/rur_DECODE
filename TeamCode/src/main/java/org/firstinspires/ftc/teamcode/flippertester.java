@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 public class flippertester extends OpMode{
 
-//    DcMotor leftFront;
+//    DcMotor leftFront;d
 //
 //    DcMotor leftRear;
 //
@@ -25,10 +25,10 @@ public class flippertester extends OpMode{
     @Override
     public void loop() {
         if(gamepad1.a){
-            Flipper.setPosition(.5877); // up
+            Flipper.setPosition(Flipper.getPosition() + 0.001); // up
         }
         if(gamepad1.b){
-            Flipper.setPosition(.93); // down
+            Flipper.setPosition(Flipper.getPosition() - 0.001); // down
         }
 
         telemetry.addData("servo position: ",Flipper.getPosition());

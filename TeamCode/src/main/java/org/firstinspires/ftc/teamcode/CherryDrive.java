@@ -43,7 +43,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         limelightsystem.init(hardwareMap, telemetry);
         indexclass = new Indexer();
         indexclass.init(hardwareMap, telemetry);
-//        TODO: FIX LIMELIGHT INIT!!!!!! NOW!!!!!!!!!! PELASE OMG I HATE LIMELIGHTG ADSLKFGHJGFDIPOK:L
+//        TODO: FIX LIMELIGHT INIT!!!!!! NOW!!!!!!!!!! PELASE OMG I HATE LIMELIGHTG ADSLKFGHJGFDIPOK :L
 
 
         intake = hardwareMap.get(DcMotor.class,"intake");
@@ -148,6 +148,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             imu.resetYaw();
         }
 
+//        telemetry.addData("color", indexclass.sensecolor());
+
     }
 
 
@@ -216,16 +218,11 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         return false;
     }
     public void autoTurn(){
-        boolean seeAprilTag = true; //TODO: ya actually change this
-        if (seeAprilTag){
-            double aprilTagAngle = 1;
-            turretTurnTo(aprilTagAngle);
-        } else {
-            turretTurnTo(0); // 0 might not be forward
-        }
+        limelightsystem.turntoAT();
     }
     public void turretTurnTo(double angle){
         //turns to angle TODO: turn
+        //idk if we'll use ts
     }
     public void manuTurn(double power){
         //turn manually

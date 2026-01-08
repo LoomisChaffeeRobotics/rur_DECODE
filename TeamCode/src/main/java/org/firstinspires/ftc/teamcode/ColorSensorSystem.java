@@ -135,10 +135,6 @@ public class ColorSensorSystem extends LinearOpMode {
         // for an explanation of HSV color.
         final float[] hsvValues = new float[3];
 
-        // xButtonPreviouslyPressed and xButtonCurrentlyPressed keep track of the previous and current
-        // state of the X button on the gamepad
-        boolean xButtonPreviouslyPressed = false;
-        boolean xButtonCurrentlyPressed = false;
 
         // Get a reference to our sensor object. It's recommended to use NormalizedColorSensor over
         // ColorSensor, because NormalizedColorSensor consistently gives values between 0 and 1, while
@@ -147,9 +143,6 @@ public class ColorSensorSystem extends LinearOpMode {
 
         // If possible, turn the light on in the beginning (it might already be on anyway,
         // we just make sure it is if we can).
-        if (colorSensor instanceof SwitchableLight) {
-            ((SwitchableLight)colorSensor).enableLight(true);
-        }
 
         // Wait for the start button to be pressed.
         waitForStart();
@@ -175,20 +168,6 @@ public class ColorSensorSystem extends LinearOpMode {
             // not during the loop)
             colorSensor.setGain(gain);
 
-            // Check the status of the X button on the gamepad
-            xButtonCurrentlyPressed = gamepad1.x;
-
-            // If the button state is different than what it was, then act
-            if (xButtonCurrentlyPressed != xButtonPreviouslyPressed) {
-                // If the button is (now) down, then toggle the light
-                if (xButtonCurrentlyPressed) {
-                    if (colorSensor instanceof SwitchableLight) {
-                        SwitchableLight light = (SwitchableLight)colorSensor;
-                        light.enableLight(!light.isLightOn());
-                    }
-                }
-            }
-            xButtonPreviouslyPressed = xButtonCurrentlyPressed;
 
             // Get the normalized colors from the sensor
             NormalizedRGBA colors = colorSensor.getNormalizedColors();
@@ -210,9 +189,9 @@ public class ColorSensorSystem extends LinearOpMode {
 //                    .addData("Saturation", "%.3f", hsvValues[1])
 //                    .addData("Value", "%.3f", hsvValues[2]);
 //            telemetry.addData("Alpha", "%.3f", colors.alpha);
-            if (hsvValues[0] >= 100 && hsvValues[0] <= 180) {
+            if (hsvValues[0] >= 163 && hsvValues[0] <= 167) {
                 CurrentColor = SensedColor.GREEN;
-            } else if (hsvValues[0] >= 270 && hsvValues[0] <= 330) {
+            } else if (hsvValues[0] >= 210 && hsvValues[0] <= 230) {
                 CurrentColor = SensedColor.PURPLE;
             } else {
                 CurrentColor = SensedColor.NEITHER;
