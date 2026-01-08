@@ -28,32 +28,28 @@ public class LauncherTuningTest extends OpMode {
     @Override
     public void loop() {
         if(gamepad1.x){
-            flipper.setPosition(0.91);
+            flipper.setPosition(0.93);
 //            leftFront.setPower(gamepad1.left_stick_y);
         }
         if(gamepad1.b){
-            flipper.setPosition(0.53);
+            flipper.setPosition(0.5877);
 //            leftRear.setPower(gamepad1.left_stick_y);
         }
-        if (gamepad1.dpad_up && elapsedTime.time() > 0.2) {
+        if (gamepad1.dpad_up) {
             bottom_velocity += 0.01;
             bottom_motor.setPower(bottom_velocity);
-            elapsedTime.reset();
         }
-        if (gamepad1.dpad_down && elapsedTime.time() > 0.2) {
+        if (gamepad1.dpad_down) {
             bottom_velocity -= 0.01;
             bottom_motor.setPower(bottom_velocity);
-            elapsedTime.reset();
         }
-        if (gamepad1.y && elapsedTime.time() > 0.2) {
+        if (gamepad1.y) {
             top_velocity += 0.01;
             top_motor.setPower(top_velocity);
-            elapsedTime.reset();
         }
-        if (gamepad1.a && elapsedTime.time() > 0.2) {
+        if (gamepad1.a) {
             top_velocity -= 0.01;
             top_motor.setPower(top_velocity);
-            elapsedTime.reset();
         }
 
         telemetry.addData("top: ",top_motor.getVelocity()*15/7);

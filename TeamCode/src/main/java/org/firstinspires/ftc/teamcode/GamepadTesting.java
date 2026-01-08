@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class GamepadTesting extends OpMode {
 
     DcMotor intake;
-    DcMotor turret1;
-    DcMotor turret2;
+    DcMotor launcher;
+    DcMotor launcher2;
     CRServo indexer;
     Servo flipper;
 
@@ -19,11 +19,11 @@ public class GamepadTesting extends OpMode {
     @Override
     public void init() {
         intake = hardwareMap.get(DcMotor.class,"intake");
-        turret1 = hardwareMap.get(DcMotor.class,"Turret1");
-        turret2 = hardwareMap.get(DcMotor.class,"Turret2");
+        launcher = hardwareMap.get(DcMotor.class,"launcher");
+        launcher2 = hardwareMap.get(DcMotor.class,"launcher2");
         indexer = hardwareMap.get(CRServo.class,"indexer");
         flipper = hardwareMap.get(Servo.class,"flipper");
-        flipper.setPosition(0.5);
+//        flipper.setPosition(0.5);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class GamepadTesting extends OpMode {
         flipper.setPosition(flipper.getPosition() + power);
     }
     public void startTurret(double power){
-        turret1.setPower(power);
-        turret2.setPower(power);
+        launcher.setPower(power);
+        launcher2.setPower(power);
         telemetry.addData("Flipper position: ",flipper.getPosition());
         telemetry.addData("turret power: ", power);
     }

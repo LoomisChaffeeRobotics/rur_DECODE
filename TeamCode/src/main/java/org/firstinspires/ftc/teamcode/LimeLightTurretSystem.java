@@ -28,6 +28,7 @@ public class LimeLightTurretSystem {
     public Position positionrelativetoapriltag;
     public double xrelativetoat;
     public double yrelativetoat;
+    public boolean yesorno = true;
     public LLResult result;
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
@@ -73,29 +74,34 @@ public class LimeLightTurretSystem {
     public void turntoAT() { //i think i got numbers right maybe
 
         //double encoderDegreesPerTick = 0.008772; //THIS IS THE CORRECT COEFFICIANT!!!!!!!!!
-        targetangle = 225;
         result = limelight.getLatestResult();
 
         if (result == null){
             turretSpin.setPower(0);
+            yesorno = false;
             return;
+
         }
+        yesorno = true;
 
         botpose = result.getBotpose();
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        angleerror = targetangle - botposeangle;
-        if (encoder.getCurrentPosition() < 19000 && encoder.getCurrentPosition() > -19000) { //change the big number
-            if (angleerror < -1 || angleerror > 180) {
-                turretSpin.setPower(-0.1);
-            } else if (angleerror > 1 && angleerror < 180) {
-                turretSpin.setPower(0.1);
+        angleerror = result.getTx(); //targetangle - botposeangle;
+        if (encoder.getCurrentPosition() < 18000 && encoder.getCurrentPosition() > -18000) { //change the big number
+            if (angleerror < -1) {
+                turretSpin.setPower(0.2);
+            } else if (angleerror > 1) {
+                turretSpin.setPower(-0.2);
             } else if (angleerror < 1 && angleerror > -1) {
                 turretSpin.setPower(0);
-            } //TODO: Dylan Doorman wants a PID here but this is fine for now I GUESS>:c
-        } else if (encoder.getCurrentPosition() > -18000) { //so if the encoder is past a certain point either way turn back the other way
-            turretSpin.setPower(0.5); //idk which direction is right
-        } else if (encoder.getCurrentPosition() < 18000) {
-            turretSpin.setPower(-0.5);
+            } //TODO: Dylan Dorman wants a PID here but this is fine for now I GUESS>:c
+        } else if (encoder.getCurrentPosition() < -18000 && angleerror >0) { //so if the encoder is past a certain point either way turn back the other way
+            turretSpin.setPower(-0.2); //idk which direction is right
+            // noih
+        } else if (encoder.getCurrentPosition() > 18000 && angleerror <0) {
+            turretSpin.setPower(0.2);
+        } else {
+            turretSpin.setPower(0);
         }
 
 
