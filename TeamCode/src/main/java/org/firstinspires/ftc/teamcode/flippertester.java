@@ -25,6 +25,7 @@ public class flippertester extends OpMode{
     @Override
     public void loop() {
         if(gamepad1.a){
+            Flipper.setPosition(.5877); // up
         }
         if(gamepad1.b){
             Flipper.setPosition(.93); // down
