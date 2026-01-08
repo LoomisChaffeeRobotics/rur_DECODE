@@ -151,7 +151,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
 
 
-    public void fieldCentricDriving(){
+    public void fieldCentricDriving(){ // Done!
 
         //inputs
         double x = gamepad1.left_stick_x;
@@ -184,16 +184,16 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //        telemetry.addData("yaw: ", Yaw);
 
     }
-    public void runIntake(double power){
+    public void runIntake(double power){ // Done!
 
         telemetry.addData("intake power: ",power);
         intake.setPower(-power);
     }
-    public void startTurret(double power){
+    public void startTurret(double power){ // Done?
         launchclass.shoot(limelightsystem.getDistance_from_apriltag(0));
         telemetry.addData("turret power: ", power);
     }
-    public void flipper(boolean up){
+    public void flipper(boolean up){ // Done!
         //flip
         double flipDown = 0.91d;
         double flipUP = 0.53d;
@@ -201,7 +201,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("flipper upness: ", up);
         flipperUp = up;
     }
-    public boolean switchColor(Indexer.SensedColor color){
+    public boolean switchColor(Indexer.SensedColor color){ // NOT DONE
        //COLOUR STUFFs
 
         if (flipperUp) {return false;}
@@ -218,13 +218,13 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("color switched: ", color);
         return false;
     }
-    public void autoTurn(){
+    public void autoTurn(){ // Done?
         limelightsystem.turntoAT();
     }
-    public void turretTurnTo(double angle){
+    public void turretTurnTo(double angle){ //not using
         //turns to angle TODO: turn
     }
-    public void manuTurn(double power){
+    public void manuTurn(double power){ // Done?
         limelightsystem.turnToNotAT(power);
     }
 }
