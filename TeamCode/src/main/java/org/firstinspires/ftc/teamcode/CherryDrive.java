@@ -35,8 +35,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     DcMotor left_back;
     DcMotor right_back;
     IMU imu;
-
-
+    boolean flipperUp = false;
 
     @Override
     public void init() {
@@ -186,7 +185,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
     }
     public void runIntake(double power){
-        //run Intake
+
         telemetry.addData("intake power: ",power);
         intake.setPower(-power);
     }
@@ -200,18 +199,21 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         double flipUP = 0.53d;
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
+        flipperUp = up;
     }
     public boolean switchColor(Indexer.SensedColor color){
        //COLOUR STUFFs
+
+        if (flipperUp) {return false;}
 
         if (indexclass.canTurn != 2) {
             indexclass.sensecolor();
         }
         else {
             indexclass.turnBasedOfColor(color);
-            if (indexclass.canTurn == 0) {
-                return true;
-            }
+//            if (indexclass.canTurn == 0) {
+//                return true;
+//            }
         }
         telemetry.addData("color switched: ", color);
         return false;

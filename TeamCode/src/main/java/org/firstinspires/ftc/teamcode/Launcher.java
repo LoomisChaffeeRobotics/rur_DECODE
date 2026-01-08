@@ -112,7 +112,7 @@ public class Launcher {
         ) * (7.0 / 15.0);
         launcher.setVelocity(-lower_motor_interporation_result);
         launcher2.setVelocity(-upper_motor_interporation_result);
-        
+
 //        flap1.setPosition(0.2);
 //        waitAuto(0.5);
 //        flap1.setPosition(0);
