@@ -21,6 +21,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     //need to make when shoot it removes a thing from the thing (makes it neither) (idk which slot it would change)
     LimeLightTurretSystem limelightsystem;
     Indexer indexclass;
+    Launcher launchclass;
 //    CRServo indexer;
     boolean autoTurn = true;
     DcMotor intake;
@@ -34,8 +35,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     DcMotor left_back;
     DcMotor right_back;
     IMU imu;
-
-
+    boolean flipperUp = false;
 
     @Override
     public void init() {
@@ -43,8 +43,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         limelightsystem.init(hardwareMap, telemetry);
         indexclass = new Indexer();
         indexclass.init(hardwareMap, telemetry);
-//        TODO: FIX LIMELIGHT INIT!!!!!! NOW!!!!!!!!!! PELASE OMG I HATE LIMELIGHTG ADSLKFGHJGFDIPOK :L
-
+        launchclass = new Launcher();
+        launchclass.init(hardwareMap, telemetry);
 
         intake = hardwareMap.get(DcMotor.class,"intake");
         turret1 = hardwareMap.get(DcMotor.class,"launcher");
@@ -114,15 +114,15 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             flipper(false);
         }
 
-//        if (gamepad2.x){
-//            switchColor(ColorTurningMechanismThing.SensedColor.GREEN);
-//        }
-//        if (gamepad2.a){
-//            switchColor(ColorTurningMechanismThing.SensedColor.NEITHER);
-//        }
-//        if (gamepad2.b){
-//            switchColor(ColorTurningMechanismThing.SensedColor.PURPLE);
-//        }
+        if (gamepad2.x){
+            switchColor(Indexer.SensedColor.GREEN);
+        }
+        if (gamepad2.a){
+            switchColor(Indexer.SensedColor.NEITHER);
+        }
+        if (gamepad2.b){
+            switchColor(Indexer.SensedColor.PURPLE);
+        }
 
         //  TURNING THE HEAD
         if(autoTurn){
@@ -147,8 +147,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (gamepad1.start){
             imu.resetYaw();
         }
-
-//        telemetry.addData("color", indexclass.sensecolor());
 
     }
 
@@ -187,12 +185,12 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
     }
     public void runIntake(double power){
-        //run Intake
+
         telemetry.addData("intake power: ",power);
         intake.setPower(-power);
     }
     public void startTurret(double power){
-        // move,
+        launchclass.shoot(limelightsystem.getDistance_from_apriltag(0));
         telemetry.addData("turret power: ", power);
     }
     public void flipper(boolean up){
@@ -201,18 +199,21 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         double flipUP = 0.53d;
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
+        flipperUp = up;
     }
     public boolean switchColor(Indexer.SensedColor color){
        //COLOUR STUFFs
+
+        if (flipperUp) {return false;}
 
         if (indexclass.canTurn != 2) {
             indexclass.sensecolor();
         }
         else {
             indexclass.turnBasedOfColor(color);
-            if (indexclass.canTurn == 0) {
-                return true;
-            }
+//            if (indexclass.canTurn == 0) {
+//                return true;
+//            }
         }
         telemetry.addData("color switched: ", color);
         return false;
@@ -222,7 +223,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     public void turretTurnTo(double angle){
         //turns to angle TODO: turn
-        //idk if we'll use ts
     }
     public void manuTurn(double power){
         limelightsystem.turnToNotAT(power);

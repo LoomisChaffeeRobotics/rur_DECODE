@@ -75,11 +75,11 @@ public class RedAutoClassBack extends OpMode {
                 if (!follower.isBusy()) {
                     follower.followPath(run2,true);
                     turningthing.turnBasedOfColor(patternArray[0]);
-                    launcher.shoot(hardwareMap, telemetry, limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     turningthing.turnBasedOfColor(patternArray[1]);
-                    launcher.shoot(hardwareMap, telemetry, limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     turningthing.turnBasedOfColor(patternArray[2]); //these make it turns
-                    launcher.shoot(hardwareMap, telemetry, limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     setPathState(2);
                 }
                 break;

@@ -79,7 +79,7 @@ public class Launcher {
 
         return x_times_slope + y_intercept;
     }
-    public boolean shoot(HardwareMap hardwareMap, Telemetry telemetry, double distance) {
+    public boolean shoot(double distance) {
        
         result = find_closest_x(distance); //finds distance from apriltag - two numbers: upper and lower bound
 
@@ -112,15 +112,7 @@ public class Launcher {
         ) * (7.0 / 15.0);
         launcher.setVelocity(-lower_motor_interporation_result);
         launcher2.setVelocity(-upper_motor_interporation_result);
-        telemetry.addData("lower motor power: ", lower_motor_interporation_result);
 
-        telemetry.addData("lower motor 0: ", lower_motor_value_0 * (7.0/15.0));
-        telemetry.addData("lower motor 1: ", lower_motor_value_1 * (7.0/15.0));
-
-        telemetry.addData("upper motor power: ", upper_motor_interporation_result);
-
-        telemetry.addData("upper motor 0: ", upper_motor_value_0 * (7.0/15.0));
-        telemetry.addData("upper motor 1: ", upper_motor_value_1 * (7.0/15.0));
 //        flap1.setPosition(0.2);
 //        waitAuto(0.5);
 //        flap1.setPosition(0);
