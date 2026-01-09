@@ -24,7 +24,7 @@ public class LauncherTestingOpMode extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("encoder: ",encoder.getCurrentPosition());
-        limelight.turntoAT();
+        limelight.turntoAT(20);
         telemetry.addData("result",limelight.yesorno);
         telemetry.addData("tx",limelight.angleerror);
         telemetry.addData("powertotrutrretpsi", limelight.turretSpin.getPower());

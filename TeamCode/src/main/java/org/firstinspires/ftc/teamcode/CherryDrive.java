@@ -34,8 +34,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     boolean autoTurn = true;
     /** if this isn't self-explanatory re-do you are 5th grade education */
     boolean flipperUp = false;
-
-
+    // whether we're red alliance or not - can be set
+    boolean isRed = false;
 
     /** List of Motors: */
     DcMotor intake;
@@ -66,7 +66,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         indexClass.init(hardwareMap, telemetry);
         launchClass = new Launcher();
         launchClass.init(hardwareMap, telemetry);
-
+        telemetry.addLine("If red hit start if not don't ");
+        if (gamepad1.start) {
+            isRed = true;
+        }
         //Setting the motors
         intake = hardwareMap.get(DcMotor.class,"intake");
         launcher = hardwareMap.get(DcMotor.class,"launcher");
@@ -89,7 +92,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         left_front.setDirection(DcMotorSimple.Direction.REVERSE);
         left_back.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        /** imu starting stuff */
+        /* imu starting stuff */
         imu = hardwareMap.get(IMU.class, "imu");
 
         IMU.Parameters myIMUparameter;
@@ -216,7 +219,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         intake.setPower(-power);
     }
     public void startTurret(double power){ // Done?
-        launchClass.shoot(limelightsystem.getDistance_from_apriltag(0));
+        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(0));
         telemetry.addData("turret power: ", power);
     }
     public void flipper(boolean up){ // Done!
@@ -245,7 +248,12 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         return false;
     }
     public void autoTurn(){ // Done?
-        limeLightTurretSystem.turntoAT();
+        if (isRed) {
+            limeLightTurretSystem.turntoAT(24);
+        } else {
+            limeLightTurretSystem.turntoAT(20);
+        }
+
     }
     public void turretTurnTo(double angle){ //not using
         //turns to angle TODO: turn

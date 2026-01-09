@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -12,6 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+
+import java.util.List;
 
 public class LimeLightTurretSystem {
     public DcMotor encoder;
@@ -59,40 +62,40 @@ public class LimeLightTurretSystem {
 
 
     }
-    public void turntoAT() { //i think i got numbers right maybe
+    public void turntoAT(double id) { //i think i got numbers right maybe
 
         //double encoderDegreesPerTick = 0.008772; //THIS IS THE CORRECT COEFFICIANT!!!!!!!!!
         result = limelight.getLatestResult();
-
-        if (result == null){
+        List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+        if (result == null || id != fiducialResults.get(0).getFiducialId()){
             turretSpin.setPower(0);
             yesorno = false;
             return;
 
         }
         yesorno = true;
-
         botpose = result.getBotpose();
-        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        angleerror = result.getTx(); //targetangle - botposeangle;
-        if (encoder.getCurrentPosition() < 18000 && encoder.getCurrentPosition() > -18000) { //change the big number
-            if (angleerror < -1) {
+        if (id == fiducialResults.get(0).getFiducialId()) {
+            botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
+            angleerror = result.getTx(); //targetangle - botposeangle;
+            if (encoder.getCurrentPosition() < 18000 && encoder.getCurrentPosition() > -18000) { //change the big number
+                if (angleerror < -1) {
+                    turretSpin.setPower(0.2);
+                } else if (angleerror > 1) {
+                    turretSpin.setPower(-0.2);
+                } else if (angleerror < 1 && angleerror > -1) {
+                    turretSpin.setPower(0);
+                } //TODO: Dylan Dorman wants a PID here but this is fine for now I GUESS>:c
+            } else if (encoder.getCurrentPosition() < -18000 && angleerror > 0) { //so if the encoder is past a certain point either way turn back the other way
+                turretSpin.setPower(-0.2); //idk which direction is right
+                // noih
+            } else if (encoder.getCurrentPosition() > 18000 && angleerror < 0) {
                 turretSpin.setPower(0.2);
-            } else if (angleerror > 1) {
-                turretSpin.setPower(-0.2);
-            } else if (angleerror < 1 && angleerror > -1) {
+            } else {
                 turretSpin.setPower(0);
-            } //TODO: Dylan Dorman wants a PID here but this is fine for now I GUESS>:c
-        } else if (encoder.getCurrentPosition() < -18000 && angleerror >0) { //so if the encoder is past a certain point either way turn back the other way
-            turretSpin.setPower(-0.2); //idk which direction is right
-            // noih
-        } else if (encoder.getCurrentPosition() > 18000 && angleerror <0) {
-            turretSpin.setPower(0.2);
-        } else {
-            turretSpin.setPower(0);
+            }
+
         }
-
-
     }
 
     public void turnToNotAT(double power){
