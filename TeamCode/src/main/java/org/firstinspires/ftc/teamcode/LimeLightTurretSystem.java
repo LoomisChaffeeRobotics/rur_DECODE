@@ -1,11 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
-
-
-
-
-
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -26,13 +20,10 @@ public class LimeLightTurretSystem {
     public Limelight3A limelight;
     public Pose3D botpose;
     public Position positionrelativetoapriltag;
-    public double xrelativetoat;
-    public double yrelativetoat;
     public boolean yesorno = true;
     public LLResult result;
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
-    public LLStatus status;
     public double velocityheading;
     public double kineticerror;
     public double distance_from_apriltag = 0; //meters
@@ -47,9 +38,6 @@ public class LimeLightTurretSystem {
         limelight.pipelineSwitch(0);
         sparkfun = new sparkFunMethodsClass();
         sparkfun.init(hardwareMap,telemetry);
-        /*
-         * Starts polling for data.  If you neglect to call start(), getLatestResult() will return null.
-         */
         limelight.start();
 
 

@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
@@ -19,37 +20,41 @@ import java.util.List;
 //change paths to pathcnages sometimes
 
 @Autonomous
-public class RedAutoClassBack extends OpMode {
+public class RedAutoClassFront extends OpMode {
     LimeLightTurretSystem limelightclass;
     Limelight3A limelight;
-    public LLResultTypes.FiducialResult fr;
     Indexer turningthing;
     Launcher launcher;
     Follower follower;
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    private Pose startPose = new Pose(144-56,9 , Math.PI/2); //heading in radians
-    private Pose pickupPose1 =  new Pose(144-24.0743,35.6656, Math.PI);
-    private Pose controlPoint1 =  new Pose(144-65.7585,37.226, Math.PI);
-    private Pose launchPoint1 = new Pose (144-61.5232,9.808, Math.PI);
-    private Pose controlPoint2 = new Pose(144-79.23384,61.873,Math.PI);
-    private Pose pickupPose2 = new Pose (144-23.8513,60.6315, Math.PI);
+    private Pose startPose = new Pose(144-21.36630602782071,123.52395672333849, Math.toRadians(323)); //heading in radians
+    private Pose launchPose1 =  new Pose(144-37.39103554868624,108.16692426584235, Math.toRadians(323));
+    private Pose launchPoseMain = new Pose (144-45.40340030911901,97.706336939721788, Math.PI);
+    private Pose controlPoint1 = new Pose(144-60.53786707882535,82.34930448222565,Math.PI);
+    private Pose pickupPose1 = new Pose (144-16.024729520865534,83.68469860896445, Math.PI);
+    private Pose controlPoint2 = new Pose(144-50.07727975270479,54.30602782071097,Math.PI);
+    private Pose pickupPose2 = new Pose (144-17.13755795981453,60.09273570324575, Math.PI);
     private Pose launchPoint2 = new Pose(144-64.4210,83.8142,Math.PI);
-    private Path scorePreload, pickup1, run2, pickup2, run3, pickupMain, score;
+    public LLResultTypes.FiducialResult fr;
+    private Pose scorePose = new Pose(37, 72, 0);
+    private Path scorePreload, pickup1, launch1, pickup2, launch2, pickupMain, score;
+    private PathChain runAuto, movespec2, movespec3;
     public void buildPaths() {
 
+        scorePreload = new Path(new BezierCurve(startPose, launchPose1));
+        scorePreload.setConstantHeadingInterpolation(Math.toRadians(323));
+        pickup1 =  new Path(new BezierCurve(launchPose1, controlPoint1, pickupPose1));
+        pickup1.setTangentHeadingInterpolation();
 
-        pickup1 =  new Path(new BezierCurve(startPose, controlPoint1, pickupPose1));
-        pickup1.setConstantHeadingInterpolation(0);
+        launch1 =  new Path(new BezierCurve(pickupPose1, launchPoseMain));
+        launch1.setConstantHeadingInterpolation(180);
 
-        run2 =  new Path(new BezierCurve(pickupPose1, launchPoint1));
-        run2.setConstantHeadingInterpolation(0);
+        pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
+        pickup2.setConstantHeadingInterpolation(180);
 
-        pickup2 = new Path(new BezierCurve(launchPoint1, controlPoint2, pickupPose2));
-        pickup2.setConstantHeadingInterpolation(0);
-
-        run3 = new Path(new BezierCurve(pickupPose2,launchPoint2));
-        run3.setConstantHeadingInterpolation(0);
+        launch2 = new Path(new BezierCurve(pickupPose2,launchPoseMain));
+        launch2.setConstantHeadingInterpolation(180);
         //Path chains are chains of paths - so you can add multiple as shown below
         //i didn't import stuff because pepa 1.0.8 which we used to build this sample code last year uses different formatting and stuff so i had to change it
 
@@ -67,13 +72,13 @@ public class RedAutoClassBack extends OpMode {
             //it can also be used to get the X value of the robot's position
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
-                follower.followPath(pickup1);
+                follower.followPath(scorePreload);
                 //CANNOT do follower.followPath(scorePreload,true); because it's a path
                 setPathState(1);
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    follower.followPath(run2,true);
+                    follower.followPath(runAuto,true); //bad runatuo doesnt do anything
                     turningthing.turnBasedOfColor(patternArray[0]);
                     launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     turningthing.turnBasedOfColor(patternArray[1]);
@@ -85,43 +90,43 @@ public class RedAutoClassBack extends OpMode {
                 break;
             case 2:
                 if (!follower.isBusy()) {
-//                    follower.followPath();
+                    follower.followPath(movespec2); //all broken
                     setPathState(3);
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
-//                    follower.followPath(movespec3);
+                    follower.followPath(movespec3); //no
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-//                    follower.followPath(pickup1);
+                    follower.followPath(pickup1); //change ltierally all of these
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
-//                    follower.followPath(score);
+                    follower.followPath(score);
                     setPathState(6);
                 }
                 break;
             case 6:
                 if (!follower.isBusy()) {
-//                    follower.followPath(pickupMain);
+                    follower.followPath(pickupMain);
                     setPathState(7);
                 }
                 break;
             case 7:
                 if (!follower.isBusy()) {
-//                    follower.followPath(score);
+                    follower.followPath(score);
                     setPathState(8);
                 }
                 break;
             case 8:
                 if (!follower.isBusy()) {
-//                    follower.followPath(pickupMain);
+                    follower.followPath(pickupMain);
                     setPathState(9);
                 }
                 break;
@@ -181,13 +186,12 @@ public class RedAutoClassBack extends OpMode {
         } else {
             telemetry.addLine("nothing");
         }
-        telemetry.update();
         opmodeTimer.resetTimer(); //not really used but would turn out useful
         setPathState(0);
     }
     @Override
     public void loop() {
-
+        telemetry.update();
         follower.update();
         autoUpdate();
         telemetry.addData("path state", pathState);

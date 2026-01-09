@@ -167,11 +167,6 @@ public class BlueAutoClassBack extends OpMode {
     }
     @Override
     public void start() {
-        opmodeTimer.resetTimer(); //not really used but would turn out useful
-        setPathState(0);
-    }
-    @Override
-    public void loop() {
         LLResult result = limelight.getLatestResult();
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
         fr = fiducialResults.get(0);
@@ -196,6 +191,11 @@ public class BlueAutoClassBack extends OpMode {
             telemetry.addLine("nothing");
         }
         telemetry.update();
+        opmodeTimer.resetTimer(); //not really used but would turn out useful
+        setPathState(0);
+    }
+    @Override
+    public void loop() {
         follower.update();
         autoUpdate();
         telemetry.addData("path state", pathState);
