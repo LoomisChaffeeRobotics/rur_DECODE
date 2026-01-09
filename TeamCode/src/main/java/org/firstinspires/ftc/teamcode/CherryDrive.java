@@ -53,8 +53,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
     /** the imu we use */
     IMU imu;
-
-    boole
+    
 
 
 
