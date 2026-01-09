@@ -134,27 +134,27 @@ public class Indexer {
 //        }
 //
         if (direction) {
-                if (encoder.getCurrentPosition()  < 120) {
-                    indexer.setPower(0.67);
-                }
-                else {
+//                if (encoder.getCurrentPosition()  < 120) {
+//                    indexer.setPower(0.67);
+//                }
+//                else {
                     canTurn = 0;
                     indexer.setPower(0);
-                    encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                    encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     shift_list(SensedColorAll, direction);
-                }
+//                }
 
 
         } else {
-                if (encoder.getCurrentPosition() > -120) {
-                    indexer.setPower(-0.67);
-                }
-                else {
+//                if (encoder.getCurrentPosition() > -120) {
+//                    indexer.setPower(-0.67);
+//                }
+//                else {
                     canTurn = 0;
                     indexer.setPower(0);
-                    encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                    encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     shift_list(SensedColorAll, direction);
-                }
+//                }
         }
 
     }
