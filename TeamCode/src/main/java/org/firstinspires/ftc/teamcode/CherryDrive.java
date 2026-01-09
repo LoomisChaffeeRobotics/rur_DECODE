@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp
+@TeleOp // FINAL TELE-OP CLASS
 public class CherryDrive extends OpMode { //this clas is called CherryDrive because the bot's name is Cherry that is final grrrrr
     //RUN SENSECOLOR BEFORE EVERY TURNING THING AAHHH
 
@@ -19,48 +19,69 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
     //need to make when shoot it removes a thing from the thing (makes it neither) (idk which slot it would change)
-    LimeLightTurretSystem limelightsystem;
-    Indexer indexclass;
-    Launcher launchclass;
-//    CRServo indexer;
-    boolean autoTurn = true;
-    DcMotor intake;
-    DcMotor turret1; // top
-    DcMotor turret2; // bottom (i think)
-    CRServo indexer;
-    Servo flipper;
 
+
+    /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
+    LimeLightTurretSystem limeLightTurretSystem;
+
+    /** Class for the Spnidexer and the color sensor */
+    Indexer indexClass;
+
+    /** we use this for finding motor speeds VERY IMPORTANT even tho only used once */
+    Launcher launchClass;
+
+    /** weather or not we turn the turret automatically (do we want ts?) */
+    boolean autoTurn = true;
+    /** if this isn't self-explanatory re-do you are 5th grade education */
+    boolean flipperUp = false;
+
+
+
+    /** List of Motors: */
+    DcMotor intake;
+    DcMotor launcher; // top
+    DcMotor launcher2; // bottom (i think)
+    // v drive motors v
     DcMotor left_front;
     DcMotor right_front;
     DcMotor left_back;
     DcMotor right_back;
+
+    /** list of servos it is missing the spindexer servo because all that is dealt with in the 'indexer' class */
+    CRServo indexer;
+    Servo flipper;
+
+    /** the imu we use */
     IMU imu;
-    boolean flipperUp = false;
+
+    boole
+
+
 
     @Override
     public void init() {
-        limelightsystem = new LimeLightTurretSystem();
-        limelightsystem.init(hardwareMap, telemetry);
-        indexclass = new Indexer();
-        indexclass.init(hardwareMap, telemetry);
-        launchclass = new Launcher();
-        launchclass.init(hardwareMap, telemetry);
+        //class initializations
+        limeLightTurretSystem = new LimeLightTurretSystem();
+        limeLightTurretSystem.init(hardwareMap, telemetry);
+        indexClass = new Indexer();
+        indexClass.init(hardwareMap, telemetry);
+        launchClass = new Launcher();
+        launchClass.init(hardwareMap, telemetry);
 
+        //Setting the motors
         intake = hardwareMap.get(DcMotor.class,"intake");
-        turret1 = hardwareMap.get(DcMotor.class,"launcher");
-        turret2 = hardwareMap.get(DcMotor.class,"launcher2");
-        indexer = hardwareMap.get(CRServo.class,"indexer");
-        flipper = hardwareMap.get(Servo.class,"flipper");
-//        indexer = hardwareMap.get(CRServo.class, "indexer");
-
-
-        //FCD INIT
-
+        launcher = hardwareMap.get(DcMotor.class,"launcher");
+        launcher2 = hardwareMap.get(DcMotor.class,"launcher2");
         left_front = hardwareMap.get(DcMotor.class, "leftFront");
         right_front = hardwareMap.get(DcMotor.class, "rightFront");
         left_back = hardwareMap.get(DcMotor.class, "leftBack");
         right_back = hardwareMap.get(DcMotor.class, "rightBack");
 
+        //Setting the servos (not spindexer)
+        indexer = hardwareMap.get(CRServo.class,"indexer");
+        flipper = hardwareMap.get(Servo.class,"flipper");
+
+        //setting up the drive motor behavior
         left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -69,6 +90,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         left_front.setDirection(DcMotorSimple.Direction.REVERSE);
         left_back.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        /** imu starting stuff */
         imu = hardwareMap.get(IMU.class, "imu");
 
         IMU.Parameters myIMUparameter;
@@ -92,7 +114,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     public void loop() {
 //        colorsensor.sensecolor(telemetry);
 
-        //  INTAKE
+        //  INTAKE - gp1 RT
         if (gamepad1.right_trigger > 0.2) {
             runIntake(1d);
         }
@@ -100,20 +122,21 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             runIntake(0d);
         }
 
-        //  TURRET
+        //  TURRET - gp2 LT
         if (gamepad2.left_trigger > 0.2){
             startTurret(1d);
         } else {
             startTurret(0d);
         }
 
-        //  FLIPPER
+        //  FLIPPER - gp2 RT
         if (gamepad2.right_trigger > 0.2){
             flipper(true);
         } else {
             flipper(false);
         }
 
+        // SPINDEXER - gp2 x,a,b (green,none,purple)
         if (gamepad2.x){
             switchColor(Indexer.SensedColor.GREEN);
         }
@@ -124,11 +147,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             switchColor(Indexer.SensedColor.PURPLE);
         }
 
-        //  TURNING THE HEAD
+        //  TURNING THE HEAD - gp2
         if(autoTurn){
             autoTurn();
         }
-
         if (gamepad2.dpad_left){
             autoTurn = false;
             manuTurn(-0.2);
@@ -151,6 +173,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
 
 
+    /** Moves the Drive motors in a field-centric way.
+     * x and y altered are the x and y components of the input vector rotated
+     * "denominator" is the denominator used to clamo out the values in [-1,1] without changing the ratio */
     public void fieldCentricDriving(){ // Done!
 
         //inputs
@@ -184,13 +209,15 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //        telemetry.addData("yaw: ", Yaw);
 
     }
+
+    /** */
     public void runIntake(double power){ // Done!
 
         telemetry.addData("intake power: ",power);
         intake.setPower(-power);
     }
     public void startTurret(double power){ // Done?
-        launchclass.shoot(limelightsystem.getDistance_from_apriltag(0));
+        launchClass.shoot(limelightsystem.getDistance_from_apriltag(0));
         telemetry.addData("turret power: ", power);
     }
     public void flipper(boolean up){ // Done!
@@ -206,11 +233,11 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         if (flipperUp) {return false;}
 
-        if (indexclass.canTurn != 2) {
-            indexclass.sensecolor();
+        if (indexClass.canTurn != 2) {
+            indexClass.sensecolor();
         }
         else {
-            indexclass.turnBasedOfColor(color);
+            indexClass.turnBasedOfColor(color);
 //            if (indexclass.canTurn == 0) {
 //                return true;
 //            }
@@ -219,12 +246,12 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         return false;
     }
     public void autoTurn(){ // Done?
-        limelightsystem.turntoAT();
+        limeLightTurretSystem.turntoAT();
     }
     public void turretTurnTo(double angle){ //not using
         //turns to angle TODO: turn
     }
     public void manuTurn(double power){ // Done?
-        limelightsystem.turnToNotAT(power);
+        limeLightTurretSystem.turnToNotAT(power);
     }
 }
