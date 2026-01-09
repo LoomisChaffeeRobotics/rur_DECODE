@@ -83,12 +83,11 @@ public class Indexer {
     DcMotor encoder;
     ElapsedTime timer;
     CRServo indexer;
-    Launcher launcher;
     NormalizedColorSensor colorSensor1;
     public SensedColor CurrentColor = SensedColor.NEITHER;
     public SensedColor CurrentColor2 = SensedColor.NEITHER;
     public SensedColor CurrentColor3 = SensedColor.NEITHER;
-    List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
+    public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
 //    NormalizedColorSensor colorSensor2;
 //    NormalizedColorSensor colorSensor3;
 
@@ -106,6 +105,10 @@ public class Indexer {
         timer.reset();
         while (timer.seconds() < seconds ) {}
 
+    }
+    public List<SensedColor> removefirst(List<SensedColor> l) {
+        l.set(0, SensedColor.NEITHER);
+        return l;
     }
     public List<SensedColor> shift_list(List<SensedColor> l, boolean direction) { //true is right, must be same as turn()
 
@@ -194,8 +197,6 @@ public class Indexer {
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         encoder = hardwareMap.get(DcMotor.class, "encoder");
         SensedColorAll = shift_list(SensedColorAll, true);
-        launcher = new Launcher();
-        launcher.init(hardwareMap, telemetry);
 
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId); //idk if these two lines are needed

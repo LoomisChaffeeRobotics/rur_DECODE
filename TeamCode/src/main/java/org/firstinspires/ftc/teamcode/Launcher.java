@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Launcher {
     ElapsedTime elapsedTime;
+    Indexer indexer;
     public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
@@ -45,6 +46,8 @@ public class Launcher {
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         elapsedTime = new ElapsedTime();
+        indexer = new Indexer();
+        indexer.init(hardwareMap, telemetry);
 //        flap1 = hardwareMap.get(Servo.class, "flap1");
         launcher = hardwareMap.get(DcMotorEx.class, "launcher");
         launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
@@ -112,7 +115,7 @@ public class Launcher {
         ) * (7.0 / 15.0);
         launcher.setVelocity(-lower_motor_interporation_result);
         launcher2.setVelocity(-upper_motor_interporation_result);
-
+        indexer.removefirst(indexer.SensedColorAll);
 //        flap1.setPosition(0.2);
 //        waitAuto(0.5);
 //        flap1.setPosition(0);
