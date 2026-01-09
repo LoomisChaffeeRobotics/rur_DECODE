@@ -81,34 +81,19 @@ public class Indexer {
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
     DcMotor encoder;
-    ElapsedTime timer;
     CRServo indexer;
     NormalizedColorSensor colorSensor1;
+    public NormalizedRGBA colors1;
     public SensedColor CurrentColor = SensedColor.NEITHER;
     public SensedColor CurrentColor2 = SensedColor.NEITHER;
     public SensedColor CurrentColor3 = SensedColor.NEITHER;
     public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
-//    NormalizedColorSensor colorSensor2;
-//    NormalizedColorSensor colorSensor3;
-
-    View relativeLayout;
     public enum SensedColor {
         PURPLE, GREEN, NEITHER
     }
-//    public enum SensedColor2 {
-//        PURPLE, GREEN, NEITHER;
-//    }
-//    public enum SensedColor3 {
-//        PURPLE, GREEN, NEITHER;
-//    }
-    public void waitAuto(double seconds) {
-        timer.reset();
-        while (timer.seconds() < seconds ) {}
-
-    }
-    public List<SensedColor> removefirst(List<SensedColor> l) {
+    public void removefirst(List<SensedColor> l) {
         l.set(0, SensedColor.NEITHER);
-        return l;
+        SensedColorAll = l;
     }
     public List<SensedColor> shift_list(List<SensedColor> l, boolean direction) { //true is right, must be same as turn()
 
@@ -191,25 +176,19 @@ public class Indexer {
         }
     }
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        timer = new ElapsedTime();
-        timer.reset();
+
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         encoder = hardwareMap.get(DcMotor.class, "encoder");
         SensedColorAll = shift_list(SensedColorAll, true);
 
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId); //idk if these two lines are needed
-
         telemetry.addData("Gain", gain);
         colorSensor1.setGain(gain);
-//            colorSensor2.setGain(gain);
-//            colorSensor3.setGain(gain);
-        NormalizedRGBA colors1 = colorSensor1.getNormalizedColors();
+        colors1 = colorSensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
     }
     public void sensecolor() { //must be run at all times
-//<<<<<<< HEADS
+
         if (canTurn != 1) {
             canTurn = 0;
         }
@@ -218,9 +197,9 @@ public class Indexer {
 
             indexer.setPower(0.5);
 
-            if (hsvValues1[0] >= 90 && hsvValues1[0] <= 180) {
+            if (hsvValues1[0] >= 163 && hsvValues1[0] <= 167) {
                 CurrentColor = SensedColor.GREEN;
-            } else if (hsvValues1[0] >= 270 && hsvValues1[0] <= 330) {
+            } else if (hsvValues1[0] >= 210 && hsvValues1[0] <= 230) {
                 CurrentColor = SensedColor.PURPLE;
             } else {
                 CurrentColor = SensedColor.NEITHER;
@@ -228,8 +207,6 @@ public class Indexer {
         } else if (canTurn == 0) {
             canTurn = 1;
         }
-
-//114 = tick per tick
 
 
         if (encoder.getCurrentPosition() > 0 && canTurn == 1) {
