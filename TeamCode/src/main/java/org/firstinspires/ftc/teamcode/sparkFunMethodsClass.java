@@ -12,6 +12,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import java.util.Objects;
+
 //has not been moved to drive class due to the uncertainty regarding whether it is being used
 
 
@@ -121,5 +123,14 @@ public class sparkFunMethodsClass {
         myOtos.getVersionInfo(hwVersion, fwVersion);
 
         telemetry.update();
+    }
+
+    public SparkFunOTOS.Pose2D ATDisplacement(String team){
+        if (Objects.equals(team, "none")){
+            return new SparkFunOTOS.Pose2D();
+        }
+
+
+        return null;
     }
 }

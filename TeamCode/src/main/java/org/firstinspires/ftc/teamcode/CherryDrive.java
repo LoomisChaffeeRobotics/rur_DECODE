@@ -139,34 +139,34 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
         // SPINDEXER - gp2 x,a,b (green,none,purple)
-        if (gamepad2.x){
-            switchColor(Indexer.SensedColor.GREEN);
-        }
-        if (gamepad2.a){
-            switchColor(Indexer.SensedColor.NEITHER);
-        }
-        if (gamepad2.b){
-            switchColor(Indexer.SensedColor.PURPLE);
-        }
+//        if (gamepad2.x){
+//            switchColor(Indexer.SensedColor.GREEN);
+//        }
+//        if (gamepad2.a){
+//            switchColor(Indexer.SensedColor.NEITHER);
+//        }
+//        if (gamepad2.b){
+//            switchColor(Indexer.SensedColor.PURPLE);
+//        }
 
         //  TURNING THE HEAD - gp2
-        if(autoTurn){
-            autoTurn();
-        }
-        if (gamepad2.dpad_left){
-            autoTurn = false;
-            manuTurn(-0.2);
-        } else if (gamepad2.dpad_right){
-            autoTurn = false;
-            manuTurn(0.2);
-        } else if (!autoTurn){
-            manuTurn(0);
-        }
-        if (gamepad1.dpad_up){
-            autoTurn = true;
-        }
+//        if(autoTurn){
+//            autoTurn();
+//        }
+//        if (gamepad2.dpad_left){
+//            autoTurn = false;
+//            manuTurn(-0.2);
+//        } else if (gamepad2.dpad_right){
+//            autoTurn = false;
+//            manuTurn(0.2);
+//        } else if (!autoTurn){
+//            manuTurn(0);
+//        }
+//        if (gamepad1.dpad_up){
+//            autoTurn = true;
+//        }
 
-        // Driving
+//         Driving
         fieldCentricDriving();
         if (gamepad1.start){
             imu.resetYaw();
@@ -208,17 +208,25 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         right_back.setPower(right_back_velocity/denominator);
         left_front.setPower(left_front_velocity/denominator);
         left_back.setPower(left_back_velocity/denominator);
+
+        telemetry.addData("leftstickx", gamepad1.left_stick_x);
+        telemetry.addData("denominator", denominator);
 //        telemetry.addData("yaw: ", Yaw);
 
     }
 
-    /** */
+    /** runs the intake at power power. 0 for stop 1 for go .5 for 50% speed*/
     public void runIntake(double power){ // Done!
 
         telemetry.addData("intake power: ",power);
         intake.setPower(-power);
     }
     public void startTurret(double power){ // Done?
+        if (power == 0) {
+            launcher.setPower(0);
+            launcher2.setPower(0);
+            return;
+        }
         launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(0));
         telemetry.addData("turret power: ", power);
     }

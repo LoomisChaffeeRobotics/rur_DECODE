@@ -119,5 +119,14 @@ public class LimeLightTurretSystem {
         angleerror = targetangle - botposeangle;
         return distance_from_apriltag;
     }
+
+    /** returns degrees rotated clockwise in range [0,360).
+     * 0 is forward (or starting pos)*/
+    public double getTurretAngle(){
+        double degrees = encoder.getCurrentPosition() * 0.008772;
+        degrees %= 360;
+        return degrees;
+    }
 }
+
 
