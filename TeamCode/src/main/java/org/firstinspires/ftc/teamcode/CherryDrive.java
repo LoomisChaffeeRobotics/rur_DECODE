@@ -240,9 +240,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     public boolean switchColor(Indexer.SensedColor color){ // NOT DONE
        //COLOUR STUFFs
 
-        if (flipperUp) {return false;}
+        if (flipperUp || indexClass.canTurn == 0) {return false;}
 
-        if (indexClass.canTurn != 2) {
+        if (indexClass.canTurn == 1) {
             indexClass.sensecolor();
         }
         else {

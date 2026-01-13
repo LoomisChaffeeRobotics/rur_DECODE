@@ -28,17 +28,15 @@ public class BlueAutoClassBack extends OpMode {
     Follower follower;
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    private Pose startPose = new Pose(56,9 , Math.PI/2); //heading in radians
-    private Pose pickupPose1 =  new Pose(24.0743,35.6656, Math.PI);
-    private Pose controlPoint1 =  new Pose(65.7585,37.226, Math.PI);
-    private Pose launchPoint1 = new Pose (61.5232,9.808, Math.PI);
-    private Pose controlPoint2 = new Pose(79.23384,61.873,Math.PI);
-    private Pose pickupPose2 = new Pose (23.8513,60.6315, Math.PI);
-    private Pose launchPoint2 = new Pose(64.4210,83.8142,Math.PI);
+    Pose startPose = new Pose(56,9 , Math.PI/2); //heading in radians
+    Pose pickupPose1 =  new Pose(24.0743,35.6656, Math.PI);
+    Pose controlPoint1 =  new Pose(65.7585,37.226, Math.PI);
+    Pose launchPoint1 = new Pose (61.5232,9.808, Math.PI);
+    Pose controlPoint2 = new Pose(79.23384,61.873,Math.PI);
+    Pose pickupPose2 = new Pose (23.8513,60.6315, Math.PI);
+    Pose launchPoint2 = new Pose(64.4210,83.8142,Math.PI);
     public LLResultTypes.FiducialResult fr;
-    private Pose scorePose = new Pose(37, 72, 0);
-    private Path scorePreload, pickup1, run2, pickup2, run3, pickupMain, score;
-    private PathChain runAuto, movespec2, movespec3;
+    private Path pickup1, run2, pickup2, run3;
     public void buildPaths() {
 
 
@@ -54,12 +52,6 @@ public class BlueAutoClassBack extends OpMode {
         run3 = new Path(new BezierCurve(pickupPose2,launchPoint2));
         run3.setConstantHeadingInterpolation(180);
         //Path chains are chains of paths - so you can add multiple as shown below
-        runAuto = follower.pathBuilder() //literally unimportant and will never be uused ignore this
-                .addPath(pickup1)
-                .addPath(run2)
-                .addPath(pickup2)
-                .addPath(run3)
-                .build();
         //i didn't import stuff because pepa 1.0.8 which we used to build this sample code last year uses different formatting and stuff so i had to change it
 
     }
@@ -76,13 +68,17 @@ public class BlueAutoClassBack extends OpMode {
             //it can also be used to get the X value of the robot's position
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
-                follower.followPath(scorePreload);
-                //CANNOT do follower.followPath(scorePreload,true); because it's a path
+                turningthing.turnBasedOfColor(patternArray[0]);
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
+                turningthing.turnBasedOfColor(patternArray[1]);
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
+                turningthing.turnBasedOfColor(patternArray[2]);
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
                 setPathState(1);
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    follower.followPath(runAuto,true);
+                    follower.followPath(pickup1);
                     turningthing.turnBasedOfColor(patternArray[0]);
                     launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     turningthing.turnBasedOfColor(patternArray[1]);
@@ -94,51 +90,51 @@ public class BlueAutoClassBack extends OpMode {
                 break;
             case 2:
                 if (!follower.isBusy()) {
-                    follower.followPath(movespec2);
+                    follower.followPath(run2);
                     setPathState(3);
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    follower.followPath(movespec3);
+                    follower.followPath(pickup2);
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    follower.followPath(pickup1);
-                    setPathState(5);
-                }
-                break;
-            case 5:
-                if (!follower.isBusy()) {
-                    follower.followPath(score);
-                    setPathState(6);
-                }
-                break;
-            case 6:
-                if (!follower.isBusy()) {
-                    follower.followPath(pickupMain);
-                    setPathState(7);
-                }
-                break;
-            case 7:
-                if (!follower.isBusy()) {
-                    follower.followPath(score);
-                    setPathState(8);
-                }
-                break;
-            case 8:
-                if (!follower.isBusy()) {
-                    follower.followPath(pickupMain);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if (!follower.isBusy()) {
+                    follower.followPath(run3);
                     setPathState(-1);
-
                 }
+                break;
+//            case 5:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(score);
+//                    setPathState(6);
+//                }
+//                break;
+//            case 6:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(pickupMain);
+//                    setPathState(7);
+//                }
+//                break;
+//            case 7:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(score);
+//                    setPathState(8);
+//                }
+//                break;
+//            case 8:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(pickupMain);
+//                    setPathState(9);
+//                }
+//                break;
+//            case 9:
+//                if (!follower.isBusy()) {
+//                    setPathState(-1);
+//
+//                }
         }
     }
     @Override
@@ -163,10 +159,6 @@ public class BlueAutoClassBack extends OpMode {
         /*
          * Starts polling for data.  If you neglect to call start(), getLatestResult() will return null.
          */
-        limelight.start();
-    }
-    @Override
-    public void start() {
         LLResult result = limelight.getLatestResult();
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
         fr = fiducialResults.get(0);
@@ -191,12 +183,17 @@ public class BlueAutoClassBack extends OpMode {
             telemetry.addLine("nothing");
         }
         telemetry.update();
+        limelight.start();
+    }
+    @Override
+    public void start() {
         opmodeTimer.resetTimer(); //not really used but would turn out useful
         setPathState(0);
     }
     @Override
     public void loop() {
         follower.update();
+        limelightclass.turntoAT(20);
         autoUpdate();
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());

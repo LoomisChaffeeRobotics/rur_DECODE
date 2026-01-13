@@ -29,6 +29,8 @@ public class EmptyTeleOp extends OpMode {
     }
 }
 
+//code code code code
+
 //@Colin guess what this does.
 //you will never guess
 //its kinda hard to tell imo

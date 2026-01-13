@@ -72,7 +72,12 @@ public class BlueAutoClassFront extends OpMode {
             //it can also be used to get the X value of the robot's position
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
-                follower.followPath(scorePreload);
+                turningthing.turnBasedOfColor(patternArray[0]);
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                turningthing.turnBasedOfColor(patternArray[1]);
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                turningthing.turnBasedOfColor(patternArray[2]); //these make it turns
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
                 //CANNOT do follower.followPath(scorePreload,true); because it's a path
                 setPathState(1);
                 break;

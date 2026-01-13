@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -80,13 +81,14 @@ public class Indexer {
     float gain = 31;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
-    DcMotor encoder;
+    DcMotor intake;
     CRServo indexer;
     NormalizedColorSensor colorSensor1;
     public NormalizedRGBA colors1;
     public SensedColor CurrentColor = SensedColor.NEITHER;
     public SensedColor CurrentColor2 = SensedColor.NEITHER;
     public SensedColor CurrentColor3 = SensedColor.NEITHER;
+    public int unitsTraveled = 0;
     public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
     public enum SensedColor {
         PURPLE, GREEN, NEITHER
@@ -119,32 +121,45 @@ public class Indexer {
         if (canTurn == 0) {
             return;
         }
+
+        if (canTurn == 2) {
+//            origin = intake.getCurrentPosition();
+            unitsTraveled = 0;
+            canTurn = 3;
+        }
+
+//        distTravelled
 //        if (Math.abs(encoder.getCurrentPosition()) < 0.67) {
 ////            return true;
 //        }
+
+        // targetPosition = 8192/3
+
+        if (Math.abs((intake.getCurrentPosition() % 8192/3) - (8192/3)) > 50 || unitsTraveled < 30) {
+            unitsTraveled++;
+            indexer.setPower((direction ? 1 : -1) * 0.27);
+        }
+        else {
+            canTurn = 0;
+            indexer.setPower(0);
+
+            shift_list(SensedColorAll, direction);
+        }
 //
-        if (direction) {
-//                if (encoder.getCurrentPosition()  < 120) {
-//                    indexer.setPower(0.67);
-//                } else {
-                    canTurn = 0;
-                    indexer.setPower(0);
-//                    encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    shift_list(SensedColorAll, direction);
-//                }
-
-
-        } else {
-//                if (encoder.getCurrentPosition() > -120) {
-//                    indexer.setPower(-0.67);
+//        if (direction) {
+//
+//
+//
+//        } else {
+//                if (intake.getCurrentPosition() % 8192/3 > -2730) {
+//                    indexer.setPower(-0.27);
 //                }
 //                else {
-                    canTurn = 0;
-                    indexer.setPower(0);
-//                    encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    shift_list(SensedColorAll, direction);
+//                    canTurn = 0;
+//                    indexer.setPower(0);
+//                    shift_list(SensedColorAll, direction);
 //                }
-        }
+//        }
 
     }
     public boolean turnRegardlessofColor() {
@@ -180,7 +195,7 @@ public class Indexer {
 
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        encoder = hardwareMap.get(DcMotor.class, "encoder");
+        intake = hardwareMap.get(DcMotor.class, "intake");
 
         telemetry.addData("Gain", gain);
         colorSensor1.setGain(gain);
@@ -188,14 +203,11 @@ public class Indexer {
         Color.colorToHSV(colors1.toColor(), hsvValues1);
     }
     public void sensecolor() { //must be run at all times
-        if (canTurn == 1) {
+        if (canTurn == 2) {
             return;
         }
 //        if (canTurn != 1) {
 //            canTurn = 0;
-//        }
-//        if (encoder.getCurrentPosition() < 60) {
-//            indexer.setPower(0.5);
 //        }
             if (hsvValues1[0] >= 163 && hsvValues1[0] <= 167) {
                 CurrentColor2 = SensedColor.GREEN;
@@ -208,15 +220,11 @@ public class Indexer {
 //        } else if (canTurn == 0) {
 //            canTurn = 1;
 //        }
-        canTurn = 1;
-//
-//        if (encoder.getCurrentPosition() > 0 && canTurn == 1) {
-//            indexer.setPower(-0.5);
-//        }
+        canTurn = 2;
+
 //        else if (canTurn == 1) {
 //            canTurn = 2;
 //        }
         SensedColorAll = (Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
     }
 }
-
