@@ -10,15 +10,14 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp // FINAL TELE-OP CLASS
-public class CherryDrive extends OpMode { //this clas is called CherryDrive because the bot's name is Cherry that is final grrrrr
-    //RUN SENSECOLOR BEFORE EVERY TURNING THING AAHHH
+public class CherryDrive extends OpMode { //this clas is called CherryDrive because Cherry is a placeholder robot name
+    //RUN SENSECOLOR BEFORE EVERY TURNING THING
 
     //name of spinning turret is turretSpin
     //name of indexer is indexer
     //uncomment out the stuff later
 
 
-    //need to make when shoot it removes a thing from the thing (makes it neither) (idk which slot it would change)
 
 
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
