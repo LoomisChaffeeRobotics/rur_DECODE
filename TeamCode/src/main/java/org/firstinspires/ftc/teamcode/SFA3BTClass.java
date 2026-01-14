@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Vector;
 
 @TeleOp
 public class SFA3BTClass extends OpMode {
@@ -19,7 +20,7 @@ public class SFA3BTClass extends OpMode {
     LimeLightTurretSystem limelight;
     String teamColor = "none";
     int desiredID = 0;
-    SparkFunOTOS.Pose2D roboPoseRelativeToAprilTag;
+    SparkFunOTOS.Pose2D roboPoseRelativeToAT;
 
 
     @Override
@@ -48,6 +49,7 @@ public class SFA3BTClass extends OpMode {
         {
             ATSeen = false;
         }
+
         //makes the results list
         List<LLResultTypes.FiducialResult> results = limelight.result.getFiducialResults();
 
@@ -60,7 +62,13 @@ public class SFA3BTClass extends OpMode {
                     limelight.turntoAT(desiredID);
                     Position pos = results.get(i).getCameraPoseTargetSpace().getPosition();
                     double head = results.get(i).getCameraPoseTargetSpace().getOrientation().getYaw();
-                    roboPoseRelativeToAprilTag = new SparkFunOTOS.Pose2D(pos.x, pos.y,head);
+                    SparkFunOTOS.Pose2D cameraPoseRelativeToAprilTag = new SparkFunOTOS.Pose2D(pos.x, pos.y,head); //TODO: TEST TO SEE IF X IS RIGHT AND Y IS FORWARD!!!!!!!!
+                    double angleFromATToRobot = Math.atan(cameraPoseRelativeToAprilTag.y/cameraPoseRelativeToAprilTag.x);
+                    double angle = Math.toRadians(results.get(i).getTargetXDegrees());
+                    double netAngle = angleFromATToRobot - angle;
+                    double addedVectorx = 7.5 * Math.cos(netAngle) * Math.signum(angleFromATToRobot);
+                    double addedVectory = 7.5 * Math.sin(netAngle) * Math.signum(angleFromATToRobot);
+                    roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(cameraPoseRelativeToAprilTag.x + addedVectorx, cameraPoseRelativeToAprilTag.y + addedVectory, cameraPoseRelativeToAprilTag.h);
                     break;
                 }
             }
