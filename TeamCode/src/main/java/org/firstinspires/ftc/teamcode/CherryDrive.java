@@ -10,15 +10,14 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp // FINAL TELE-OP CLASS
-public class CherryDrive extends OpMode { //this clas is called CherryDrive because the bot's name is Cherry that is final grrrrr
-    //RUN SENSECOLOR BEFORE EVERY TURNING THING AAHHH
+public class CherryDrive extends OpMode { //this clas is called CherryDrive because Cherry is a placeholder robot name
+    //RUN SENSECOLOR BEFORE EVERY TURNING THING
 
     //name of spinning turret is turretSpin
     //name of indexer is indexer
     //uncomment out the stuff later
 
 
-    //need to make when shoot it removes a thing from the thing (makes it neither) (idk which slot it would change)
 
 
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
@@ -232,8 +231,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     public void flipper(boolean up){ // Done!
         //flip
-        double flipDown = 0.91d;
-        double flipUP = 0.53d;
+        double flipDown = 0.6741d;
+        double flipUP = 0.3189d;
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
         flipperUp = up;
@@ -241,9 +240,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     public boolean switchColor(Indexer.SensedColor color){ // NOT DONE
        //COLOUR STUFFs
 
-        if (flipperUp) {return false;}
+        if (flipperUp || indexClass.canTurn == 0) {return false;}
 
-        if (indexClass.canTurn != 2) {
+        if (indexClass.canTurn == 1) {
             indexClass.sensecolor();
         }
         else {

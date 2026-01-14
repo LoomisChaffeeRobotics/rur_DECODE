@@ -28,11 +28,11 @@ public class LauncherTuningTest extends OpMode {
     @Override
     public void loop() {
         if(gamepad1.x){
-            flipper.setPosition(0.95); // down //OFFICIAL THINGS SINCE JAN 8TH!!!!!!!
+            flipper.setPosition(0.6741); // down //OFFICIAL THINGS SINCE JAN 8TH!!!!!!!
 //            leftFront.setPower(gamepad1.left_stick_y);
         }
         if(gamepad1.b){
-            flipper.setPosition(0.40); // up
+            flipper.setPosition(0.3189); // up
 //            leftRear.setPower(gamepad1.left_stick_y);
         }
         if (gamepad1.dpad_up) {
