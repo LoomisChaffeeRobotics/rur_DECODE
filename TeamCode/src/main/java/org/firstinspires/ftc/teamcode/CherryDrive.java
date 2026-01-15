@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.bylazar.panels.Panels;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,6 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.bylazar.telemetry.*;
+
+import kotlin.jvm.internal.markers.KMutableList;
 
 @TeleOp // FINAL TELE-OP CLASS
 public class CherryDrive extends OpMode { //this clas is called CherryDrive because Cherry is a placeholder robot name
@@ -16,13 +20,16 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     //name of spinning turret is turretSpin
     //name of indexer is indexer
     //uncomment out the stuff later
+    public static double indexerP = 0.00007;
+    public static double indexerC = 0;
+
 
 
 
 
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
     LimeLightTurretSystem limeLightTurretSystem;
-
+    TelemetryManager panelsTelemetry;
     /** Class for the Spnidexer and the color sensor */
     Indexer indexClass;
 
@@ -53,13 +60,19 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     /** the imu we use */
     IMU imu;
 
+    /** depressed stuffs */
+    boolean xdepressed = false;
+    boolean bdepressed = false;
+
 
 
 
     @Override
     public void init() {
         //class initializations
-
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+        panelsTelemetry.debug("hi");
+        panelsTelemetry.update(telemetry);
         limeLightTurretSystem = new LimeLightTurretSystem();
         limeLightTurretSystem.init(hardwareMap, telemetry);
         indexClass = new Indexer();
@@ -136,39 +149,28 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         } else {
             flipper(false);
         }
-        if (gamepad2.x) {
+
+        // SPINNER - gp2 X and B
+        if (gamepad2.x && !xdepressed) {
             turnSpinner(true);
-        } else if (gamepad2.b) {
+            xdepressed = true;
+        } else if (gamepad2.b && !bdepressed) {
             turnSpinner(false);
-        } else {indexer.setPower(0);}
+            bdepressed = true;
+        }
+        if (!gamepad2.x){
+            xdepressed = false;
+        }
+        if (!gamepad2.b){
+            bdepressed = false;
+        }
+        indexClass.indexerUpdate(indexerC,indexerP);
 
-        // SPINDEXER - gp2 x,a,b (green,none,purple)
-//        if (gamepad2.x){
-//            switchColor(Indexer.SensedColor.GREEN);
-//        }
-//        if (gamepad2.a){
-//            switchColor(Indexer.SensedColor.NEITHER);
-//        }
-//        if (gamepad2.b){
-//            switchColor(Indexer.SensedColor.PURPLE);
-//        }
 
-        //  TURNING THE HEAD - gp2
-//        if(autoTurn){
-//            autoTurn();
-//        }
-//        if (gamepad2.dpad_left){
-//            autoTurn = false;
-//            manuTurn(-0.2);
-//        } else if (gamepad2.dpad_right){
-//            autoTurn = false;
-//            manuTurn(0.2);
-//        } else if (!autoTurn){
-//            manuTurn(0);
-//        }
-//        if (gamepad1.dpad_up){
-//            autoTurn = true;
-//        }
+        panelsTelemetry.addData("desiered", indexClass.targetPosition);
+        panelsTelemetry.addData("position", indexClass.intake.getCurrentPosition());
+        panelsTelemetry.update();
+
 
 //         Driving
         fieldCentricDriving();

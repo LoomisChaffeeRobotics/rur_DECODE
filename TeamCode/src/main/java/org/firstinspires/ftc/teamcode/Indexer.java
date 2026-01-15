@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ftc.localization.Encoder;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -48,8 +49,10 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-
+@Configurable
 public class Indexer {
+
+    public double error;
     float gain = 31;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
@@ -88,17 +91,13 @@ public class Indexer {
         SensedColorAll = l;
         return l;
     }
-    public void indexerUpdate(){
-        if (Math.abs(intake.getCurrentPosition() - targetPosition) < 0.2){
+    public void indexerUpdate(double indexerC, double indexerP){
+        error = targetPosition - intake.getCurrentPosition();
+        if (Math.abs(error) <0){
             indexer.setPower(0);
             return;
         }
-        if (intake.getCurrentPosition() < targetPosition){
-            indexer.setPower(0.2);
-        }
-        if (intake.getCurrentPosition() > targetPosition){
-            indexer.setPower(-0.2);
-        }
+        indexer.setPower(Math.signum(error)* indexerC + indexerP * error);
     }
     public void turn(boolean direction) { // true is right
 //        if (canTurn == 0) {
@@ -193,6 +192,7 @@ public class Indexer {
         colorSensor1.setGain(gain);
         colors1 = colorSensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
+
     }
     public void sensecolor() { //must be run at all times
         if (canTurn == 2) {
