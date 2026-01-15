@@ -12,6 +12,10 @@ public class GamepadTesting extends OpMode {
     DcMotor intake;
     DcMotor launcher;
     DcMotor launcher2;
+    DcMotor left_front;
+    DcMotor right_front;
+    DcMotor left_back;
+    DcMotor right_back;
     CRServo indexer;
     Servo flipper;
 
@@ -23,6 +27,18 @@ public class GamepadTesting extends OpMode {
         launcher2 = hardwareMap.get(DcMotor.class,"launcher2");
         indexer = hardwareMap.get(CRServo.class,"indexer");
         flipper = hardwareMap.get(Servo.class,"flipper");
+        left_front = hardwareMap.get(DcMotor.class, "leftFront");
+        right_front = hardwareMap.get(DcMotor.class, "rightFront");
+        left_back = hardwareMap.get(DcMotor.class, "leftBack");
+        right_back = hardwareMap.get(DcMotor.class, "rightBack");
+
+        //Setting the servos (not spindexer)
+
+        //setting up the drive motor behavior
+        left_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        flipper.setPosition(0.5);
     }
 

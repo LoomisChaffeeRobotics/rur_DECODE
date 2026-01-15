@@ -1,38 +1,10 @@
-/* Copyright (c) 2017-2020 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 
+import com.pedropathing.ftc.localization.Encoder;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -81,15 +53,14 @@ public class Indexer {
     float gain = 31;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
+    double targetPosition=0;
     DcMotor intake;
     CRServo indexer;
     NormalizedColorSensor colorSensor1;
     public NormalizedRGBA colors1;
-    public SensedColor CurrentColor = SensedColor.NEITHER;
-    public SensedColor CurrentColor2 = SensedColor.NEITHER;
-    public SensedColor CurrentColor3 = SensedColor.NEITHER;
     public int unitsTraveled = 0;
-    public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
+    ///  I removed "currentColor" because it was useless. we only need one list.
+    public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(SensedColor.NEITHER, SensedColor.NEITHER, SensedColor.NEITHER));
     public enum SensedColor {
         PURPLE, GREEN, NEITHER
     }
@@ -117,34 +88,53 @@ public class Indexer {
         SensedColorAll = l;
         return l;
     }
-    public void turn(boolean direction) { // true is right
-        if (canTurn == 0) {
+    public void indexerUpdate(){
+        if (Math.abs(intake.getCurrentPosition() - targetPosition) < 0.2){
+            indexer.setPower(0);
             return;
         }
-
-        if (canTurn == 2) {
-//            origin = intake.getCurrentPosition();
-            unitsTraveled = 0;
-            canTurn = 3;
+        if (intake.getCurrentPosition() < targetPosition){
+            indexer.setPower(0.2);
         }
+        if (intake.getCurrentPosition() > targetPosition){
+            indexer.setPower(-0.2);
+        }
+    }
+    public void turn(boolean direction) { // true is right
+//        if (canTurn == 0) {
+//            return;
+//        }
+//
+//        if (canTurn == 2) {
+////            origin = intake.getCurrentPosition();
+//            unitsTraveled = 0;
+//            canTurn = 3;
+//        }
 
 //        distTravelled
 //        if (Math.abs(encoder.getCurrentPosition()) < 0.67) {
-////            return true;
+//            return true;
 //        }
 
-        // targetPosition = 8192/3
 
-        if (Math.abs((intake.getCurrentPosition() % 8192/3) - (8192/3)) > 50 || unitsTraveled < 30) {
-            unitsTraveled++;
-            indexer.setPower((direction ? 1 : -1) * 0.27);
-        }
-        else {
-            canTurn = 0;
-            indexer.setPower(0);
+        if (direction) {
+            targetPosition += 8192/3;
+            shift_list(SensedColorAll, direction);
 
+        } else {
+            targetPosition -= 8192/3;
             shift_list(SensedColorAll, direction);
         }
+//        if (Math.abs((intake.getCurrentPosition() % 8192/3) - (8192/3)) > 50 || unitsTraveled < 30) {
+//            unitsTraveled++;
+//            indexer.setPower((direction ? 1 : -1) * 0.27);
+//        }
+//        else {
+//            canTurn = 0;
+//            indexer.setPower(0);
+//
+//
+//        }
 //
 //        if (direction) {
 //
@@ -163,13 +153,13 @@ public class Indexer {
 
     }
     public boolean turnRegardlessofColor() {
-        if (CurrentColor != SensedColor.NEITHER) {
+        if (SensedColorAll.get(0) != SensedColor.NEITHER) {
             turn(true); //idk what way this is bro
             return true;
-        } else if (CurrentColor2 != SensedColor.NEITHER) {
+        } else if (SensedColorAll.get(1) != SensedColor.NEITHER) {
             turn(true); //turn to slot 2 - change if needed
             return true;
-        } else if (CurrentColor3 != SensedColor.NEITHER) {
+        } else if (SensedColorAll.get(2) != SensedColor.NEITHER) {
             turn(false); //turn to slot 3 - change if needed
             return true;
         } else return false; //empty
@@ -177,14 +167,16 @@ public class Indexer {
     public boolean turnBasedOfColor(SensedColor color) { //PURPLE, GREEN, or NEITHER
         //the boolean returned = whether there exists a color
         //to rotate to.
-        if (CurrentColor == color) {
+        if (SensedColorAll.get(0) == color) {
             return true;
         }
-        else if (CurrentColor2 == color) {
-            turn(true); //same as turnRegardlessOfColor
+        else if (SensedColorAll.get(1) == color) {
+            turn(false); //same as turnRegardlessOfColor
+            shift_list(SensedColorAll,false);
             return true;
-        } else if (CurrentColor3 == color) {
-            turn(false);
+        } else if (SensedColorAll.get(2) == color) {
+            turn(true);
+            shift_list(SensedColorAll,true);
             return true;
         }
         else {
@@ -196,7 +188,7 @@ public class Indexer {
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         intake = hardwareMap.get(DcMotor.class, "intake");
-
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.addData("Gain", gain);
         colorSensor1.setGain(gain);
         colors1 = colorSensor1.getNormalizedColors();
@@ -210,9 +202,9 @@ public class Indexer {
 //            canTurn = 0;
 //        }
             if (hsvValues1[0] >= 163 && hsvValues1[0] <= 167) {
-                CurrentColor2 = SensedColor.GREEN;
+                SensedColorAll.set(0, SensedColor.GREEN);
             } else if (hsvValues1[0] >= 210 && hsvValues1[0] <= 230) {
-                CurrentColor2 = SensedColor.PURPLE;
+                SensedColorAll.set(0, SensedColor.PURPLE);
             }
 //            else {
 //                CurrentColor2 = SensedColor.NEITHER;
@@ -225,6 +217,5 @@ public class Indexer {
 //        else if (canTurn == 1) {
 //            canTurn = 2;
 //        }
-        SensedColorAll = (Arrays.asList(CurrentColor, CurrentColor2, CurrentColor3));
     }
 }

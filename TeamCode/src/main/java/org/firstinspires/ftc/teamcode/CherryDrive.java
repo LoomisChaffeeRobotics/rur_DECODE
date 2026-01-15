@@ -59,6 +59,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     @Override
     public void init() {
         //class initializations
+
         limeLightTurretSystem = new LimeLightTurretSystem();
         limeLightTurretSystem.init(hardwareMap, telemetry);
         indexClass = new Indexer();
@@ -92,14 +93,13 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         left_back.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /* imu starting stuff */
-        imu = hardwareMap.get(IMU.class, "imu");
-
+        imu = hardwareMap.get(IMU.class, "imu2");
         IMU.Parameters myIMUparameter;
 
         myIMUparameter = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
-                        RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
                 )
         );
 
@@ -136,6 +136,11 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         } else {
             flipper(false);
         }
+        if (gamepad2.x) {
+            turnSpinner(true);
+        } else if (gamepad2.b) {
+            turnSpinner(false);
+        } else {indexer.setPower(0);}
 
         // SPINDEXER - gp2 x,a,b (green,none,purple)
 //        if (gamepad2.x){
@@ -170,7 +175,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (gamepad1.start){
             imu.resetYaw();
         }
-
+        telemetry.update();
     }
 
 
@@ -208,9 +213,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         left_front.setPower(left_front_velocity/denominator);
         left_back.setPower(left_back_velocity/denominator);
 
-        telemetry.addData("leftstickx", gamepad1.left_stick_x);
+        telemetry.addData("imu", Yaw);
         telemetry.addData("denominator", denominator);
-//        telemetry.addData("yaw: ", Yaw);
 
     }
 
@@ -236,6 +240,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
         flipperUp = up;
+    }
+    public void turnSpinner(boolean direction) {
+        indexClass.turn(direction);
+        return;
     }
     public boolean switchColor(Indexer.SensedColor color){ // NOT DONE
        //COLOUR STUFFs
