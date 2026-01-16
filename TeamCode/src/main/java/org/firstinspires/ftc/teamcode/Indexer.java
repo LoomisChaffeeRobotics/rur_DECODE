@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.ftc.localization.Encoder;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,6 +21,7 @@ import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 //I've already moved all of the code into DriveClass - any changes that need to be made should be made there
 //10-7-25
@@ -51,8 +54,14 @@ import java.util.List;
  */
 @Configurable
 public class Indexer {
+//    TelemetryManager panelsTelemetry;
+    public static double indexerP = 0.0001;
+    //0.00007 is 0-ball
+    public static double indexerC = 0;
+    public static double indexerI = 0.000001;
 
     public double error;
+    public double sum;
     float gain = 31;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
@@ -68,6 +77,7 @@ public class Indexer {
         PURPLE, GREEN, NEITHER
     }
     public void removefirst(List<SensedColor> l) {
+//        panelsTelemetry = ftcTelemetry;
         l.set(0, SensedColor.NEITHER);
         SensedColorAll = l;
     }
@@ -91,13 +101,22 @@ public class Indexer {
         SensedColorAll = l;
         return l;
     }
-    public void indexerUpdate(double indexerC, double indexerP){
+    public void indexerUpdate(){
         error = targetPosition - intake.getCurrentPosition();
-        if (Math.abs(error) <0){
+        double product = indexerP * error;
+        if (Math.abs(error) <50){
             indexer.setPower(0);
+            sum = 0;
             return;
         }
-        indexer.setPower(Math.signum(error)* indexerC + indexerP * error);
+        if (Math.abs(error) < 300){
+            sum += error * indexerI;
+            product = 0;
+        }
+        indexer.setPower(Math.signum(error)* indexerC + product);
+
+//        panelsTelemetry.addData("error", error);
+//        panelsTelemetry.addData("sum", sum);
     }
     public void turn(boolean direction) { // true is right
 //        if (canTurn == 0) {
@@ -217,5 +236,9 @@ public class Indexer {
 //        else if (canTurn == 1) {
 //            canTurn = 2;
 //        }
+    }
+
+    public void spinIn (double power){ // I thought having 2 indexer motors would be bad but the probelm is still there.
+        intake.setPower(-power);
     }
 }

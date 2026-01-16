@@ -20,16 +20,16 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     //name of spinning turret is turretSpin
     //name of indexer is indexer
     //uncomment out the stuff later
-    public static double indexerP = 0.00007;
-    public static double indexerC = 0;
 
 
 
 
 
+//    private TelemetryManager panelsTelemetry;
+//    PanelsTelemetry
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
     LimeLightTurretSystem limeLightTurretSystem;
-    TelemetryManager panelsTelemetry;
+//    TelemetryManager panelsTelemetry;
     /** Class for the Spnidexer and the color sensor */
     Indexer indexClass;
 
@@ -44,7 +44,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     boolean isRed = false;
 
     /** List of Motors: */
-    DcMotor intake;
+//    DcMotor intake;
     DcMotor launcher; // top
     DcMotor launcher2; // bottom (i think)
     // v drive motors v
@@ -70,9 +70,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     @Override
     public void init() {
         //class initializations
-        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        panelsTelemetry.debug("hi");
-        panelsTelemetry.update(telemetry);
+//        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+//        panelsTelemetry.debug("hi");
+//        panelsTelemetry.update(telemetry);
         limeLightTurretSystem = new LimeLightTurretSystem();
         limeLightTurretSystem.init(hardwareMap, telemetry);
         indexClass = new Indexer();
@@ -84,7 +84,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             isRed = true;
         }
         //Setting the motors
-        intake = hardwareMap.get(DcMotor.class,"intake");
+//        intake = hardwareMap.get(DcMotor.class,"intake");
         launcher = hardwareMap.get(DcMotor.class,"launcher");
         launcher2 = hardwareMap.get(DcMotor.class,"launcher2");
         left_front = hardwareMap.get(DcMotor.class, "leftFront");
@@ -164,12 +164,15 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (!gamepad2.b){
             bdepressed = false;
         }
-        indexClass.indexerUpdate(indexerC,indexerP);
+        indexClass.indexerUpdate();
 
 
-        panelsTelemetry.addData("desiered", indexClass.targetPosition);
-        panelsTelemetry.addData("position", indexClass.intake.getCurrentPosition());
-        panelsTelemetry.update();
+
+        telemetry.addData("desiered", indexClass.targetPosition);
+        telemetry.addData("position", indexClass.intake.getCurrentPosition());
+        telemetry.addData("error", indexClass.error);
+        telemetry.addData("sum", indexClass.sum);
+//        telemetry.update();
 
 
 //         Driving
@@ -224,7 +227,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     public void runIntake(double power){ // Done!
 
         telemetry.addData("intake power: ",power);
-        intake.setPower(-power);
+        indexClass.spinIn(power);
     }
     public void startTurret(double power){ // Done?
         if (power == 0) {
