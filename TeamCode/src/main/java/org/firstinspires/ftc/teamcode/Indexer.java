@@ -201,7 +201,7 @@ public class Indexer {
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         intake = hardwareMap.get(DcMotor.class, "intake");
-        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.addData("Gain", gain);
         colorSensor1.setGain(gain);
         colors1 = colorSensor1.getNormalizedColors();
