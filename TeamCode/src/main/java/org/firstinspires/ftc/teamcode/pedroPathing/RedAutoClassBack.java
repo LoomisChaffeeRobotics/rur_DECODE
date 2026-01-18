@@ -4,52 +4,72 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
+import com.pedropathing.paths.callbacks.ParametricCallback;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Indexer;
 import org.firstinspires.ftc.teamcode.Launcher;
 import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
 
 import java.util.List;
-//change paths to pathcnages sometimes
 
 @Autonomous
 public class RedAutoClassBack extends OpMode {
-    LimeLightTurretSystem limelightclass;
+    DcMotor intake;
     Limelight3A limelight;
-    public LLResultTypes.FiducialResult fr;
+    LimeLightTurretSystem limelightclass;
     Indexer turningthing;
     Launcher launcher;
     Follower follower;
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    private Pose startPose = new Pose(144-56,9 , Math.PI/2); //heading in radians
-    private Pose pickupPose1 =  new Pose(144-24.0743,35.6656, Math.PI);
-    private Pose controlPoint1 =  new Pose(144-65.7585,37.226, Math.PI);
-    private Pose launchPoint1 = new Pose (144-61.5232,9.808, Math.PI);
-    private Pose controlPoint2 = new Pose(144-79.23384,61.873,Math.PI);
-    private Pose pickupPose2 = new Pose (144-23.8513,60.6315, Math.PI);
-    private Pose launchPoint2 = new Pose(144-64.4210,83.8142,Math.PI);
-    private Path scorePreload, pickup1, run2, pickup2, run3, pickupMain, score;
+    Pose startPose = new Pose(144-56,9 , -Math.PI); //heading in radians
+    Pose pickupPose1 =  new Pose(144-39.5,35.6656, -Math.PI);
+    Pose controlPoint1 =  new Pose(144-65.7585,37.226, -Math.PI);
+    Pose intakePose1 = new Pose(144-9.0743, 35.6656, -Math.PI);
+    Pose launchPoint1 = new Pose (144-61.5232,9.808, -Math.PI);
+    Pose controlPoint2 = new Pose(144-79.23384,61.873,-Math.PI);
+    Pose pickupPose2 = new Pose (144-39.5,60.6315, -Math.PI);
+    Pose intakePose2 = new Pose(144-9.0743, 60.6315, -Math.PI);
+    Pose launchPoint2 = new Pose(144-64.4210,83.8142,-Math.PI);
+    public LLResultTypes.FiducialResult fr;
+    private Path pickup1, run2, pickup2, run3;
+    private PathChain intake1chain, intake2chain;
     public void buildPaths() {
 
+        pickup1 =  new Path((new BezierCurve(startPose, controlPoint1, pickupPose1)));
+        pickup1.setConstantHeadingInterpolation(-Math.PI);
 
-        pickup1 =  new Path(new BezierCurve(startPose, controlPoint1, pickupPose1));
-        pickup1.setConstantHeadingInterpolation(0);
+        intake1chain = follower.pathBuilder()
+                .addPath(new BezierCurve(pickupPose1, intakePose1))
+                .setConstantHeadingInterpolation(-Math.PI)
+                .addParametricCallback(0.3, () -> turningthing.turn(true))
+                .addParametricCallback(0.6, () -> turningthing.turn(true))
+                .build();
 
-        run2 =  new Path(new BezierCurve(pickupPose1, launchPoint1));
-        run2.setConstantHeadingInterpolation(0);
+        run2 =  new Path(new BezierCurve(intakePose1, launchPoint1));
+        run2.setConstantHeadingInterpolation(-Math.PI);
 
         pickup2 = new Path(new BezierCurve(launchPoint1, controlPoint2, pickupPose2));
-        pickup2.setConstantHeadingInterpolation(0);
+        pickup2.setConstantHeadingInterpolation(-Math.PI);
 
-        run3 = new Path(new BezierCurve(pickupPose2,launchPoint2));
-        run3.setConstantHeadingInterpolation(0);
+        intake2chain = follower.pathBuilder()
+                .addPath(new BezierCurve(pickupPose2, intakePose2))
+                .setConstantHeadingInterpolation(-Math.PI)
+                .addParametricCallback(0.3, () -> turningthing.turn(true))
+                .addParametricCallback(0.6, () -> turningthing.turn(true))
+                .build();
+
+
+        run3 = new Path(new BezierCurve(intakePose2,launchPoint2));
+        run3.setConstantHeadingInterpolation(-Math.PI);
         //Path chains are chains of paths - so you can add multiple as shown below
         //i didn't import stuff because pepa 1.0.8 which we used to build this sample code last year uses different formatting and stuff so i had to change it
 
@@ -67,73 +87,92 @@ public class RedAutoClassBack extends OpMode {
             //it can also be used to get the X value of the robot's position
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
+                turningthing.turnBasedOffColor(patternArray[0]);
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
+                turningthing.turnBasedOffColor(patternArray[1]);
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
+                turningthing.turnBasedOffColor(patternArray[2]);
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
                 follower.followPath(pickup1);
-                //CANNOT do follower.followPath(scorePreload,true); because it's a path
                 setPathState(1);
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    follower.followPath(run2,true);
-                    turningthing.turnBasedOfColor(patternArray[0]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
-                    turningthing.turnBasedOfColor(patternArray[1]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
-                    turningthing.turnBasedOfColor(patternArray[2]); //these make it turns
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    intake.setPower(1);
+                    // run intake, do it here please :) 👍
+                    follower.updateCallbacks();
+                    follower.followPath(intake1chain, 0.7, true);
                     setPathState(2);
                 }
                 break;
             case 2:
                 if (!follower.isBusy()) {
-//                    follower.followPath();
+                    intake.setPower(0);
+                    follower.followPath(run2);
                     setPathState(3);
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
-//                    follower.followPath(movespec3);
+                    turningthing.turnBasedOffColor(patternArray[0]);
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    turningthing.turnBasedOffColor(patternArray[1]);
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    follower.followPath(pickup2);
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-//                    follower.followPath(pickup1);
+                    //run intake
+                    intake.setPower(1);
+                    follower.updateCallbacks();
+                    follower.followPath(intake2chain, 0.7, true);
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
-//                    follower.followPath(score);
+                    intake.setPower(0);
+                    follower.followPath(run3);
                     setPathState(6);
                 }
                 break;
             case 6:
                 if (!follower.isBusy()) {
-//                    follower.followPath(pickupMain);
-                    setPathState(7);
-                }
-                break;
-            case 7:
-                if (!follower.isBusy()) {
-//                    follower.followPath(score);
-                    setPathState(8);
-                }
-                break;
-            case 8:
-                if (!follower.isBusy()) {
-//                    follower.followPath(pickupMain);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if (!follower.isBusy()) {
+                    turningthing.turnBasedOffColor(patternArray[0]);
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    turningthing.turnBasedOffColor(patternArray[1]);
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
                     setPathState(-1);
-
                 }
+                break;
+//            case 7:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(score);
+//                    setPathState(8);
+//                }
+//                break;
+//            case 8:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(pickupMain);
+//                    setPathState(9);
+//                }
+//                break;
+//            case 9:
+//                if (!follower.isBusy()) {
+//                    setPathState(-1);
+//
+//                }
         }
     }
     @Override
     public void init() {
+        intake = hardwareMap.get(DcMotor.class, "intake");
         turningthing = new Indexer();
         turningthing.init(hardwareMap, telemetry);
         launcher = new Launcher();
@@ -146,18 +185,10 @@ public class RedAutoClassBack extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        telemetry.setMsTransmissionInterval(11);
-
-        limelight.pipelineSwitch(0);
 
         /*
          * Starts polling for data.  If you neglect to call start(), getLatestResult() will return null.
          */
-        limelight.start();
-    }
-    @Override
-    public void start() {
         LLResult result = limelight.getLatestResult();
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
         fr = fiducialResults.get(0);
@@ -182,13 +213,19 @@ public class RedAutoClassBack extends OpMode {
             telemetry.addLine("nothing");
         }
         telemetry.update();
+        limelight.start();
+    }
+    @Override
+    public void start() {
         opmodeTimer.resetTimer(); //not really used but would turn out useful
         setPathState(0);
     }
     @Override
     public void loop() {
-
+        turningthing.sensecolor();
+        turningthing.indexerUpdate();
         follower.update();
+        limelightclass.turntoAT(24);
         autoUpdate();
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());

@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import java.util.Arrays;
-
 @TeleOp
 public class indexerLogicTestingClass extends OpMode {
     Indexer indexer;
@@ -34,12 +32,12 @@ public class indexerLogicTestingClass extends OpMode {
         } else if (!gamepad1.b) { bdepressed = false; }
 
         if (gamepad1.x && !xdepressed){
-            indexer.turnBasedOfColor(Indexer.SensedColor.GREEN);
+            indexer.turnBasedOffColor(Indexer.SensedColor.GREEN);
             xdepressed = true;
         } else if (!gamepad1.x) { xdepressed = false; }
 
         if (gamepad1.y && !ydepressed){
-            indexer.turnBasedOfColor(Indexer.SensedColor.PURPLE);
+            indexer.turnBasedOffColor(Indexer.SensedColor.PURPLE);
             ydepressed = true;
         } else if (!gamepad1.y) { ydepressed = false; }
 

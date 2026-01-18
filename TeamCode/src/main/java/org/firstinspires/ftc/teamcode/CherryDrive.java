@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.bylazar.panels.Panels;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,9 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.bylazar.telemetry.*;
-
-import kotlin.jvm.internal.markers.KMutableList;
 
 @TeleOp // FINAL TELE-OP CLASS
 public class CherryDrive extends OpMode { //this clas is called CherryDrive because Cherry is a placeholder robot name
@@ -79,10 +75,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         indexClass.init(hardwareMap, telemetry);
         launchClass = new Launcher();
         launchClass.init(hardwareMap, telemetry);
-        telemetry.addLine("If red hit start if not don't ");
-        if (gamepad1.start) {
-            isRed = true;
-        }
         //Setting the motors
 //        intake = hardwareMap.get(DcMotor.class,"intake");
         launcher = hardwareMap.get(DcMotor.class,"launcher");
@@ -125,8 +117,18 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
 
     @Override
+    public void init_loop() {
+        telemetry.addLine("If red hit start if not don't ");
+        if (gamepad1.start) {
+            isRed = true;
+        }
+        telemetry.update();
+    }
+    public void start() {
+        indexClass.intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    @Override
     public void loop() {
-//        colorsensor.sensecolor(telemetry);
 
         //  INTAKE - gp1 RT
         if (gamepad1.right_trigger > 0.2) {
@@ -250,19 +252,14 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         indexClass.turn(direction);
         return;
     }
-    public boolean switchColor(Indexer.SensedColor color){ // NOT DONE
-       //COLOUR STUFFs
-
-        if (flipperUp || indexClass.canTurn == 0) {return false;}
-
-        if (indexClass.canTurn == 1) {
-            indexClass.sensecolor();
+    public boolean switchColor(Indexer.SensedColor color) { // NOT DONE
+        //COLOUR STUFFs
+        indexClass.sensecolor();
+        if (flipperUp) {
+            return false;
         }
         else {
-            indexClass.turnBasedOfColor(color);
-//            if (indexclass.canTurn == 0) {
-//                return true;
-//            }
+            indexClass.turnBasedOffColor(color);
         }
         telemetry.addData("color switched: ", color);
         return false;

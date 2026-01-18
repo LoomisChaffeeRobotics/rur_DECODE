@@ -1,23 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.view.View;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.ftc.localization.Encoder;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -182,7 +175,9 @@ public class Indexer {
             return true;
         } else return false; //empty
     }
-    public boolean turnBasedOfColor(SensedColor color) { //PURPLE, GREEN, or NEITHER
+
+
+    public boolean turnBasedOffColor(SensedColor color) { //PURPLE, GREEN, or NEITHER
         //the boolean returned = whether there exists a color
         //to rotate to.
         if (SensedColorAll.get(0) == color) {
@@ -214,12 +209,7 @@ public class Indexer {
 
     }
     public void sensecolor() { //must be run at all times
-        if (canTurn == 2) {
-            return;
-        }
-//        if (canTurn != 1) {
-//            canTurn = 0;
-//        }
+
             if (hsvValues1[0] >= 163 && hsvValues1[0] <= 167) {
                 SensedColorAll.set(0, SensedColor.GREEN);
             } else if (hsvValues1[0] >= 210 && hsvValues1[0] <= 230) {
@@ -228,14 +218,6 @@ public class Indexer {
 //            else {
 //                CurrentColor2 = SensedColor.NEITHER;
 //            }
-//        } else if (canTurn == 0) {
-//            canTurn = 1;
-//        }
-        canTurn = 2;
-
-//        else if (canTurn == 1) {
-//            canTurn = 2;
-//        }
     }
 
     public void spinIn (double power){ // I thought having 2 indexer motors would be bad but the probelm is still there.
