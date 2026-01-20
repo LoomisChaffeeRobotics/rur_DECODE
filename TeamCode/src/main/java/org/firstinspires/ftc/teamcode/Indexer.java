@@ -245,9 +245,9 @@ public class Indexer {
     }
     public void sensecolor() { //must be run at all times
 
-            if (hsvValues1[0] >= 163 && hsvValues1[0] <= 167) {
+            if (hsvValues1[0] >= 119 && hsvValues1[0] <= 181) {
                 SensedColorAll.set(0, SensedColor.GREEN);
-            } else if (hsvValues1[0] >= 210 && hsvValues1[0] <= 230) {
+            } else if (hsvValues1[0] >= 238 && hsvValues1[0] <= 242) {
                 SensedColorAll.set(0, SensedColor.PURPLE);
             }
 //            else {
