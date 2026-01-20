@@ -50,14 +50,14 @@ import java.util.List;
 @Configurable
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
-    public static double indexerP = 0.000015;
+    public static double indexerP = 0.0002;
     //0.00007 is 0-ball
     public static double indexerF = 0.00;
-    public static double indexerI = 0.000001;
-    public static double indexerD = 0.00015;
+    public static double indexerI = 0.000006;
+    public static double indexerD = -0.005;
+    public static double indexerSpeedCap = 0.15;
 
-    public double error;
-    public double sum;
+
     float gain = 31;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
@@ -101,36 +101,48 @@ public class Indexer {
         return l;
     }
 
+    public double sum;
     double prevPosition = 0;
     public void indexerUpdate(){
-        error = targetPosition - intake.getCurrentPosition();
-        double product = indexerP * error;
-        double derivitive = intake.getCurrentPosition() - prevPosition;
-        if( Math.abs(error)< 600){
-            sum += error * indexerI;
-            derivitive = 0;
-        } else {
+
+        double error = targetPosition - intake.getCurrentPosition();
+        double absError = Math.abs(error);
+
+        if ((targetPosition - prevPosition) * error < 0){
+            panlesTelem.addLine("switch");
             sum = 0;
         }
-        if (Math.abs(sum) > 0.5){
-            sum = Math.signum(sum)*0.5;
-        }
-        if (Math.abs(error) <50){
+
+        double product = indexerP * error;
+        double derivative = intake.getCurrentPosition() - prevPosition;
+        if (absError< 100){
             indexer.setPower(0);
             sum = 0;
-            return;
+        } else if (absError < 1000){
+            sum += error * indexerI;
+            if (Math.abs(sum) > 0.5) {sum = Math.signum(sum)*0.5;}
+
+            double power = Math.signum(error)* indexerF + product + sum + (indexerD * derivative);
+            power = Math.max(Math.min(power,indexerSpeedCap), -indexerSpeedCap);
+            indexer.setPower(power);
+
+        } else {
+            indexer.setPower(indexerSpeedCap * Math.signum(error));
+            sum = 0;
         }
-        double power = Math.signum(error)* indexerF + product + sum + (-indexerD * derivitive);
-        power = Math.max(Math.min(power,0.2), -0.2);
-        indexer.setPower(power);
+        prevPosition = intake.getCurrentPosition();
 
-//        panelsTelemetry.addData("error", error);
-//        panelsTelemetry.addData("sum", sum);
 
+        panlesTelem.addData("product: ", product);
+        panlesTelem.addData("sum: ", sum);
+        panlesTelem.addData("derivitive: ", indexerD * derivative);
         panlesTelem.addData("position: ", intake.getCurrentPosition());
         panlesTelem.addData("error: ", error);
         panlesTelem.addData("target: ", targetPosition);
+        panlesTelem.addData("power: ", indexer.getPower());
         panlesTelem.update();
+
+
     }
     public void turn(boolean direction) { // true is right
 //        if (canTurn == 0) {

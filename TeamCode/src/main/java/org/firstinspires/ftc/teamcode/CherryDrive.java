@@ -172,7 +172,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         telemetry.addData("desiered", indexClass.targetPosition);
         telemetry.addData("position", indexClass.intake.getCurrentPosition());
-        telemetry.addData("error", indexClass.error);
         telemetry.addData("sum", indexClass.sum);
 //        telemetry.update();
 
