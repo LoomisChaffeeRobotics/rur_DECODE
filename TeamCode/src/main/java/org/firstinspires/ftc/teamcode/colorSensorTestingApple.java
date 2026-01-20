@@ -41,7 +41,7 @@ public class colorSensorTestingApple extends OpMode {
         }
         sensor.setGain(gain);
         Color.colorToHSV(sensor.getNormalizedColors().toColor(), hsv);
-        if (hsv[0] >= 119 && hsv[0] <= 181) {
+        if (hsv[0] >= 157 && hsv[0] <= 167) {
             telemetry.addLine("GREEN");
         } else if (hsv[0] >= 238 && hsv[0] <= 242) {
             telemetry.addLine("PUJPEL");
