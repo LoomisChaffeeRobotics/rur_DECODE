@@ -131,7 +131,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     public void loop() {
 
         //  INTAKE - gp1 RT
-        if (gamepad1.right_trigger > 0.2) {
+        if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/) {
             runIntake(1d);
         }
         else {

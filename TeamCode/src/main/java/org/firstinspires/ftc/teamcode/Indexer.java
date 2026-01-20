@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -48,10 +50,11 @@ import java.util.List;
 @Configurable
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
-    public static double indexerP = 0.0001;
+    public static double indexerP = 0.000015;
     //0.00007 is 0-ball
-    public static double indexerC = 0;
+    public static double indexerF = 0.00;
     public static double indexerI = 0.000001;
+    public static double indexerD = 0.00015;
 
     public double error;
     public double sum;
@@ -63,9 +66,12 @@ public class Indexer {
     CRServo indexer;
     NormalizedColorSensor colorSensor1;
     public NormalizedRGBA colors1;
+    TelemetryManager panlesTelem;
     public int unitsTraveled = 0;
     ///  I removed "currentColor" because it was useless. we only need one list.
     public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(SensedColor.NEITHER, SensedColor.NEITHER, SensedColor.NEITHER));
+
+
     public enum SensedColor {
         PURPLE, GREEN, NEITHER
     }
@@ -94,22 +100,37 @@ public class Indexer {
         SensedColorAll = l;
         return l;
     }
+
+    double prevPosition = 0;
     public void indexerUpdate(){
         error = targetPosition - intake.getCurrentPosition();
         double product = indexerP * error;
+        double derivitive = intake.getCurrentPosition() - prevPosition;
+        if( Math.abs(error)< 600){
+            sum += error * indexerI;
+            derivitive = 0;
+        } else {
+            sum = 0;
+        }
+        if (Math.abs(sum) > 0.5){
+            sum = Math.signum(sum)*0.5;
+        }
         if (Math.abs(error) <50){
             indexer.setPower(0);
             sum = 0;
             return;
         }
-        if (Math.abs(error) < 300){
-            sum += error * indexerI;
-            product = 0;
-        }
-        indexer.setPower(Math.signum(error)* indexerC + product);
+        double power = Math.signum(error)* indexerF + product + sum + (-indexerD * derivitive);
+        power = Math.max(Math.min(power,0.2), -0.2);
+        indexer.setPower(power);
 
 //        panelsTelemetry.addData("error", error);
 //        panelsTelemetry.addData("sum", sum);
+
+        panlesTelem.addData("position: ", intake.getCurrentPosition());
+        panlesTelem.addData("error: ", error);
+        panlesTelem.addData("target: ", targetPosition);
+        panlesTelem.update();
     }
     public void turn(boolean direction) { // true is right
 //        if (canTurn == 0) {
@@ -201,11 +222,13 @@ public class Indexer {
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         intake = hardwareMap.get(DcMotor.class, "intake");
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.addData("Gain", gain);
         colorSensor1.setGain(gain);
         colors1 = colorSensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
+        panlesTelem = PanelsTelemetry.INSTANCE.getTelemetry();
 
     }
     public void sensecolor() { //must be run at all times
