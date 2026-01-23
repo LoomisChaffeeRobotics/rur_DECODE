@@ -94,8 +94,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        left_front.setDirection(DcMotorSimple.Direction.REVERSE);
-        left_back.setDirection(DcMotorSimple.Direction.REVERSE);
+        launcher2.setDirection(DcMotorSimple.Direction.REVERSE);
+        launcher.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /* imu starting stuff */
         imu = hardwareMap.get(IMU.class, "imu2");
@@ -130,13 +130,18 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     @Override
     public void loop() {
 
-        //  INTAKE - gp1 RT
-        if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/) {
+        //  INTAKE - gp1 RT, gp2 RB
+        if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/ /*nevermind keep this*/) {
             runIntake(1d);
         }
-        else {
+        else if (gamepad2.left_bumper || gamepad1.left_trigger > 0.2){
+            runIntake(-1);
+        } else {
             runIntake(0d);
         }
+
+
+
 
         //  TURRET - gp2 LT
         if (gamepad2.left_trigger > 0.2){
