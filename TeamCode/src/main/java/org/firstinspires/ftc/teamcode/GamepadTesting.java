@@ -60,9 +60,9 @@ public class GamepadTesting extends OpMode {
             runIndexer(0d);
         }
         if (gamepad1.dpad_up) {
-            flip(0.565);
+            flip(0.3189);
         } else if (gamepad1.dpad_down) {
-            flip(0.91d);
+            flip(0.6741d);
         }
         if (gamepad1.left_trigger > 0.2){
             startTurret(-0.3d);
