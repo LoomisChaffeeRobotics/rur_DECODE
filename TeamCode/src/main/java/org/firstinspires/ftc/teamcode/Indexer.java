@@ -247,17 +247,17 @@ public class Indexer {
 
     }
     public void sensecolor() { //must be run at all times
-
+//**TODO: CHANGE THE VALUES FOR PURPLEEEEE PLEASE
             if (hsvValues1[0] >= 119 && hsvValues1[0] <= 181) {
                 SensedColorAll.set(0, SensedColor.GREEN);
-            } else if (hsvValues1[0] >= 238 && hsvValues1[0] <= 242) {
+            } else if (hsvValues1[0] >= 238 && hsvValues1[0] <= 242) { //MUST BE CHANGED ASAPPPPPPPPP
                 SensedColorAll.set(0, SensedColor.PURPLE);
             }
 //            else {
 //                CurrentColor2 = SensedColor.NEITHER;
 //            }
     }
-
+//**
     public void spinIn (double power){ // I thought having 2 indexer motors would be bad but the probelm is still there.
         intake.setPower(-power);
     }

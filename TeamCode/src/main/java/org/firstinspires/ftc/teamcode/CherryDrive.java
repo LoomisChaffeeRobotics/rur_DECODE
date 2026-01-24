@@ -116,14 +116,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         flipper(false);
     }
 
-    @Override
-    public void init_loop() {
-        telemetry.addLine("If red hit start if not don't ");
-        if (gamepad1.start) {
-            isRed = true;
-        }
-        telemetry.update();
-    }
     public void start() {
         indexClass.intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }

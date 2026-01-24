@@ -4,14 +4,12 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Indexer;
 import org.firstinspires.ftc.teamcode.Launcher;
@@ -20,7 +18,7 @@ import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
 import java.util.List;
 
 @Autonomous
-public class simpleautobecasuewerestupid extends OpMode {
+public class SimpleAuto extends OpMode {
     Limelight3A limelight;
     LimeLightTurretSystem limelightclass;
     Indexer turningthing;
@@ -183,7 +181,6 @@ public class simpleautobecasuewerestupid extends OpMode {
     }
     @Override
     public void loop() {
-        turningthing.sensecolor();
         turningthing.indexerUpdate();
         follower.update();
         autoUpdate();
