@@ -18,6 +18,9 @@ public class indexerLogicTestingClass extends OpMode {
     public void init() {
         indexer = new Indexer();
         indexer.init(hardwareMap,telemetry);
+        indexer.SensedColorAll.set(0, Indexer.SensedColor.PURPLE);
+        indexer.SensedColorAll.set(1, Indexer.SensedColor.PURPLE);
+        indexer.SensedColorAll.set(2, Indexer.SensedColor.GREEN);
     }
 
     @Override

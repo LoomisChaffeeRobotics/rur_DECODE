@@ -58,7 +58,6 @@ public class Constants {
                 .OTOSLocalizer(localizerConstants)
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
-                .OTOSLocalizer(localizerConstants)
                 .build();
     }
 }

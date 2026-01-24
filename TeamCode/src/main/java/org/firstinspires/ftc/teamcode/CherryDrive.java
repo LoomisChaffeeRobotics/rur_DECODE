@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,6 +10,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import com.pedropathing.util.Timer;
 
 @TeleOp // FINAL TELE-OP CLASS
 public class CherryDrive extends OpMode { //this clas is called CherryDrive because Cherry is a placeholder robot name
@@ -35,7 +40,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     /** weather or not we turn the turret automatically (do we want ts?) */
     boolean autoTurn = true;
     /** if this isn't self-explanatory re-do you are 5th grade education */
-    boolean flipperUp = false;
+    Timer flipperUp;
     // whether we're red alliance or not - can be set
     boolean isRed = false;
 
@@ -94,8 +99,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        launcher2.setDirection(DcMotorSimple.Direction.REVERSE);
-        launcher.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /* imu starting stuff */
         imu = hardwareMap.get(IMU.class, "imu2");
@@ -114,6 +117,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
         flipper(false);
+        flipperUp = new Timer();
+        flipperUp.resetTimer();
+
     }
 
     public void start() {
@@ -121,6 +127,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     @Override
     public void loop() {
+
+//        indexClass.sensecolor();
 
         //  INTAKE - gp1 RT, gp2 RB
         if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/ /*nevermind keep this*/) {
@@ -132,6 +140,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             runIntake(0d);
         }
 
+        if (gamepad2.dpad_up){ //reverse launcher gp2 DIP-DUP
+            launcher.setPower(-0.5);
+            launcher2.setPower(-0.5);
+        } else
 
 
 
@@ -144,10 +156,14 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         //  FLIPPER - gp2 RT
         if (gamepad2.right_trigger > 0.2){
+            flipperUp.resetTimer();
             flipper(true);
+//            flipperUp = true;
         } else {
             flipper(false);
+//            flipperUp = false;
         }
+
 
         // SPINNER - gp2 X and B
         if (gamepad2.x && !xdepressed) {
@@ -163,13 +179,20 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (!gamepad2.b){
             bdepressed = false;
         }
-        indexClass.indexerUpdate();
 
+        //Roan thing
+        if (flipperUp.getElapsedTime() <= 1000){
+            indexer.setPower(0);
+        } else {
+            indexClass.indexerUpdate();
+        }
 
 
         telemetry.addData("desiered", indexClass.targetPosition);
         telemetry.addData("position", indexClass.intake.getCurrentPosition());
         telemetry.addData("sum", indexClass.sum);
+
+        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.update();
 
 
@@ -179,6 +202,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             imu.resetYaw();
         }
         telemetry.update();
+
     }
 
 
@@ -209,6 +233,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         if(max > 1){
             denominator = max;
+        }
+        if (gamepad1.a){
+            denominator *= 3;
         }
 
         right_front.setPower(right_front_velocity/denominator);
@@ -242,16 +269,15 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         double flipUP = 0.3189d;
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
-        flipperUp = up;
     }
     public void turnSpinner(boolean direction) {
         indexClass.turn(direction);
-        return;
+
     }
     public boolean switchColor(Indexer.SensedColor color) { // NOT DONE
         //COLOUR STUFFs
         indexClass.sensecolor();
-        if (flipperUp) {
+        if (true) {
             return false;
         }
         else {

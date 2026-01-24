@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
+
 import android.graphics.Color;
 
 import com.bylazar.configurables.annotations.Configurable;
@@ -67,6 +69,7 @@ public class Indexer {
     NormalizedColorSensor colorSensor1;
     public NormalizedRGBA colors1;
     TelemetryManager panlesTelem;
+    double error;
     public int unitsTraveled = 0;
     ///  I removed "currentColor" because it was useless. we only need one list.
     public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(SensedColor.NEITHER, SensedColor.NEITHER, SensedColor.NEITHER));
@@ -105,7 +108,7 @@ public class Indexer {
     double prevPosition = 0;
     public void indexerUpdate(){
 
-        double error = targetPosition - intake.getCurrentPosition();
+        error = targetPosition - intake.getCurrentPosition();
         double absError = Math.abs(error);
 
         if ((targetPosition - prevPosition) * error < 0){
@@ -146,7 +149,7 @@ public class Indexer {
     }
     public void turn(boolean direction) { // true is right
 
-        sensecolor();
+//        sensecolor();
 
 //        if (canTurn == 0) {
 //            return;
@@ -220,11 +223,11 @@ public class Indexer {
             return true;
         }
         else if (SensedColorAll.get(1) == color) {
-            turn(false); //same as turnRegardlessOfColor
+            turn(true); //same as turnRegardlessOfColor
             shift_list(SensedColorAll,false);
             return true;
         } else if (SensedColorAll.get(2) == color) {
-            turn(true);
+            turn(false);
             shift_list(SensedColorAll,true);
             return true;
         }
@@ -239,7 +242,6 @@ public class Indexer {
         intake = hardwareMap.get(DcMotor.class, "intake");
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        telemetry.addData("Gain", gain);
         colorSensor1.setGain(gain);
         colors1 = colorSensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
@@ -250,7 +252,7 @@ public class Indexer {
 //**TODO: CHANGE THE VALUES FOR PURPLEEEEE PLEASE
             if (hsvValues1[0] >= 119 && hsvValues1[0] <= 181) {
                 SensedColorAll.set(0, SensedColor.GREEN);
-            } else if (hsvValues1[0] >= 238 && hsvValues1[0] <= 242) { //MUST BE CHANGED ASAPPPPPPPPP
+            } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 233) { //MUST BE CHANGED ASAPPPPPPPPP
                 SensedColorAll.set(0, SensedColor.PURPLE);
             }
 //            else {

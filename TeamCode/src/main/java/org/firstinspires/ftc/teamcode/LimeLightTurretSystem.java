@@ -24,6 +24,7 @@ public class LimeLightTurretSystem {
     public Pose3D botpose;
     public Position positionrelativetoapriltag;
     public boolean yesorno = true;
+
     public LLResult result;
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
@@ -31,6 +32,7 @@ public class LimeLightTurretSystem {
     public double kineticerror;
     public double distance_from_apriltag = 0; //meters
     public CRServo turretSpin;
+    public List<LLResultTypes.FiducialResult> fiducialResults;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
@@ -46,7 +48,6 @@ public class LimeLightTurretSystem {
 
     }
     public void turnWithKinetic() { //this doesn't work we need to ask doc sbout this
-        result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
         velocityheading = sparkfun.velocity.h; //i dont know what velocity.h is but im hoping it's the angle of the velocity
@@ -113,7 +114,7 @@ public class LimeLightTurretSystem {
         if (value == 0) {
             distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
         } else {
-            distance_from_apriltag = value;
+            return value;
         }
 
         angleerror = targetangle - botposeangle;

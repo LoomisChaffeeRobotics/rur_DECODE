@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
 import java.util.List;
 
 @Autonomous
-public class SimpleAuto extends OpMode {
+public class SAR extends OpMode {
     LimeLightTurretSystem limelightclass;
     Indexer turningthing;
     LLResultTypes.FiducialResult result;
@@ -29,9 +29,8 @@ public class SimpleAuto extends OpMode {
     Follower follower;
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    Pose startPose = new Pose(56,9 , Math.toRadians(78)); //heading in radians
-    Pose endPose = new Pose(45, 18,Math.toRadians(78));
-    public LLResultTypes.FiducialResult fr;
+    Pose startPose = new Pose(144-56,9 , Math.toRadians(102)); //heading in radians
+    Pose endPose = new Pose(144-32, 18,Math.toRadians(102));
     private Path move;
     public void buildPaths() {
         move = new Path(new BezierCurve(startPose, endPose));
@@ -51,17 +50,17 @@ public class SimpleAuto extends OpMode {
             case 0:
 //                turningthing.turn(false);
                 actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 2676.7) {
+                while (actionTimer.getElapsedTime() < 1676.7) {
                     launcher.shoot(5.3);
                 }
                 flipper.setPosition(0.3189);
                 actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 476.7){
+                while (actionTimer.getElapsedTime() < 676.7){
                 }
                 flipper.setPosition(0.6741);
                 turningthing.turn(false);
                 actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 4676.7) {
+                while (actionTimer.getElapsedTime() < 3676.7) {
                     turningthing.indexerUpdate();
                     launcher.shoot(5.3);
                 }
@@ -73,7 +72,7 @@ public class SimpleAuto extends OpMode {
                 flipper.setPosition(0.6741);
                 turningthing.turn(false);
                 actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 4676.7) {
+                while (actionTimer.getElapsedTime() < 3676.7) {
                     launcher.shoot(5.3);
                     turningthing.indexerUpdate();
                 }
@@ -88,10 +87,6 @@ public class SimpleAuto extends OpMode {
             case 1:
                 if (!follower.isBusy()) {
                     follower.followPath(move);
-                    actionTimer.resetTimer();
-                    while (actionTimer.getElapsedTime() < 500) {
-//                        follower.drivetrain.setXVelocity(0.1);
-                    }
                 }
                 setPathState(-1);
                 break;

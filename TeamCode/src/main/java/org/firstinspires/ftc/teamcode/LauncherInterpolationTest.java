@@ -8,6 +8,7 @@ public class LauncherInterpolationTest extends OpMode {
 
     Launcher launcherClass;
     LimeLightTurretSystem limelight;
+    double distance;
 
     @Override
     public void init() {
@@ -20,9 +21,15 @@ public class LauncherInterpolationTest extends OpMode {
 
     @Override
     public void loop() {
-        launcherClass.shoot(limelight.getDistance_from_apriltag(0));
-        telemetry.addData("Distance from APrilag", limelight.getDistance_from_apriltag(0));
+        launcherClass.shoot(distance);
+        if (gamepad1.a){
+            distance += 0.01;
+        } else if (gamepad1.b){
+            distance -= 0.01;
+        }
+        telemetry.addData("Distance, meters", distance);
        telemetry.addData("botpose", limelight.botpose);
+
        telemetry.update();
     }
 
