@@ -99,13 +99,13 @@ public class Launcher {
        
         result = find_closest_x(distance); //finds distance from apriltag - two numbers: upper and lower bound
 
-//        if (result[0] >= 1.5) {
 //
-//            time_in_flight_value_0 = time_in_flights[(int) (result[0] * 2) - 1];
-//            lower_motor_value_0 = lower_motor_speeds[(int) (result[0] * 2) - 1];
-//            upper_motor_value_0 = upper_motor_speeds[(int) (result[0] * 2) - 1];
 //
-//        }
+//            time_in_flight_value_0 = time_in_flights[(int) (result[0] * 50) - 48];
+//            lower_motor_value_0 = lower_motor_speeds[(int) (result[0] * 50) - 48];
+//            upper_motor_value_0 = upper_motor_speeds[(int) (result[0] * 50) - 48];
+//
+//
 //        else if (result[0] == 0.5) {
 //
 //            time_in_flight_value_0 = time_in_flights[0];
