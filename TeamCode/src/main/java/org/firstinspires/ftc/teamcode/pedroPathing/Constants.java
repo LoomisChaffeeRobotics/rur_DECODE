@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.pedropathing.control.FilteredPIDFCoefficients;
+import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -24,9 +26,12 @@ public class Constants {
             .mass(10.5)
             .forwardZeroPowerAcceleration(-46.8420957445043)
             .lateralZeroPowerAcceleration(-59.5523410120594)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.3,0,0,0))
+            .headingPIDFCoefficients(new PIDFCoefficients(1,0,0,0.01))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.003,0,0.00001,0,0))
             ;
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 0.7, 1);
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -35,10 +40,10 @@ public class Constants {
             .leftFrontMotorName("leftFront")
             .leftRearMotorName("leftBack")
             .rightRearMotorName("rightBack")
-//            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-//            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-//            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-//            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(49.533994179072344)
             .yVelocity(34.377330870140256)
             ;
@@ -47,7 +52,7 @@ public class Constants {
             .hardwareMapName("sensor_otos")
             .linearUnit(DistanceUnit.INCH)
             .angleUnit(AngleUnit.RADIANS)
-            .offset(new SparkFunOTOS.Pose2D(6.5,5.5,-Math.PI/2))
+            .offset(new SparkFunOTOS.Pose2D(7,5.5,-Math.PI/2))
             .linearScalar(1.31)
             .angularScalar(0.96)
             ;
