@@ -43,6 +43,40 @@ public class SimpleAuto extends OpMode {
         pathState = state;
         pathTimer.resetTimer();
     }
+    public void shootingMacro(double shootingdistance) {
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 2676.7) {
+            launcher.shoot(shootingdistance);
+        }
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 476.7){
+        }
+        flipper.setPosition(0.6741);
+        turningthing.turn(false);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 4676.7) {
+            turningthing.indexerUpdate();
+            launcher.shoot(shootingdistance);
+        }
+
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 676.7){
+        }
+        flipper.setPosition(0.6741);
+        turningthing.turn(false);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 4676.7) {
+            launcher.shoot(shootingdistance);
+            turningthing.indexerUpdate();
+        }
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 676.7){
+        }
+        flipper.setPosition(0.6741);
+    }
     public void autoUpdate() {
         switch (pathState) {
             //these cases can also be used to check for time (if(pathTimer.getElapsedTimeSeconds() >1) {}
@@ -50,38 +84,7 @@ public class SimpleAuto extends OpMode {
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
 //                turningthing.turn(false);
-                actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 2676.7) {
-                    launcher.shoot(5.3);
-                }
-                flipper.setPosition(0.3189);
-                actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 476.7){
-                }
-                flipper.setPosition(0.6741);
-                turningthing.turn(false);
-                actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 4676.7) {
-                    turningthing.indexerUpdate();
-                    launcher.shoot(5.3);
-                }
-
-                flipper.setPosition(0.3189);
-                actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 676.7){
-                }
-                flipper.setPosition(0.6741);
-                turningthing.turn(false);
-                actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 4676.7) {
-                    launcher.shoot(5.3);
-                    turningthing.indexerUpdate();
-                }
-                flipper.setPosition(0.3189);
-                actionTimer.resetTimer();
-                while (actionTimer.getElapsedTime() < 676.7){
-                }
-                flipper.setPosition(0.6741);
+                shootingMacro(5.3);
                 setPathState(1);
 
                 break;
@@ -217,6 +220,7 @@ public class SimpleAuto extends OpMode {
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("patternArray", patternArray);
         telemetry.addData("timet", actionTimer);
         telemetry.update();
     }

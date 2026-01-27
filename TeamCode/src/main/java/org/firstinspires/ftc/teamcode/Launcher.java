@@ -78,7 +78,7 @@ public class Launcher {
         }
 
         if (target_x >= 5.48) {
-            return new double[]{5.48, 0.96};
+            return new double[]{0.96, 5.48}; //??? why
         }
 //        else if (target_x >= 1.2 && target_x < 1.5) {
 //            return new double[]{1.2, 1.5};
@@ -99,14 +99,24 @@ public class Launcher {
        
         result = find_closest_x(distance); //finds distance from apriltag - two numbers: upper and lower bound
 
-//
+//         if (result[1] != 0.96) {
 //
 //            time_in_flight_value_0 = time_in_flights[(int) (result[0] * 50) - 48];
 //            lower_motor_value_0 = lower_motor_speeds[(int) (result[0] * 50) - 48];
-//            upper_motor_value_0 = upper_motor_speeds[(int) (result[0] * 50) - 48];
+//            upper_motor_value_0 = upper_motor_speeds[(int) (result[0] * 50) - 48]
+//            time_in_flight_value_1 = time_in_flights[(int) (result[0] * 50) - 47];
+//            lower_motor_value_1 = lower_motor_speeds[(int) (result[0] * 50) - 47];
+//            upper_motor_value_1 = upper_motor_speeds[(int) (result[0] * 50) - 47];
 //
-//
-//        else if (result[0] == 0.5) {
+//      } else {
+//            time_in_flight_value_0 = 0;
+//            lower_motor_value_0 = 0;
+//            upper_motor_value_0 = 0;
+//            time_in_flight_value_1 = time_in_flights[0];
+//            lower_motor_value_1 = lower_motor_speeds[0];
+//            upper_motor_value_1 = upper_motor_speeds[0];
+//      }
+//        else if (result[0] == ) {
 //
 //            time_in_flight_value_0 = time_in_flights[0];
 //            lower_motor_value_0 = lower_motor_speeds[0];
