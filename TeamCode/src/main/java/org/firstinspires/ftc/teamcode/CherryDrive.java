@@ -162,7 +162,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
         //  FLIPPER - gp2 RT
-        if (gamepad2.right_trigger > 0.2){
+        if (gamepad2.right_trigger > 0.2 && Math.abs(indexClass.error) < 500){
             flipperUp.resetTimer();
             flipper(true);
 //            flipperUp = true;
@@ -187,7 +187,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             bdepressed = false;
         }
 
-        //Roan thing
+        //spindexer cannot spin with the flipper up
         if (flipperUp.getElapsedTime() <= 1000){
             indexer.setPower(0);
         } else {
