@@ -32,23 +32,25 @@ public class EmptyTeleOp extends OpMode {
 
     @Override
     public void loop() {
-//        if (gamepad1.aWasPressed()) {
-//            indexClass.turnBasedOffColor(Indexer.SensedColor.GREEN);
-//        } else if  (gamepad1.yWasPressed()) {
-//            indexClass.turnBasedOffColor(Indexer.SensedColor.PURPLE);
-//        } else if (gamepad1.bWasPressed()) {
-//            indexClass.removefirst(indexClass.SensedColorAll);
-//        }
-//        if (indexClass.error < 100) {
-//            indexClass.sensecolor();
-//        }
+        if (gamepad1.bWasPressed()) {
+            indexClass.turnBasedOffColor(Indexer.SensedColor.GREEN);
+        } else if  (gamepad1.xWasPressed()) {
+            indexClass.turnBasedOffColor(Indexer.SensedColor.PURPLE);
+        }
+        if (indexClass.error < 100) {
+            indexClass.sensecolor();
+        }
         if (gamepad1.aWasPressed()) {
             indexClass.turn(false);
         } else if (gamepad1.yWasPressed()) {
             indexClass.turn(true);
         }
+        if (gamepad1.dpadUpWasPressed()) {
+            indexClass.removefirst(indexClass.SensedColorAll);
+        }
         indexClass.indexerUpdate();
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+        telemetry.addData("error", indexClass.error);
         telemetry.update();
         t2.addData("curPose", indexClass.curPose);
         t2.addData("Targ", indexClass.targetPosition);
