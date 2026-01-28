@@ -45,8 +45,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     // whether we're red alliance or not - can be set
     boolean isRed = false;
 
+
     /** List of Motors: */
-//    DcMotor intake;
     DcMotor launcher; // top
     DcMotor launcher2; // bottom (i think)
     // v drive motors v

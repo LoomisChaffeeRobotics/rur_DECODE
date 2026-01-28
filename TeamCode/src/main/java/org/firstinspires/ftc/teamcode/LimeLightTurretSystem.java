@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
@@ -104,7 +105,7 @@ public class LimeLightTurretSystem {
     }
 
 
-    public double getDistance_from_apriltag(double value) {
+    public double getDistance_from_apriltag(double value /*im not sure what that does */) {
         //BLUEEEEEEEEE
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
@@ -127,6 +128,19 @@ public class LimeLightTurretSystem {
         double degrees = encoder.getCurrentPosition() * 0.008772;
         degrees %= 360;
         return degrees;
+    }
+
+    /** gives the position relative to the april tag */
+    public Pose2D getPositionRelative(boolean isBlue){
+        result = limelight.getLatestResult();
+        botpose = (result != null) ? result.getBotpose() : botpose;
+
+        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
+        return new Pose2D(DistanceUnit.METER,
+                botpose.getPosition().x + 1.482,
+                botpose.getPosition().y + (isBlue?1.413:-1.413),
+                AngleUnit.DEGREES,
+                botposeangle);
     }
 }
 
