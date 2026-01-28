@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 
 import android.graphics.Color;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -50,6 +52,7 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 @Configurable
+@Config
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
     public static double indexerP = 0.0002;
@@ -69,8 +72,14 @@ public class Indexer {
     NormalizedColorSensor colorSensor1;
     public NormalizedRGBA colors1;
     TelemetryManager panlesTelem;
+    public double curPose;
     double error;
     public int unitsTraveled = 0;
+    public double sum;
+    double prevPosition = 0;
+    double prevError = 0;
+    public double power;
+    ElapsedTime PIDTimer = new ElapsedTime();
     ///  I removed "currentColor" because it was useless. we only need one list.
     public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(SensedColor.NEITHER, SensedColor.NEITHER, SensedColor.NEITHER));
 
@@ -104,9 +113,8 @@ public class Indexer {
         return l;
     }
 
-    public double sum;
-    double prevPosition = 0;
     public void indexerUpdate(){
+        curPose = intake.getCurrentPosition();
 
         error = targetPosition - intake.getCurrentPosition();
         double absError = Math.abs(error);
@@ -117,32 +125,31 @@ public class Indexer {
         }
 
         double product = indexerP * error;
-        double derivative = intake.getCurrentPosition() - prevPosition;
+        double derivative = (error - prevError)/PIDTimer.seconds();
         if (absError< 100){
             indexer.setPower(0);
             sum = 0;
-        } else if (absError < 1000){
+        } else {
             sum += error * indexerI;
             if (Math.abs(sum) > 0.5) {sum = Math.signum(sum)*0.5;}
 
-            double power = Math.signum(error)* indexerF + product + sum + (indexerD * derivative);
-            power = Math.max(Math.min(power,indexerSpeedCap), -indexerSpeedCap);
+            power = Math.signum(error)* indexerF + product + sum + (indexerD * derivative);
+//            power = Math.max(Math.min(power,indexerSpeedCap), -indexerSpeedCap);
             indexer.setPower(power);
 
-        } else {
-            indexer.setPower(indexerSpeedCap * Math.signum(error));
-            sum = 0;
         }
         prevPosition = intake.getCurrentPosition();
+        prevError = error;
+        PIDTimer.reset();
 
 
-        panlesTelem.addData("product: ", product);
-        panlesTelem.addData("sum: ", sum);
-        panlesTelem.addData("derivitive: ", indexerD * derivative);
+        panlesTelem.addData("product: ", indexerP);
+        panlesTelem.addData("sum: ", indexerI);
+        panlesTelem.addData("derivitive: ", indexerD);
         panlesTelem.addData("position: ", intake.getCurrentPosition());
         panlesTelem.addData("error: ", error);
         panlesTelem.addData("target: ", targetPosition);
-        panlesTelem.addData("power: ", indexer.getPower());
+        panlesTelem.addData("power: ", power);
         panlesTelem.update();
 
 
@@ -169,11 +176,11 @@ public class Indexer {
 
         if (direction) {
             targetPosition += 8192/3;
-            shift_list(SensedColorAll, direction);
+            shift_list(SensedColorAll, !direction);
 
         } else {
             targetPosition -= 8192/3;
-            shift_list(SensedColorAll, direction);
+            shift_list(SensedColorAll, !direction);
         }
 //        if (Math.abs((intake.getCurrentPosition() % 8192/3) - (8192/3)) > 50 || unitsTraveled < 30) {
 //            unitsTraveled++;
@@ -224,11 +231,11 @@ public class Indexer {
         }
         else if (SensedColorAll.get(1) == color) {
             turn(true); //same as turnRegardlessOfColor
-            shift_list(SensedColorAll,false);
+
             return true;
         } else if (SensedColorAll.get(2) == color) {
             turn(false);
-            shift_list(SensedColorAll,true);
+
             return true;
         }
         else {
@@ -246,11 +253,12 @@ public class Indexer {
         colors1 = colorSensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
         panlesTelem = PanelsTelemetry.INSTANCE.getTelemetry();
+        PIDTimer.reset();
 
     }
     public void sensecolor() { //must be run at all times
 //**TODO: CHANGE THE VALUES FOR PURPLEEEEE PLEASE
-            if (hsvValues1[0] >= 119 && hsvValues1[0] <= 181) {
+            if (hsvValues1[0] >= 157 && hsvValues1[0] <= 167) {
                 SensedColorAll.set(0, SensedColor.GREEN);
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 233) { //MUST BE CHANGED ASAPPPPPPPPP
                 SensedColorAll.set(0, SensedColor.PURPLE);

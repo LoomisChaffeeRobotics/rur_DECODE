@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -26,8 +28,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
 
-//    private TelemetryManager panelsTelemetry;
-//    PanelsTelemetry
+    private TelemetryManager panelsTelemetry;
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
     LimeLightTurretSystem limeLightTurretSystem;
 //    TelemetryManager panelsTelemetry;
@@ -71,9 +72,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     @Override
     public void init() {
         //class initializations
-//        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-//        panelsTelemetry.debug("hi");
-//        panelsTelemetry.update(telemetry);
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+        panelsTelemetry.update(telemetry);
         limeLightTurretSystem = new LimeLightTurretSystem();
         limeLightTurretSystem.init(hardwareMap, telemetry);
         indexClass = new Indexer();
@@ -102,6 +102,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         right_front.setDirection(DcMotorSimple.Direction.FORWARD);
         left_back.setDirection(DcMotorSimple.Direction.FORWARD);
         right_back.setDirection(DcMotorSimple.Direction.FORWARD);
+        indexClass.SensedColorAll.set(0, Indexer.SensedColor.NEITHER);
+        indexClass.SensedColorAll.set(1, Indexer.SensedColor.NEITHER);
+        indexClass.SensedColorAll.set(2, Indexer.SensedColor.NEITHER);
 
 
         /* imu starting stuff */
@@ -132,7 +135,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     @Override
     public void loop() {
 
-//        indexClass.sensecolor();
+        indexClass.sensecolor();
 
         //  INTAKE - gp1 RT, gp2 RB
         if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/ /*nevermind keep this*/) {
@@ -191,11 +194,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             indexClass.indexerUpdate();
         }
 
-
         telemetry.addData("desiered", indexClass.targetPosition);
         telemetry.addData("position", indexClass.intake.getCurrentPosition());
         telemetry.addData("sum", indexClass.sum);
-
+        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
         telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.update();
 
