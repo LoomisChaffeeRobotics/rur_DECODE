@@ -2,12 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class flippertester extends OpMode{
 
-//    DcMotor leftFront;d
+//    DcMotor leftFront;
 //
 //    DcMotor leftRear;
 //
@@ -15,23 +16,22 @@ public class flippertester extends OpMode{
 //
 //    DcMotor rightRear;
 
-    Servo Flipper;
+    CRServo turretSpin;
     @Override
     public void init() {
-        Flipper = hardwareMap.get(Servo.class, "flipper");
+        turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
 
     }
 
     @Override
     public void loop() {
         if(gamepad1.a){
-            Flipper.setPosition(Flipper.getPosition() + 0.001); // up
-        }
-        if(gamepad1.b){
-            Flipper.setPosition(Flipper.getPosition() - 0.001); // down
-        }
+            turretSpin.setPower(0.1);
+        } else if(gamepad1.b){
+            turretSpin.setPower(-0.1);
+        } else {turretSpin.setPower(0);}
 
-        telemetry.addData("servo position: ",Flipper.getPosition());
+        telemetry.addData("servo posiwer: ",turretSpin.getPower());
         telemetry.update();
 
 

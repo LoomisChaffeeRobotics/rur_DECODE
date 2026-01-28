@@ -55,11 +55,11 @@ import java.util.List;
 @Config
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
-    public static double indexerP = 0.0002;
+    public static double indexerP = 0.0005;
     //0.00007 is 0-ball
     public static double indexerF = 0.00;
-    public static double indexerI = 0.000006;
-    public static double indexerD = -0.005;
+    public static double indexerI = 0.000001;
+    public static double indexerD = 0.000038;
     public static double indexerSpeedCap = 0.15;
 
 
@@ -257,11 +257,14 @@ public class Indexer {
 
     }
     public void sensecolor() { //must be run at all times
-//**TODO: CHANGE THE VALUES FOR PURPLEEEEE PLEASE
-            if (hsvValues1[0] >= 157 && hsvValues1[0] <= 167) {
+
+        Color.colorToHSV(colors1.toColor(), hsvValues1);
+            if (hsvValues1[0] >= 160.5 && hsvValues1[0] <= 168) {
                 SensedColorAll.set(0, SensedColor.GREEN);
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 233) { //MUST BE CHANGED ASAPPPPPPPPP
                 SensedColorAll.set(0, SensedColor.PURPLE);
+            } else {
+                SensedColorAll.set(0, SensedColor.NEITHER);
             }
 //            else {
 //                CurrentColor2 = SensedColor.NEITHER;
