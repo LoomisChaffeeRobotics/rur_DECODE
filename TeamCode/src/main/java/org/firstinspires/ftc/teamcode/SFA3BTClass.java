@@ -5,6 +5,7 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
@@ -34,7 +35,7 @@ public class SFA3BTClass extends OpMode {
 
     @Override
     public void loop() {
-        boolean ATSeen = true;
+        boolean ATSeen = false;
 
         if (gamepad1.a && Objects.equals(teamColor, "none")){ // Objects.equals(String, String) just sees if theyre equal
             teamColor = "red";
@@ -45,42 +46,21 @@ public class SFA3BTClass extends OpMode {
             desiredID = 20;
         }
 
-        if (limelight.result.getFiducialResults() == null)
-        {
-            ATSeen = false;
-        }
 
         //makes the results list
         List<LLResultTypes.FiducialResult> results = limelight.result.getFiducialResults();
 
-        int goodIndex = 10; //no way it sees 10 AT's like no nuh uh i dont belive it.
 
-        if (ATSeen){
-            for (int i = 0; i < limelight.result.getFiducialResults().size(); i++){
-                if (results.get(i).getFiducialId() == desiredID){
-                    goodIndex = i;
-                    limelight.turntoAT(desiredID);
-                    Position pos = results.get(i).getCameraPoseTargetSpace().getPosition();
-                    double head = results.get(i).getCameraPoseTargetSpace().getOrientation().getYaw();
-                    SparkFunOTOS.Pose2D cameraPoseRelativeToAprilTag = new SparkFunOTOS.Pose2D(pos.x, pos.y,head); //TODO: TEST TO SEE IF X IS RIGHT AND Y IS FORWARD!!!!!!!!
-                    double angleFromATToRobot = Math.atan(cameraPoseRelativeToAprilTag.y/cameraPoseRelativeToAprilTag.x);
-                    double angle = Math.toRadians(results.get(i).getTargetXDegrees());
-                    double netAngle = angleFromATToRobot - angle;
-                    double addedVectorx = 7.5 * Math.cos(netAngle) * Math.signum(angleFromATToRobot);
-                    double addedVectory = 7.5 * Math.sin(netAngle) * Math.signum(angleFromATToRobot);
-                    roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(cameraPoseRelativeToAprilTag.x + addedVectorx, cameraPoseRelativeToAprilTag.y + addedVectory, cameraPoseRelativeToAprilTag.h);
-                    break;
-                }
-            }
-            if (goodIndex == 10) {
-                ATSeen = false;
-            }
+        if (!limelight.result.getFiducialResults().isEmpty()){
+            ATSeen = true;
         }
+
         // by NOW atseen is accurate
 
         if(ATSeen){
-
-
+            Pose2D ATSeenRoboPose = limelight.getPositionCenterRelative(Objects.equals(teamColor, "blue"));
+            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.METER), ATSeenRoboPose.getY(DistanceUnit.METER), ATSeenRoboPose.getHeading(DistanceUnit.METER));
+            sparkfun.myOtos.setPosition(roboPoseRelativeToAT);
         }
         else {
             sparkfun.myOtos.getPosition();

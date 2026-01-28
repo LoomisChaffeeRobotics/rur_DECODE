@@ -111,7 +111,7 @@ public class LimeLightTurretSystem {
         botpose = (result != null) ? result.getBotpose() : botpose;
 
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + 1.413, 0, 0);
+        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + (isBlue?1.413:-1.413), 0, 0);
         if (value == 0) {
             distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
         } else {
@@ -131,16 +131,14 @@ public class LimeLightTurretSystem {
     }
 
     /** gives the position relative to the april tag */
-    public Pose2D getPositionRelative(boolean isBlue){
+    public Pose2D getPositionCenterRelative(boolean isBlue){
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
 
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        return new Pose2D(DistanceUnit.METER,
-                botpose.getPosition().x + 1.482,
-                botpose.getPosition().y + (isBlue?1.413:-1.413),
-                AngleUnit.DEGREES,
-                botposeangle);
+        double robox = botpose.getPosition().x + 1.482 + Math.cos(botposeangle);
+        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413) + Math.sin(botposeangle);
+        return new Pose2D(DistanceUnit.METER, robox, roboy, AngleUnit.DEGREES, botposeangle);
     }
 }
 
