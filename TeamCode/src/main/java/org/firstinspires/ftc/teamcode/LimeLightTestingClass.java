@@ -27,7 +27,7 @@ public class LimeLightTestingClass extends OpMode {
     @Override
     public void loop() {
 
-        double distance = limelight.getDistance_from_apriltag(0);
+        double distance = limelight.getDistance_from_apriltag(0, false);
         Pose2D position = limelight.getPositionCenterRelative(true);
         telemetry.addData("Distance: ", distance);
         telemetry.addData("heading ", position.getHeading(AngleUnit.DEGREES));

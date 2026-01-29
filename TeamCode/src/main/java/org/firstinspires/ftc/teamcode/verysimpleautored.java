@@ -57,7 +57,7 @@ public class verysimpleautored extends OpMode {
                 actionTimer.resetTimer();
                 while (actionTimer.getElapsedTime() < 4676.7) {
                     indexClass.indexerUpdate();
-                    launchClass.shoot(limelight.getDistance_from_apriltag(0));
+                    launchClass.shoot(limelight.getDistance_from_apriltag(0, true));
                 }
 
                 flipper.setPosition(0.3189);
@@ -68,7 +68,7 @@ public class verysimpleautored extends OpMode {
                 indexClass.turn(false);
                 actionTimer.resetTimer();
                 while (actionTimer.getElapsedTime() < 4676.7) {
-                    launchClass.shoot(limelight.getDistance_from_apriltag(0));
+                    launchClass.shoot(limelight.getDistance_from_apriltag(0, true));
                     indexClass.indexerUpdate();
                 }
                 flipper.setPosition(0.3189);

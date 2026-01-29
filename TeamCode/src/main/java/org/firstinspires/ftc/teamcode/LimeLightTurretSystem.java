@@ -105,13 +105,12 @@ public class LimeLightTurretSystem {
     }
 
 
-    public double getDistance_from_apriltag(double value /*im not sure what that does */) {
+    public double getDistance_from_apriltag(double value, boolean isRed) {
         //BLUEEEEEEEEE
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
-
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + (isBlue?1.413:-1.413), 0, 0);
+        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + (isRed?-1.413:1.413), 0, 0);
         if (value == 0) {
             distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
         } else {
