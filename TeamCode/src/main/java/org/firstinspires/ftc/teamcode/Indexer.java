@@ -61,7 +61,7 @@ public class Indexer {
     public static double indexerSpeedCap = 0.15;
 
 
-    float gain = 31;
+    float gain = 3.5F;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
     double targetPosition=0;
@@ -257,9 +257,9 @@ public class Indexer {
     public void sensecolor() { //must be run at all times. Senses the color
 
         Color.colorToHSV(colors1.toColor(), hsvValues1);
-            if (hsvValues1[0] >= 160.5 && hsvValues1[0] <= 168) {
+            if (hsvValues1[0] >= 150 && hsvValues1[0] <= 170) {
                 SensedColorAll.set(0, SensedColor.GREEN);
-            } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 233) { //MUST BE CHANGED ASAPPPPPPPPP
+            } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 290) { //MUST BE CHANGED ASAPPPPPPPPP // UPDATED 1/29 TO EMMA'S NUMBERS
                 SensedColorAll.set(0, SensedColor.PURPLE);
             } else {
                 SensedColorAll.set(0, SensedColor.NEITHER);
