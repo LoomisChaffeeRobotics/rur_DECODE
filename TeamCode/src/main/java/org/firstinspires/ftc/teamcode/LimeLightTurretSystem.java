@@ -35,6 +35,8 @@ public class LimeLightTurretSystem {
     public CRServo turretSpin;
     public List<LLResultTypes.FiducialResult> fiducialResults;
 
+    double encoderDegreesPerTick = 0.008772; //THIS IS THE CORRECT COEFFICIANT!!!!!!!!!
+
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -66,7 +68,7 @@ public class LimeLightTurretSystem {
     }
     public void turntoAT(double id) { //i think i got numbers right maybe
 
-        //double encoderDegreesPerTick = 0.008772; //THIS IS THE CORRECT COEFFICIANT!!!!!!!!!
+
         result = limelight.getLatestResult();
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
         if (result == null || id != fiducialResults.get(0).getFiducialId()){
@@ -80,7 +82,7 @@ public class LimeLightTurretSystem {
         if (id == fiducialResults.get(0).getFiducialId()) {
             botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
             angleerror = result.getTx(); //targetangle - botposeangle;
-            if (encoder.getCurrentPosition() < 18000 && encoder.getCurrentPosition() > -18000) { //change the big number
+            if (encoder.getCurrentPosition() < 90/encoderDegreesPerTick && encoder.getCurrentPosition() > -90/encoderDegreesPerTick) { //change the big number
                 if (angleerror < -1) {
                     turretSpin.setPower(0.2);
                 } else if (angleerror > 1) {
@@ -88,10 +90,10 @@ public class LimeLightTurretSystem {
                 } else if (angleerror < 1 && angleerror > -1) {
                     turretSpin.setPower(0);
                 } //TODO: Dylan Dorman wants a PID here but this is fine for now I GUESS>:c
-            } else if (encoder.getCurrentPosition() < -18000 && angleerror > 0) { //so if the encoder is past a certain point either way turn back the other way
+            } else if (encoder.getCurrentPosition() < -90/encoderDegreesPerTick && angleerror > 0) { //so if the encoder is past a certain point either way turn back the other way
                 turretSpin.setPower(-0.2); //idk which direction is right
                 // noih
-            } else if (encoder.getCurrentPosition() > 18000 && angleerror < 0) {
+            } else if (encoder.getCurrentPosition() > 90/encoderDegreesPerTick && angleerror < 0) {
                 turretSpin.setPower(0.2);
             } else {
                 turretSpin.setPower(0);

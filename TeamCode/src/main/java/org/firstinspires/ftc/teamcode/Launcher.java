@@ -73,12 +73,12 @@ public class Launcher {
 
     public double[] find_closest_x(double target_x) {
 
-        if (target_x >= 0 && target_x < 0.96) {
-            return new double[]{0, 0.96};
+        if (target_x >= 0 && target_x < target_ranges[0]) {
+            return new double[]{0, target_ranges[0]};
         }
 
-        if (target_x >= 5.48) {
-            return new double[]{5.48, 15}; //??? why
+        if (target_x >= target_ranges[target_ranges.length - 1]) {
+            return new double[]{target_ranges[target_ranges.length - 1], 15}; //??? why
         }
 //        else if (target_x >= 1.2 && target_x < 1.5) {
 //            return new double[]{1.2, 1.5};
