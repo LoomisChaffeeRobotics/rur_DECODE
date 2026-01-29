@@ -59,8 +59,8 @@ public class SFA3BTClass extends OpMode {
 
         if(ATSeen){
             Pose2D ATSeenRoboPose = limelight.getPositionCenterRelative(Objects.equals(teamColor, "blue"));
-            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.METER), ATSeenRoboPose.getY(DistanceUnit.METER), ATSeenRoboPose.getHeading(DistanceUnit.METER));
-            sparkfun.myOtos.setPosition(roboPoseRelativeToAT);
+//            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.METER), ATSeenRoboPose.getY(DistanceUnit.METER), ATSeenRoboPose.getHeading(DistanceUnit.METER));
+//            sparkfun.myOtos.setPosition(roboPoseRelativeToAT);
         }
         else {
             sparkfun.myOtos.getPosition();
