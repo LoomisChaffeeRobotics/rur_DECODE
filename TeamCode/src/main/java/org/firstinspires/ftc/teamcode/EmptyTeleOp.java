@@ -32,13 +32,14 @@ public class EmptyTeleOp extends OpMode {
 
     @Override
     public void loop() {
+        if (gamepad1.left_trigger > 0.2 && (Math.abs(indexClass.error) < 100)) {
+            indexClass.sensecolor();
+        }
+
         if (gamepad1.bWasPressed()) {
             indexClass.turnBasedOffColor(Indexer.SensedColor.GREEN);
         } else if  (gamepad1.xWasPressed()) {
             indexClass.turnBasedOffColor(Indexer.SensedColor.PURPLE);
-        }
-        if (indexClass.error < 100) {
-            indexClass.sensecolor();
         }
         if (gamepad1.aWasPressed()) {
             indexClass.turn(false);

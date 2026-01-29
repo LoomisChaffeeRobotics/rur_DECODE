@@ -12,6 +12,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Indexer;
 import org.firstinspires.ftc.teamcode.Launcher;
@@ -19,15 +20,22 @@ import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
 
 import java.util.List;
 
+
+
+//don't use, haven't modified yet and will not in time for qual
+
+
 @Autonomous
 public class BlueAutoClassBack extends OpMode {
+    LLResultTypes.FiducialResult result;
     DcMotor intake;
+    Servo flipper;
     Limelight3A limelight;
     LimeLightTurretSystem limelightclass;
     Indexer turningthing;
     Launcher launcher;
     Follower follower;
-    Timer pathTimer,  opmodeTimer;
+    Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
     Pose startPose = new Pose(56,9 , Math.PI); //heading in radians
     Pose pickupPose1 =  new Pose(39.5,35.6656, Math.PI);
@@ -80,6 +88,42 @@ public class BlueAutoClassBack extends OpMode {
         pathState = state;
         pathTimer.resetTimer();
     }
+    public void shootingMacro(double shootingdistance) { //can replace turnbasedoffcolor to just turn() if needed
+
+        turningthing.turnBasedOffColor(patternArray[1]);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 2676.7) {
+            launcher.shoot(shootingdistance);
+        }
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 476.7){
+        }
+        flipper.setPosition(0.6741);
+        turningthing.turnBasedOffColor(patternArray[1]);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 4676.7) {
+            turningthing.indexerUpdate();
+            launcher.shoot(shootingdistance);
+        }
+
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 676.7){
+        }
+        flipper.setPosition(0.6741);
+        turningthing.turnBasedOffColor(patternArray[2]);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 4676.7) {
+            launcher.shoot(shootingdistance);
+            turningthing.indexerUpdate();
+        }
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 676.7){
+        }
+        flipper.setPosition(0.6741);
+    }
     public void autoUpdate() {
         switch (pathState) {
             //these cases can also be used to check for time (if(pathTimer.getElapsedTimeSeconds() >1) {}
@@ -87,11 +131,11 @@ public class BlueAutoClassBack extends OpMode {
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
                 turningthing.turnBasedOffColor(patternArray[0]);
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0, false));
                 turningthing.turnBasedOffColor(patternArray[1]);
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0, false));
                 turningthing.turnBasedOffColor(patternArray[2]);
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0));
+                launcher.shoot(limelightclass.getDistance_from_apriltag(0, false));
                 follower.followPath(pickup1);
                 setPathState(1);
                 break;
@@ -114,11 +158,11 @@ public class BlueAutoClassBack extends OpMode {
             case 3:
                 if (!follower.isBusy()) {
                     turningthing.turnBasedOffColor(patternArray[0]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[1]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
                     follower.followPath(pickup2);
                     setPathState(4);
                 }
@@ -142,11 +186,11 @@ public class BlueAutoClassBack extends OpMode {
             case 6:
                 if (!follower.isBusy()) {
                     turningthing.turnBasedOffColor(patternArray[0]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[1]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
                     setPathState(-1);
                 }
                 break;

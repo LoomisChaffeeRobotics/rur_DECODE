@@ -59,10 +59,12 @@ public class GamepadTesting extends OpMode {
         else {
             runIndexer(0d);
         }
-        if (gamepad1.dpad_up) {
-            flip(0.3189);
-        } else if (gamepad1.dpad_down) {
-            flip(0.6741d);
+        if (gamepad1.dpadUpWasPressed()) {
+            flip(0.01);
+        } else if (gamepad1.dpadDownWasPressed()) {
+            flip(-.01);
+        } else {
+            flip(0);
         }
         if (gamepad1.left_trigger > 0.2){
             startTurret(-0.3d);
@@ -80,7 +82,7 @@ public class GamepadTesting extends OpMode {
         indexer.setPower(power);
     }
     public void flip(double power){
-        flipper.setPosition(power);
+        flipper.setPosition(flipper.getPosition()+power);
     }
     public void startTurret(double power){
         launcher.setPower(power);

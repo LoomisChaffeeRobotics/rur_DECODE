@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.stopRobot;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.telemetryM;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
@@ -23,6 +24,8 @@ import com.pedropathing.telemetry.SelectableOpMode;
 import com.pedropathing.util.*;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,7 @@ public class Tuning extends SelectableOpMode {
 
     @IgnoreConfigurable
     static TelemetryManager telemetryM;
+
 
     @IgnoreConfigurable
     static ArrayList<String> changes = new ArrayList<>();
@@ -126,7 +130,8 @@ public class Tuning extends SelectableOpMode {
  */
 class LocalizationTest extends OpMode {
     @Override
-    public void init() {}
+    public void init() {
+    }
 
     /** This initializes the PoseUpdater, the mecanum drive motors, and the Panels telemetry. */
     @Override
@@ -1005,7 +1010,8 @@ class Line extends OpMode {
 class CentripetalTuner extends OpMode {
     public static double DISTANCE = 20;
     private boolean forward = true;
-
+    FtcDashboard dash = FtcDashboard.getInstance();
+    Telemetry t = dash.getTelemetry();
     private Path forwards;
     private Path backwards;
 
@@ -1055,7 +1061,6 @@ class CentripetalTuner extends OpMode {
                 follower.followPath(forwards);
             }
         }
-
         telemetryM.debug("Driving away from the origin along the curve?: " + forward);
         telemetryM.update(telemetry);
     }
@@ -1072,8 +1077,8 @@ class CentripetalTuner extends OpMode {
 class Triangle extends OpMode {
 
     private final Pose startPose = new Pose(0, 0, Math.toRadians(0));
-    private final Pose interPose = new Pose(24, -24, Math.toRadians(90));
-    private final Pose endPose = new Pose(24, 24, Math.toRadians(45));
+    private final Pose interPose = new Pose(12, -12, Math.toRadians(90));
+    private final Pose endPose = new Pose(12, 12, Math.toRadians(45));
 
     private PathChain triangle;
 

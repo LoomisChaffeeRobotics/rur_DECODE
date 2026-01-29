@@ -131,7 +131,17 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         flipperUp.resetTimer();
 
     }
-
+    @Override
+    public void init_loop() {
+        if (gamepad1.aWasPressed()) {
+            isRed = true;
+        } else if (gamepad1.yWasPressed()) {
+            isRed = false;
+        }
+        telemetry.addLine("Hit A if red, Y if blue");
+        telemetry.addData("isRed: ", isRed);
+    }
+    @Override
     public void start() {
         indexClass.intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -202,6 +212,12 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("sum", indexClass.sum);
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
         telemetry.addData("flipper", flipperUp.getElapsedTime());
+        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0);
+        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1);
+        telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0);
+        telemetry.addData("lower motor speed 1", launchClass.lower_motor_value_1);
+        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(0, false));
+
 //        telemetry.update();
 
 
@@ -269,7 +285,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             launcher2.setPower(0);
             return;
         }
-        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(0));
+        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(0, isRed));
         telemetry.addData("turret power: ", power);
     }
     public void flipper(boolean up){ // Done!

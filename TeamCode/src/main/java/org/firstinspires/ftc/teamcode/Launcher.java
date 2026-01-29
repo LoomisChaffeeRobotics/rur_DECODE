@@ -96,59 +96,57 @@ public class Launcher {
         return x_times_slope + y_intercept;
     }
     public boolean shoot(double distance) {
-       
+
         result = find_closest_x(distance); //finds distance from apriltag - two numbers: upper and lower bound
 
-         if (result[1] != target_ranges[0] && result[0] != target_ranges[target_ranges.length - 1]) {
+        if (result[1] != target_ranges[0] && result[0] != target_ranges[target_ranges.length - 1]) {
 
-            time_in_flight_value_0 = time_in_flights[(int) ((result[0]/spacing) - (target_ranges[0]/spacing))];
-            lower_motor_value_0 = lower_motor_speeds[(int) ((result[0]/spacing) - (target_ranges[0]/spacing))];
-            upper_motor_value_0 = upper_motor_speeds[(int) ((result[0]/spacing) - (target_ranges[0]/spacing))];
-            time_in_flight_value_1 = time_in_flights[(int) ((result[0]/spacing) - (target_ranges[0]/spacing) - 1)];
-            lower_motor_value_1 = lower_motor_speeds[(int) ((result[0]/spacing) - (target_ranges[0]/spacing) - 1)];
-            upper_motor_value_1 = upper_motor_speeds[(int) ((result[0]/spacing) - (target_ranges[0]/spacing) - 1)];
+            time_in_flight_value_0 = time_in_flights[(int) ((result[0] / spacing) - (target_ranges[0] / spacing))];
+            lower_motor_value_0 = lower_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing))];
+            upper_motor_value_0 = upper_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing))];
+            time_in_flight_value_1 = time_in_flights[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) - 1)];
+            lower_motor_value_1 = lower_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) - 1)];
+            upper_motor_value_1 = upper_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) - 1)];
 
-      } else if (result[1] == target_ranges[0]) {
+        } else if (result[1] == target_ranges[0]) {
             time_in_flight_value_0 = 0;
             lower_motor_value_0 = 0;
             upper_motor_value_0 = 0;
             time_in_flight_value_1 = time_in_flights[0];
             lower_motor_value_1 = lower_motor_speeds[0];
             upper_motor_value_1 = upper_motor_speeds[0];
-      }
-       else {
+        } else {
 
-           time_in_flight_value_0 = time_in_flights[time_in_flights.length - 1];
+            time_in_flight_value_0 = time_in_flights[time_in_flights.length - 1];
             lower_motor_value_0 = lower_motor_speeds[lower_motor_speeds.length - 1];
             upper_motor_value_0 = upper_motor_speeds[upper_motor_speeds.length - 1];
-
+        }
 
 //            the statements below create line approximations; slope is based off of the "distance" between the last item
 //            and the second last item.
 
-             // will NOT be as accurate as regular look-up table--if needs to be more accurate,
+        // will NOT be as accurate as regular look-up table--if needs to be more accurate,
 //             will need to find an approximate function for the look-up table
 
 //            ^^^^^^
 
-            time_in_flight_value_1 = time_in_flights[time_in_flights.length - 1]
-                    + (time_in_flights[time_in_flights.length - 1]
-                        - time_in_flights[time_in_flights.length - 2])
-                    * (distance - 5.48);
-
-
-            lower_motor_value_1 = lower_motor_speeds[lower_motor_speeds.length - 1]
-                    + (lower_motor_speeds[lower_motor_speeds.length - 1]
-                        - lower_motor_speeds[lower_motor_speeds.length - 2])
-                    * (distance - 5.48);
-
-
-            upper_motor_value_1 = upper_motor_speeds[upper_motor_speeds.length - 1]
-                    + (upper_motor_speeds[upper_motor_speeds.length - 1]
-                        - upper_motor_speeds[upper_motor_speeds.length - 2])
-                    * (distance - 5.48);
-
-        }
+//            time_in_flight_value_1 = time_in_flights[time_in_flights.length - 1]
+//                    + (time_in_flights[time_in_flights.length - 1]
+//                        - time_in_flights[time_in_flights.length - 2])
+//                    * (distance - 5.48);
+//
+//
+//            lower_motor_value_1 = lower_motor_speeds[lower_motor_speeds.length - 1]
+//                    + (lower_motor_speeds[lower_motor_speeds.length - 1]
+//                        - lower_motor_speeds[lower_motor_speeds.length - 2])
+//                    * (distance - 5.48);
+//
+//
+//            upper_motor_value_1 = upper_motor_speeds[upper_motor_speeds.length - 1]
+//                    + (upper_motor_speeds[upper_motor_speeds.length - 1]
+//                        - upper_motor_speeds[upper_motor_speeds.length - 2])
+//                    * (distance - 5.48);
+//    }
 //        else {
 //
 //            time_in_flight_value_0 = time_in_flights[0];
@@ -183,7 +181,7 @@ public class Launcher {
         ) * (7.0 / 15.0);
         launcher.setVelocity(lower_motor_interporation_result);
         launcher2.setVelocity(upper_motor_interporation_result);
-        indexer.removefirst(indexer.SensedColorAll);
+        indexer.removefirst(indexer.SensedColorAll); //remove? color sensor stuff must be tested before messing with this
 //        flap1.setPosition(0.2);
 //        waitAuto(0.5);
 //        flap1.setPosition(0);

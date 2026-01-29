@@ -109,7 +109,6 @@ public class LimeLightTurretSystem {
         //BLUEEEEEEEEE
         result = limelight.getLatestResult();
         botpose = (result != null) ? result.getBotpose() : botpose;
-
         botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
         positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + 1.413, 0, 0);
         if (value == 0) {
