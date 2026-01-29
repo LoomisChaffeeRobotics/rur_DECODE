@@ -28,6 +28,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
 
+    /** This helps us send telemetry data to a thing called 'Panels' */
     private TelemetryManager panelsTelemetry;
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
     LimeLightTurretSystem limeLightTurretSystem;
@@ -58,6 +59,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     /** list of servos it is missing the spindexer servo because all that is dealt with in the 'indexer' class */
     CRServo indexer;
     Servo flipper;
+
+
 
     /** the imu we use */
     IMU imu;

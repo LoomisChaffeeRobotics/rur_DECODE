@@ -4,7 +4,6 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 
 import android.graphics.Color;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -52,7 +51,6 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 @Configurable
-@Config
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
     public static double indexerP = 0.0005;
@@ -256,7 +254,7 @@ public class Indexer {
         PIDTimer.reset();
 
     }
-    public void sensecolor() { //must be run at all times
+    public void sensecolor() { //must be run at all times. Senses the color
 
         Color.colorToHSV(colors1.toColor(), hsvValues1);
             if (hsvValues1[0] >= 160.5 && hsvValues1[0] <= 168) {

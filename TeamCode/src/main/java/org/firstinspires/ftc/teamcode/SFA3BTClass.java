@@ -5,6 +5,7 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
@@ -59,7 +60,7 @@ public class SFA3BTClass extends OpMode {
 
         if(ATSeen){
             Pose2D ATSeenRoboPose = limelight.getPositionCenterRelative(Objects.equals(teamColor, "blue"));
-            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.METER), ATSeenRoboPose.getY(DistanceUnit.METER), ATSeenRoboPose.getHeading(DistanceUnit.METER));
+            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.METER), ATSeenRoboPose.getY(DistanceUnit.METER), ATSeenRoboPose.getHeading(AngleUnit.DEGREES));
             sparkfun.myOtos.setPosition(roboPoseRelativeToAT);
         }
         else {

@@ -1,0 +1,36 @@
+
+HELLO!!
+
+The foloowing are the classes we use:
+1: Cherry Drive
+2: LimeLightTurretSystem
+3: Indexer
+4: Launcher
+5: sparkFunMethodsClass
+they are all under TeamCode/java/org.firstinspires.ftc.teamcode. Everything else is for testing certain features or gradle stuff.
+Unfortunately, the names we gave things in the code are all over the place and there isn't much of a standard we all follow. You
+will find some names separated_by_underscores others withCapitalLettersLikeThis and some allsquishedtogetherinlowercase. On top of
+that, some things like Indexer and sparkFunMethodsClass are analogous but are named differently. One might expect that they would be
+named either indexerMethodsClass and SparkFunMethodsClass or Indexer and Sparkfun. The mixing of how things are named will
+probably make it confusing, so make sure to watch out for that. If you ever get confused, one thing that may possibly help is holding
+the 'command' or 'cntrl' key while clicking a method or class (this is an android studio thing and idk how much you know about android
+studio. If you didn't already know this it is very helpful).
+
+I don't know how much you know about ftc and how everything generally works so skip this paragraph if you know that already I guess.
+'OpMode' is a kind of class that will directly control the robot. There are two built-in methods that are necesary for an OpMode:
+'init' and 'loop' whose functions should be obvious. Above an Opmode will usually be the annotation @Tele-Op or @Autonomous.
+@Tele-Op will be driver controlled and @Autonomous is (shockingly) autonomous. On the Driver Station (the phone looking thing) we
+can set a robot configuration. The configuration will name all the ports with a string. so for example the controll hub motor port 0
+is named "intake." Then we use the hardwaremap to assign a Motor object in the class to a specific port. That is what
+"intake = hardwareMap.get(DcMotor.class, "intake");" and all the similar lines do.
+
+Cherry Drive is the TeleOp we will use in the game. It has a bunch of methods that we use to organize the functions of each button input
+it is the most important Class we have. LimelightTurretSystem, Indexer, Launcher, and sparkFunMethodsClass all have methods that control
+their titular element. There will be comments(?) along each of the methods to describe wht they do. Each of them has an 'init()' that
+is run in the init phase.
+
+Our main question is how to keep all this organized in a nice way. Currently we are just guessing for most of it becuase none of us
+have learned officially good practices for coding. Please look over the code and let us know if there are any patterns you can
+easily notice where we could just be better. The current issues we have are with the launcher (the motors on top) not making it into
+the goal every time even though we have the data tables in. Could the data tables be wrong or is our way of interpolating the values
+the thing that gives us problems?
