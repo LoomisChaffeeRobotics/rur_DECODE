@@ -131,22 +131,22 @@ public class Launcher {
 
 //            ^^^^^^
 
-            time_in_flight_value_1 = time_in_flights[time_in_flights.length - 1]
-                    + (time_in_flights[time_in_flights.length - 1]
-                        - time_in_flights[time_in_flights.length - 2])
-                    * (distance - 5.48);
-
-
-            lower_motor_value_1 = lower_motor_speeds[lower_motor_speeds.length - 1]
-                    + (lower_motor_speeds[lower_motor_speeds.length - 1]
-                        - lower_motor_speeds[lower_motor_speeds.length - 2])
-                    * (distance - 5.48);
-
-
-            upper_motor_value_1 = upper_motor_speeds[upper_motor_speeds.length - 1]
-                    + (upper_motor_speeds[upper_motor_speeds.length - 1]
-                        - upper_motor_speeds[upper_motor_speeds.length - 2])
-                    * (distance - 5.48);
+//            time_in_flight_value_1 = time_in_flights[time_in_flights.length - 1]
+//                    + (time_in_flights[time_in_flights.length - 1]
+//                        - time_in_flights[time_in_flights.length - 2])
+//                    * (distance - 5.48);
+//
+//
+//            lower_motor_value_1 = lower_motor_speeds[lower_motor_speeds.length - 1]
+//                    + (lower_motor_speeds[lower_motor_speeds.length - 1]
+//                        - lower_motor_speeds[lower_motor_speeds.length - 2])
+//                    * (distance - 5.48);
+//
+//
+//            upper_motor_value_1 = upper_motor_speeds[upper_motor_speeds.length - 1]
+//                    + (upper_motor_speeds[upper_motor_speeds.length - 1]
+//                        - upper_motor_speeds[upper_motor_speeds.length - 2])
+//                    * (distance - 5.48);
 
         }
 //        else {

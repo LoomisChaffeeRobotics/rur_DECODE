@@ -23,15 +23,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(10.5)
-            .forwardZeroPowerAcceleration(-46.8420957445043)
-            .lateralZeroPowerAcceleration(-59.5523410120594)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.3,0,0,0))
-            .headingPIDFCoefficients(new PIDFCoefficients(1,0,0,0.01))
+            .mass(10.9769354)
+            .forwardZeroPowerAcceleration(-43.81054521998005)
+            .lateralZeroPowerAcceleration(-68.40326896087805)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.15,0,0.02,0.07))
+            .headingPIDFCoefficients(new PIDFCoefficients(0.85,0,0.005,0.04))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.003,0,0.00001,0,0))
+            .centripetalScaling(0.00005);
             ;
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 0.7, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 0.9, 1.2);
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -44,15 +45,15 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(49.533994179072344)
-            .yVelocity(34.377330870140256)
+            .xVelocity(56.35359155850148)
+            .yVelocity(43.18537674550935)
             ;
 
     public static OTOSConstants localizerConstants = new OTOSConstants()
             .hardwareMapName("sensor_otos")
             .linearUnit(DistanceUnit.INCH)
             .angleUnit(AngleUnit.RADIANS)
-            .offset(new SparkFunOTOS.Pose2D(7,5.5,-Math.PI/2))
+            .offset(new SparkFunOTOS.Pose2D(7.5,6.75,-Math.PI/2))
             .linearScalar(1.31)
             .angularScalar(0.96)
             ;

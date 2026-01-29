@@ -12,6 +12,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Indexer;
 import org.firstinspires.ftc.teamcode.Launcher;
@@ -21,13 +22,15 @@ import java.util.List;
 
 @Autonomous
 public class BlueAutoClassBack extends OpMode {
+    LLResultTypes.FiducialResult result;
     DcMotor intake;
+    Servo flipper;
     Limelight3A limelight;
     LimeLightTurretSystem limelightclass;
     Indexer turningthing;
     Launcher launcher;
     Follower follower;
-    Timer pathTimer,  opmodeTimer;
+    Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
     Pose startPose = new Pose(56,9 , Math.PI); //heading in radians
     Pose pickupPose1 =  new Pose(39.5,35.6656, Math.PI);
@@ -79,6 +82,42 @@ public class BlueAutoClassBack extends OpMode {
     public void setPathState(int state) { //allows it to know where in tihe code it is
         pathState = state;
         pathTimer.resetTimer();
+    }
+    public void shootingMacro(double shootingdistance) { //can replace turnbasedoffcolor to just turn() if needed
+
+        turningthing.turnBasedOffColor(patternArray[1]);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 2676.7) {
+            launcher.shoot(shootingdistance);
+        }
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 476.7){
+        }
+        flipper.setPosition(0.6741);
+        turningthing.turnBasedOffColor(patternArray[1]);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 4676.7) {
+            turningthing.indexerUpdate();
+            launcher.shoot(shootingdistance);
+        }
+
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 676.7){
+        }
+        flipper.setPosition(0.6741);
+        turningthing.turnBasedOffColor(patternArray[2]);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 4676.7) {
+            launcher.shoot(shootingdistance);
+            turningthing.indexerUpdate();
+        }
+        flipper.setPosition(0.3189);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 676.7){
+        }
+        flipper.setPosition(0.6741);
     }
     public void autoUpdate() {
         switch (pathState) {

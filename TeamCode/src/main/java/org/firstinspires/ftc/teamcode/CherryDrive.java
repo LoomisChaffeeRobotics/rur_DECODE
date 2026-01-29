@@ -199,6 +199,12 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("sum", indexClass.sum);
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
         telemetry.addData("flipper", flipperUp.getElapsedTime());
+        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0);
+        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1);
+        telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0);
+        telemetry.addData("lower motor speed 1", launchClass.lower_motor_value_1);
+        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(0));
+
 //        telemetry.update();
 
 
