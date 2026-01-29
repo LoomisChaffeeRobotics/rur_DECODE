@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
 public class BlueAutoClassFront extends OpMode {
     public LLResultTypes.FiducialResult result;
     DcMotor intake;
-//    Servo flipper;
+    Servo flipper;
     LimeLightTurretSystem limelightclass;
     Indexer turningthing;
     Launcher launcher;
@@ -33,11 +33,11 @@ public class BlueAutoClassFront extends OpMode {
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
     Pose startPose = new Pose(21.36630602782071,123.52395672333849, Math.toRadians(143)); //heading in radians
-    Pose detectPose = new Pose(47.40340030911901,97.706336939721788, Math.toRadians(65)); //to detect apriltag, same as launchposeMain but different heading
-    Pose launchPoseMain = new Pose (45.40340030911901,97.706336939721788, Math.toRadians(137));
+    Pose detectPose = new Pose(34.68712123,107.7528485, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
+    Pose launchPoseMain = new Pose(45.40340030911901,97.706336939721788, 2.3911);
     Pose controlPoint1 = new Pose(66.7958,83.5325,Math.PI);
-    Pose pickupPose1 = new Pose (39.5,83.68469860896445, Math.PI);
-    Pose intake1 = new Pose(16, 83.68469860896445, Math.PI);
+    Pose pickupPose1 = new Pose (39.5,88.6, Math.PI);
+    Pose intake1 = new Pose(16, 88.6, Math.PI);
     Pose controlPoint2 = new Pose(68.80518,58.5278,Math.PI);
     Pose pickupPose2 = new Pose (39.5,60.09273570324575, Math.PI);
     Pose intake2 = new Pose(9.137, 60.092735, Math.PI);
@@ -48,10 +48,10 @@ public class BlueAutoClassFront extends OpMode {
         detectAT = new Path(new BezierCurve(startPose, detectPose));
         detectAT.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(65));
 
-        scorePreload = new Path(new BezierCurve(detectPose, launchPoseMain));
-        scorePreload.setLinearHeadingInterpolation(Math.toRadians(65), Math.toRadians(137));
-        pickup1 =  new Path(new BezierCurve(launchPoseMain, controlPoint1, pickupPose1));
-        pickup1.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
+        scorePreload = new Path(new BezierCurve(startPose, launchPoseMain));
+        scorePreload.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(137), 0.8);
+        pickup1 =  new Path(new BezierCurve(detectPose, controlPoint1, pickupPose1));
+        pickup1.setLinearHeadingInterpolation(Math.toRadians(65), Math.PI);
 
         intake1chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose1, intake1))
@@ -60,10 +60,9 @@ public class BlueAutoClassFront extends OpMode {
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
         launch1 =  new Path(new BezierCurve(intake1, launchPoseMain));
-        launch1.setLinearHeadingInterpolation(Math.PI, Math.toRadians(137));
+        launch1.setLinearHeadingInterpolation(Math.PI, 2.3911, 0.8);
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
-        pickup1.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
 
         intake2chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose2, intake2))
@@ -72,12 +71,11 @@ public class BlueAutoClassFront extends OpMode {
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
         launch2 = new Path(new BezierCurve(intake2,launchPoseMain));
-        pickup1.setLinearHeadingInterpolation(Math.PI, Math.toRadians(137));
         //Path chains are chains of paths - so you can add multiple as shown below
 
     }
     public Indexer.SensedColor[] patternArray = {
-            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE
+            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN
     };
     public void setPathState(int state) { //state machine :)
         pathState = state;
@@ -85,39 +83,40 @@ public class BlueAutoClassFront extends OpMode {
     }
     public void shootingMacro(double shootingdistance) { //can replace turnbasedoffcolor to just turn() if needed
 
-        turningthing.turnBasedOffColor(patternArray[0]);
+//        turningthing.turnBasedOffColor(patternArray[0]);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 2676.7) { //fix times
+        while (actionTimer.getElapsedTime() < 1476.7) { //fix times
             launcher.shoot(shootingdistance);
         }
-        //flipper.setPosition(0.3189);
+        flipper.setPosition(0);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 476.7){ //this is probably okay
+        while (actionTimer.getElapsedTime() < 1076.7){ //this is probably okay
         }
-        //flipper.setPosition(0.6741);
-        turningthing.turnBasedOffColor(patternArray[1]);
+        flipper.setPosition(0.3778);
+//        turningthing.turnBasedOffColor(patternArray[1]);
+        turningthing.turn(false);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 4676.7) { //fix timings
+        while (actionTimer.getElapsedTime() < 2676.7) { //fix timings
             turningthing.indexerUpdate();
             launcher.shoot(shootingdistance);
         }
 
-        //flipper.setPosition(0.3189);
+        flipper.setPosition(0);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //should probably be same as 2nd
+        while (actionTimer.getElapsedTime() < 1076.7){ //should probably be same as 2nd
         }
-        //flipper.setPosition(0.6741);
-        turningthing.turnBasedOffColor(patternArray[2]);
+        flipper.setPosition(0.3778);
+//        turningthing.turnBasedOffColor(patternArray[2]);
+        turningthing.turn(false);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 4676.7) { //fix
+        while (actionTimer.getElapsedTime() < 2676.7) { //fix
             launcher.shoot(shootingdistance);
             turningthing.indexerUpdate();
         }
-        //flipper.setPosition(0.3189);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //same as 2nd
+        while (actionTimer.getElapsedTime() < 1076.7){ //same as 2nd
         }
-        //flipper.setPosition(0.6741);
+        flipper.setPosition(0.3778);
     }
     public void autoUpdate() {
         switch (pathState) {
@@ -130,6 +129,13 @@ public class BlueAutoClassFront extends OpMode {
                 break;
             case 1:
                 if (!follower.isBusy()) {
+                    follower.followPath(scorePreload);
+                    setPathState(2);
+                }
+                    break;
+            case 2:
+                    if (!follower.isBusy()){
+                    shootingMacro(limelightclass.getDistance_from_apriltag(0, false));
 //                    if (limelightclass.result != null) {
 //                        result = limelightclass.result.getFiducialResults().get(0); //might break
 //                    } else {
@@ -152,61 +158,63 @@ public class BlueAutoClassFront extends OpMode {
 //                        telemetry.addLine("nothing");
 //                    }
 
-                    setPathState(2);
-                }
-                break;
-            case 2:
-                if (!follower.isBusy()) {
-                    follower.followPath(pickup1);
                     setPathState(3);
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    intake.setPower(1);
-                    follower.followPath(intake1chain, 0.5, true); //maxPower should go down probably
+                    follower.followPath(pickup1);
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    follower.followPath(launch1);
+                    intake.setPower(-1);
+                    follower.followPath(intake1chain, 0.5, true); //maxPower should go down probably
                     setPathState(5);
                 }
                 break;
-
             case 5:
                 if (!follower.isBusy()) {
-//                    shootingMacro(limelightclass.getDistance_from_apriltag(0, false));
-
-                    //STOP HERE FOR QUAL UNLESS EXTRA TIME
-                    //GO FIX STUFF THAT ARE BROKEN
-
-                    follower.followPath(pickup2);
+                    intake.setPower(0.1);
+                    follower.followPath(launch1);
+                    follower.turnToDegrees(137);
                     setPathState(6);
                 }
                 break;
-            case 6:
-                if (!follower.isBusy()) {
-                    //run intake
-                    intake.setPower(1);
-                    follower.updateCallbacks();
-                    follower.followPath(intake2chain, 0.5, true);
-                    setPathState(7);
-                }
-                break;
-            case 7:
-                if (!follower.isBusy()) {
-                    follower.followPath(launch2);
-                    setPathState(8);
-                }
-                break;
-            case 8:
-                if (!follower.isBusy()) {
-                    shootingMacro(limelightclass.getDistance_from_apriltag(0, false));
-                    setPathState(-1);
-                }
-                break;
+
+//            case 5:
+//                if (!follower.isBusy()) {
+////                    shootingMacro(limelightclass.getDistance_from_apriltag(0, false));
+//
+//                    //STOP HERE FOR QUAL UNLESS EXTRA TIME
+//                    //GO FIX STUFF THAT ARE BROKEN
+//
+//                    follower.followPath(pickup2);
+//                    setPathState(6);
+//                }
+//                break;
+//            case 6:
+//                if (!follower.isBusy()) {
+//                    //run intake
+//                    intake.setPower(1);
+//                    follower.updateCallbacks();
+//                    follower.followPath(intake2chain, 0.5, true);
+//                    setPathState(7);
+//                }
+//                break;
+//            case 7:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(launch2);
+//                    setPathState(8);
+//                }
+//                break;
+//            case 8:
+//                if (!follower.isBusy()) {
+//                    shootingMacro(limelightclass.getDistance_from_apriltag(0, true));
+//                    setPathState(-1);
+//                }
+//                break;
 //            case 8:
 //                if (!follower.isBusy()) {
 //                    follower.followPath(pickupMain);
@@ -222,7 +230,7 @@ public class BlueAutoClassFront extends OpMode {
     }
     @Override
     public void init() {
-        //flipper = hardwareMap.get(Servo.class, "//flipper");
+        flipper = hardwareMap.get(Servo.class, "flipper");
         intake = hardwareMap.get(DcMotor.class, "intake");
         turningthing = new Indexer();
         turningthing.init(hardwareMap, telemetry);

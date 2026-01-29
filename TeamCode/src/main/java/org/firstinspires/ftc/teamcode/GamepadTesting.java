@@ -60,9 +60,9 @@ public class GamepadTesting extends OpMode {
             runIndexer(0d);
         }
         if (gamepad1.dpadUpWasPressed()) {
-            flip(0.01);
+            flip(0.01); // up 0.1889
         } else if (gamepad1.dpadDownWasPressed()) {
-            flip(-.01);
+            flip(-.01); // down .51
         } else {
             flip(0);
         }

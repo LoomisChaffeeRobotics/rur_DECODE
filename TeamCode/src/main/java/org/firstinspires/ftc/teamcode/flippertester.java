@@ -16,22 +16,22 @@ public class flippertester extends OpMode{
 //
 //    DcMotor rightRear;
 
-    CRServo turretSpin;
+    Servo turretSpin;
     @Override
     public void init() {
-        turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
+        turretSpin = hardwareMap.get(Servo.class, "flipper");
 
     }
 
     @Override
     public void loop() {
-        if(gamepad1.a){
-            turretSpin.setPower(0.1);
-        } else if(gamepad1.b){
-            turretSpin.setPower(-0.1);
-        } else {turretSpin.setPower(0);}
+        if(gamepad1.aWasPressed()){
+            turretSpin.setPosition(turretSpin.getPosition() +0.001);
+        } else if(gamepad1.bWasPressed()){
+            turretSpin.setPosition(turretSpin.getPosition() -0.001);
+        } else {turretSpin.setPosition(turretSpin.getPosition());}
 
-        telemetry.addData("servo posiwer: ",turretSpin.getPower());
+        telemetry.addData("servo posiwer: ",turretSpin.getPosition());
         telemetry.update();
 
 
