@@ -48,7 +48,7 @@ public class BlueAutoClassFront extends OpMode {
         detectAT = new Path(new BezierCurve(startPose, detectPose));
         detectAT.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(65));
 
-        scorePreload = new Path(new BezierCurve(startPose, launchPoseMain));
+        scorePreload = new Path(new BezierCurve(detectPose, launchPoseMain));
         scorePreload.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(137), 0.8);
         pickup1 =  new Path(new BezierCurve(detectPose, controlPoint1, pickupPose1));
         pickup1.setLinearHeadingInterpolation(Math.toRadians(65), Math.PI);
@@ -85,12 +85,12 @@ public class BlueAutoClassFront extends OpMode {
 
 //        turningthing.turnBasedOffColor(patternArray[0]);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 876.7) { //fix times
+        while (actionTimer.getElapsedTime() < 1476.7) { //fix times
             launcher.shoot(shootingdistance);
         }
         flipper.setPosition(0);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 1476.7){ //this is probably okay
+        while (actionTimer.getElapsedTime() < 676.7){ //this is probably okay
         }
         flipper.setPosition(0.3778);
 //        turningthing.turnBasedOffColor(patternArray[1]);
@@ -103,7 +103,7 @@ public class BlueAutoClassFront extends OpMode {
 
         flipper.setPosition(0.03);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 1476.7){ //should probably be same as 2nd
+        while (actionTimer.getElapsedTime() < 676.7){ //should probably be same as 2nd
         }
         flipper.setPosition(0.3778);
 //        turningthing.turnBasedOffColor(patternArray[2]);
@@ -114,7 +114,7 @@ public class BlueAutoClassFront extends OpMode {
             turningthing.indexerUpdate();
         }
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 1476.7){ //same as 2nd
+        while (actionTimer.getElapsedTime() < 676.7){ //same as 2nd
         }
         flipper.setPosition(0.3778);
     }
@@ -125,22 +125,8 @@ public class BlueAutoClassFront extends OpMode {
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
                 follower.followPath(detectAT);
-                setPathState(1);
-                break;
-            case 1:
-                if (!follower.isBusy()) {
-                    follower.followPath(scorePreload);
-                    setPathState(2);
-                }
-                    break;
-            case 2:
-                    if (!follower.isBusy()){
-                    shootingMacro(limelightclass.getDistance_from_apriltag(0, false));
-//                    if (limelightclass.result != null) {
-//                        result = limelightclass.result.getFiducialResults().get(0); //might break
-//                    } else {
-//                        follower.followPath(scorePreload);
-//                    }
+//                if (limelightclass.result != null) {
+//                    result = limelightclass.result.getFiducialResults().get(0); //might break
 //                    if (result.getFiducialId() == 23) {
 //                        patternArray[0] = Indexer.SensedColor.PURPLE;
 //                        patternArray[1] = Indexer.SensedColor.PURPLE;
@@ -157,6 +143,20 @@ public class BlueAutoClassFront extends OpMode {
 //                    } else {
 //                        telemetry.addLine("nothing");
 //                    }
+//                }
+
+                setPathState(1);
+                break;
+            case 1:
+                if (!follower.isBusy()) {
+                    follower.followPath(scorePreload);
+                    setPathState(2);
+                }
+                    break;
+            case 2:
+                    if (!follower.isBusy()){
+                    shootingMacro(limelightclass.getDistance_from_apriltag(0, false));
+//                    shootingMacro(1); //uhhhhh this should probably work lowkey
 
                     setPathState(3);
                 }
@@ -178,7 +178,7 @@ public class BlueAutoClassFront extends OpMode {
                 if (!follower.isBusy()) {
                     intake.setPower(0.1);
                     follower.followPath(launch1);
-                    follower.turnToDegrees(137);
+//                    follower.turnToDegrees(137); only use if needed
                     setPathState(6);
                 }
                 break;
@@ -254,8 +254,8 @@ public class BlueAutoClassFront extends OpMode {
     }
     @Override
     public void loop() {
-//        turningthing.sensecolor();
-        turningthing.indexerUpdate();
+////        turningthing.sensecolor();
+//        turningthing.indexerUpdate();
         follower.update();
 //        limelightclass.turntoAT(20);
         autoUpdate();
