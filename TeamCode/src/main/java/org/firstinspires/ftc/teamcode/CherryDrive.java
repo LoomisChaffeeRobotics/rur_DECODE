@@ -292,8 +292,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             launcher2.setPower(0);
             return;
         }
-        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.4 /*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/);
+        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.1 /*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/);
         telemetry.addData("turret power: ", power);
+        telemetry.addData("current distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.1);
     }
     public void flipper(boolean up){ // Done!
         //flip
