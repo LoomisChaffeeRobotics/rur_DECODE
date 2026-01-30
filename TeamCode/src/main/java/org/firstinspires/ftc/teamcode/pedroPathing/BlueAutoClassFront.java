@@ -85,12 +85,12 @@ public class BlueAutoClassFront extends OpMode {
 
 //        turningthing.turnBasedOffColor(patternArray[0]);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 1476.7) { //fix times
+        while (actionTimer.getElapsedTime() < 876.7) { //fix times
             launcher.shoot(shootingdistance);
         }
         flipper.setPosition(0);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 1076.7){ //this is probably okay
+        while (actionTimer.getElapsedTime() < 1476.7){ //this is probably okay
         }
         flipper.setPosition(0.3778);
 //        turningthing.turnBasedOffColor(patternArray[1]);
@@ -101,9 +101,9 @@ public class BlueAutoClassFront extends OpMode {
             launcher.shoot(shootingdistance);
         }
 
-        flipper.setPosition(0);
+        flipper.setPosition(0.03);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 1076.7){ //should probably be same as 2nd
+        while (actionTimer.getElapsedTime() < 1476.7){ //should probably be same as 2nd
         }
         flipper.setPosition(0.3778);
 //        turningthing.turnBasedOffColor(patternArray[2]);
@@ -114,7 +114,7 @@ public class BlueAutoClassFront extends OpMode {
             turningthing.indexerUpdate();
         }
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 1076.7){ //same as 2nd
+        while (actionTimer.getElapsedTime() < 1476.7){ //same as 2nd
         }
         flipper.setPosition(0.3778);
     }

@@ -103,9 +103,9 @@ public class Launcher {
             time_in_flight_value_0 = time_in_flights[(int) ((result[0] / spacing) - (target_ranges[0] / spacing))];
             lower_motor_value_0 = lower_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing))];
             upper_motor_value_0 = upper_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing))];
-            time_in_flight_value_1 = time_in_flights[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) - 1)];
-            lower_motor_value_1 = lower_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) - 1)];
-            upper_motor_value_1 = upper_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) - 1)];
+            time_in_flight_value_1 = time_in_flights[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) + 1)];
+            lower_motor_value_1 = lower_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) + 1)];
+            upper_motor_value_1 = upper_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) + 1)];
 
         } else if (result[1] == target_ranges[0]) {
             time_in_flight_value_0 = 0;
@@ -114,12 +114,12 @@ public class Launcher {
             time_in_flight_value_1 = time_in_flights[0];
             lower_motor_value_1 = lower_motor_speeds[0];
             upper_motor_value_1 = upper_motor_speeds[0];
-        } else {
+        } else if (result[0] == target_ranges[target_ranges.length - 1]) {
 
             time_in_flight_value_0 = time_in_flights[time_in_flights.length - 1];
             lower_motor_value_0 = lower_motor_speeds[lower_motor_speeds.length - 1];
             upper_motor_value_0 = upper_motor_speeds[upper_motor_speeds.length - 1];
-        }
+
 
 //            the statements below create line approximations; slope is based off of the "distance" between the last item
 //            and the second last item.
@@ -145,7 +145,7 @@ public class Launcher {
 //                    + (upper_motor_speeds[upper_motor_speeds.length - 1]
 //                        - upper_motor_speeds[upper_motor_speeds.length - 2])
 //                    * (distance - 5.48);
-//    }
+    }
 //        else {
 //
 //            time_in_flight_value_0 = time_in_flights[0];
