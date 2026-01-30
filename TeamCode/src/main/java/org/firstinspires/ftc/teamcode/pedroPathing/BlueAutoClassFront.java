@@ -56,7 +56,7 @@ public class BlueAutoClassFront extends OpMode {
         intake1chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose1, intake1))
                 .setConstantHeadingInterpolation(Math.PI)
-                .addParametricCallback(0.3, () -> turningthing.turn(true)) //adjust these t values when needed
+                .addParametricCallback(0.2, () -> turningthing.turn(true)) //adjust these t values when needed
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
         launch1 =  new Path(new BezierCurve(intake1, launchPoseMain));
@@ -163,7 +163,7 @@ public class BlueAutoClassFront extends OpMode {
             case 2:
                     if (!follower.isBusy()){
 //                    shootingMacro(limelightclass.getDistance_from_apriltag( true));
-                    shootingMacro(1.02); //uhhhhh this should probably work lowkey
+                    shootingMacro(1.3); //uhhhhh this should probably work lowkey
 
                     setPathState(3);
                 }
@@ -183,7 +183,7 @@ public class BlueAutoClassFront extends OpMode {
                 break;
             case 5:
                 if (!follower.isBusy()) {
-                    intake.setPower(0);
+//                    intake.setPower(0);
                     follower.followPath(launch1);
                     setPathState(6);
                 }
@@ -193,7 +193,7 @@ public class BlueAutoClassFront extends OpMode {
                 if (!follower.isBusy()) {
                     follower.turnTo(Math.toRadians(137));
 //                    shootingMacro(limelightclass.getDistance_from_apriltag(true));
-                    shootingMacro(1.02);
+                    shootingMacro(1.3);
 
                     //STOP HERE FOR QUAL UNLESS EXTRA TIME
                     //GO FIX STUFF THAT ARE BROKEN
@@ -263,9 +263,7 @@ public class BlueAutoClassFront extends OpMode {
     @Override
     public void loop() {
 ////        turningthing.sensecolor();
-        if (pathState == 4) {
-            turningthing.indexerUpdate();
-        }
+        turningthing.indexerUpdate();
         limelightclass.update();
         follower.update();
 //        limelightclass.turntoAT(20);
