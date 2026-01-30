@@ -60,7 +60,7 @@ public class BlueAutoClassFront extends OpMode {
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
         launch1 =  new Path(new BezierCurve(intake1, launchPoseMain));
-        launch1.setLinearHeadingInterpolation(Math.PI, Math.toRadians(137), 0.8);
+        launch1.setLinearHeadingInterpolation(Math.PI, 0);
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
 
@@ -121,7 +121,7 @@ public class BlueAutoClassFront extends OpMode {
         }
         flipper.setPosition(0);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //same as 2nd
+        while (actionTimer.getElapsedTime() < 876.7){ //same as 2nd
         }
         flipper.setPosition(0.3778);
     }
@@ -131,6 +131,7 @@ public class BlueAutoClassFront extends OpMode {
             //it can also be used to get the X value of the robot's position
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
+                intake.setPower(-0.2);
                 follower.followPath(detectAT);
 //                if (limelightclass.result != null) {
 //                    result = limelightclass.result.getFiducialResults().get(0); //might break

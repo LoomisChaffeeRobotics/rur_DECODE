@@ -83,8 +83,8 @@ public class Launcher {
 
         }
 
-        launcher.setVelocity(lower_motor_interporation_result);
-        launcher2.setVelocity(upper_motor_interporation_result);
+        launcher.setVelocity(lower_motor_interporation_result*(7.0/15.0));
+        launcher2.setVelocity(upper_motor_interporation_result*(7.0/15.0));
         indexer.removefirst(indexer.SensedColorAll); //remove? color sensor stuff must be tested before messing with this
 //        flap1.setPosition(0.2);
 //        waitAuto(0.5);
