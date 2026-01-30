@@ -96,6 +96,8 @@ public class Launcher {
     }
     public boolean shoot(double distance) {
 
+        boolean interpolation_set = false;
+
         result = find_closest_x(distance); //finds distance from apriltag - two numbers: upper and lower bound
 
         if (result[1] != target_ranges[0] && result[0] != target_ranges[target_ranges.length - 1]) {
@@ -108,18 +110,41 @@ public class Launcher {
             upper_motor_value_1 = upper_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) - 1)];
 
         } else if (result[1] == target_ranges[0]) {
-            time_in_flight_value_0 = 0;
-            lower_motor_value_0 = 0;
-            upper_motor_value_0 = 0;
-            time_in_flight_value_1 = time_in_flights[0];
-            lower_motor_value_1 = lower_motor_speeds[0];
-            upper_motor_value_1 = upper_motor_speeds[0];
+
+            interpolation_set = true;
+
+//            time_in_flight_value_0 = 0;
+//            lower_motor_value_0 = 0;
+//            upper_motor_value_0 = 0;
+//            time_in_flight_value_1 = time_in_flights[0];
+//            lower_motor_value_1 = lower_motor_speeds[0];
+//            upper_motor_value_1 = upper_motor_speeds[0];
+
+            flight_time_interporation_result = time_in_flights[0]
+                    + (time_in_flights[1]
+                    - time_in_flights[0])
+                    * (distance - target_ranges[0]);
+
+
+            lower_motor_interporation_result = lower_motor_speeds[0]
+                    + (lower_motor_speeds[1]
+                    - lower_motor_speeds[0])
+                    * (distance - target_ranges[0]);
+
+
+            upper_motor_interporation_result = upper_motor_speeds[0]
+                    + (upper_motor_speeds[1]
+                    - upper_motor_speeds[0])
+                    * (distance - target_ranges[0]);
+
+
         } else {
 
-            time_in_flight_value_0 = time_in_flights[time_in_flights.length - 1];
-            lower_motor_value_0 = lower_motor_speeds[lower_motor_speeds.length - 1];
-            upper_motor_value_0 = upper_motor_speeds[upper_motor_speeds.length - 1];
-        }
+
+            interpolation_set = true;
+//            time_in_flight_value_0 = time_in_flights[time_in_flights.length - 1];
+//            lower_motor_value_0 = lower_motor_speeds[lower_motor_speeds.length - 1];
+//            upper_motor_value_0 = upper_motor_speeds[upper_motor_speeds.length - 1];
 
 //            the statements below create line approximations; slope is based off of the "distance" between the last item
 //            and the second last item.
@@ -129,23 +154,23 @@ public class Launcher {
 
 //            ^^^^^^
 
-//            time_in_flight_value_1 = time_in_flights[time_in_flights.length - 1]
-//                    + (time_in_flights[time_in_flights.length - 1]
-//                        - time_in_flights[time_in_flights.length - 2])
-//                    * (distance - 5.48);
-//
-//
-//            lower_motor_value_1 = lower_motor_speeds[lower_motor_speeds.length - 1]
-//                    + (lower_motor_speeds[lower_motor_speeds.length - 1]
-//                        - lower_motor_speeds[lower_motor_speeds.length - 2])
-//                    * (distance - 5.48);
-//
-//
-//            upper_motor_value_1 = upper_motor_speeds[upper_motor_speeds.length - 1]
-//                    + (upper_motor_speeds[upper_motor_speeds.length - 1]
-//                        - upper_motor_speeds[upper_motor_speeds.length - 2])
-//                    * (distance - 5.48);
-//    }
+        flight_time_interporation_result = time_in_flights[time_in_flights.length - 1]
+                    + (time_in_flights[time_in_flights.length - 1]
+                        - time_in_flights[time_in_flights.length - 2])
+                    * (distance - target_ranges[target_ranges.length - 1]);
+
+
+        lower_motor_interporation_result = lower_motor_speeds[lower_motor_speeds.length - 1]
+                    + (lower_motor_speeds[lower_motor_speeds.length - 1]
+                        - lower_motor_speeds[lower_motor_speeds.length - 2])
+                    * (distance - target_ranges[target_ranges.length - 1]);
+
+
+        upper_motor_interporation_result = upper_motor_speeds[upper_motor_speeds.length - 1]
+                    + (upper_motor_speeds[upper_motor_speeds.length - 1]
+                        - upper_motor_speeds[upper_motor_speeds.length - 2])
+                    * (distance - target_ranges[target_ranges.length - 1]);
+    }
 //        else {
 //
 //            time_in_flight_value_0 = time_in_flights[0];
@@ -161,23 +186,25 @@ public class Launcher {
 //        upper_motor_value_1 = result[1] >= 2 ? upper_motor_speeds[(int) (result[1] * 2)] : upper_motor_speeds[(result[1] == 0.5 ? 1 : 2)]; // upper motor speed for upper and lower
 
         //legit no idea if thats going tow ork
-        flight_time_interporation_result = interpolate_points(
-                distance, // distance
-                new double[]{result[0], time_in_flight_value_0}, //first (x,y) is (lower distance bound, flight time)
-                new double[]{result[1], time_in_flight_value_1} // second (x,y) is (upper distance bound, flight time)
-        );
+        if (!interpolation_set) {
+            flight_time_interporation_result = interpolate_points(
+                    distance, // distance
+                    new double[]{result[0], time_in_flight_value_0}, //first (x,y) is (lower distance bound, flight time)
+                    new double[]{result[1], time_in_flight_value_1} // second (x,y) is (upper distance bound, flight time)
+            );
 
-        lower_motor_interporation_result = interpolate_points(
-                distance,
-                new double[]{result[0], lower_motor_value_0},
-                new double[]{result[1], lower_motor_value_1}
-        ) * (7.0 / 15.0);
+            lower_motor_interporation_result = interpolate_points(
+                    distance,
+                    new double[]{result[0], lower_motor_value_0},
+                    new double[]{result[1], lower_motor_value_1}
+            ) * (7.0 / 15.0);
 
-        upper_motor_interporation_result = interpolate_points(
-                distance,
-                new double[]{result[0], upper_motor_value_0},
-                new double[]{result[1], upper_motor_value_1}
-        ) * (7.0 / 15.0);
+            upper_motor_interporation_result = interpolate_points(
+                    distance,
+                    new double[]{result[0], upper_motor_value_0},
+                    new double[]{result[1], upper_motor_value_1}
+            ) * (7.0 / 15.0);
+        }
         launcher.setVelocity(lower_motor_interporation_result);
         launcher2.setVelocity(upper_motor_interporation_result);
         indexer.removefirst(indexer.SensedColorAll); //remove? color sensor stuff must be tested before messing with this
