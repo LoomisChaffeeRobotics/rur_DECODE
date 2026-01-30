@@ -187,9 +187,10 @@ public class SimpleAuto extends OpMode {
     }
     @Override
     public void start() {
-        if (limelightclass.result != null) {
-            result = limelightclass.result.getFiducialResults().get(0);
-        } else {return;}
+//        if (limelightclass.result != null) {
+//            result = limelightclass.result.getFiducialResults().get(0);
+//        } else {return;}
+        ///  "result" is no longer a class variable
         if (result.getFiducialId() == 23) {
             telemetry.addLine("PPG");
             patternArray[0] = Indexer.SensedColor.PURPLE;

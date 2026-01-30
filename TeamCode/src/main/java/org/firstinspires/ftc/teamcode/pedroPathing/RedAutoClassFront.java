@@ -87,11 +87,11 @@ public class RedAutoClassFront extends OpMode {
             case 0:
                 follower.followPath(scorePreload);
                 turningthing.turnBasedOffColor(patternArray[0]);
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                 turningthing.turnBasedOffColor(patternArray[1]);
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                 turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                 setPathState(1);
                 break;
             case 1:
@@ -117,11 +117,11 @@ public class RedAutoClassFront extends OpMode {
             case 4:
                 if (!follower.isBusy()) {
                     turningthing.turnBasedOffColor(patternArray[0]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[1]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                     follower.followPath(pickup2);
                     setPathState(5);
                 }
@@ -144,11 +144,11 @@ public class RedAutoClassFront extends OpMode {
             case 7:
                 if (!follower.isBusy()) {
                     turningthing.turnBasedOffColor(patternArray[0]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[1]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, true)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( true)); //actually shoots
                     setPathState(-1);
                 }
                 break;

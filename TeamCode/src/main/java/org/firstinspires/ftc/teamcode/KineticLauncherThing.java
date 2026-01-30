@@ -59,7 +59,7 @@ public class KineticLauncherThing {
         pos = sparkfun.myOtos.getPosition();  //in meters and radians
         velocity = sparkfun.myOtos.getVelocity(); // like meters per second  possibly
         velocitymag = Math.sqrt(Math.pow(velocity.x, 2) + Math.pow(velocity.y, 2));
-        distancefromat = limelightsystem.getDistance_from_apriltag(0, false); //
+        distancefromat = limelightsystem.getDistance_from_apriltag( false); //
         velocity_towards_target = velocitymag * Math.cos(limelightsystem.botposeangle); //i think works
         angleerror = pos.h - 2.87979; //i literaly dont know it might be 165 degrees
         result = launcher.find_closest_x(distancefromat); //finds distance from apriltag - two numbers: upper and lower bound
@@ -67,7 +67,7 @@ public class KineticLauncherThing {
         time_in_flight_value_0 = result[0] >= 1.5 ? time_in_flights[(int) (result[0] * 2) - 1] : time_in_flights[(result[0] == 0.5 ? 0 : 1)]; // finds the time in flight for both upper and lower bound
         time_in_flight_value_1 = result[1] >= 2 ? time_in_flights[(int) (result[1] * 2)] : time_in_flights[(result[1] == 0.5 ? 1 : 2)]; // finds the time in flight for both upper and lower bound
         flight_time_interporation_result = launcher.interpolate_points(
-                limelightsystem.getDistance_from_apriltag(0, false), // distance
+                limelightsystem.getDistance_from_apriltag( false), // distance
                 new double[]{result[0], time_in_flight_value_0}, //first (x,y) is (lower distance bound, flight time)
                 new double[]{result[1], time_in_flight_value_1} // second (x,y) is (upper distance bound, flight time)
         );
@@ -81,7 +81,7 @@ public class KineticLauncherThing {
         telemetry.update();
     }
     public void calculateKINETICvalues(Telemetry telemetry) {
-        result = launcher.find_closest_x(limelightsystem.getDistance_from_apriltag(0, false)); //finds distance from apriltag - two numbers: upper and lower bound
+        result = launcher.find_closest_x(limelightsystem.getDistance_from_apriltag( false)); //finds distance from apriltag - two numbers: upper and lower bound
 
         time_in_flight_value_0 = result[0] >= 1.5 ? time_in_flights[(int) (result[0] * 2) - 1] : time_in_flights[(result[0] == 0.5 ? 0 : 1)]; // finds the time in flight for both upper and lower bound
         lower_motor_value_0 = result[0] >= 1.5 ? lower_motor_speeds[(int) (result[0] * 2) - 1] : lower_motor_speeds[(result[0] == 0.5 ? 0 : 1)]; // lower motor speed for upper and lower
@@ -94,22 +94,23 @@ public class KineticLauncherThing {
 
         //legit no idea if thats going tow ork
         flight_time_interporation_result = launcher.interpolate_points(
-                limelightsystem.getDistance_from_apriltag(0, false), // distance
+                limelightsystem.getDistance_from_apriltag( false), // distance
                 new double[]{result[0], time_in_flight_value_0}, //first (x,y) is (lower distance bound, flight time)
                 new double[]{result[1], time_in_flight_value_1} // second (x,y) is (upper distance bound, flight time)
         );
 
-        lower_motor_interporation_result = launcher.interpolate_points(
-                limelightsystem.getDistance_from_apriltag(sparkfun.expecteddistance, false),
-                new double[]{result[0], lower_motor_value_0},
-                new double[]{result[1], lower_motor_value_1}
-        ) * (7.0 / 15.0);
-
-        upper_motor_interporation_result = launcher.interpolate_points(
-                limelightsystem.getDistance_from_apriltag(sparkfun.expecteddistance, false),
-                new double[]{result[0], upper_motor_value_0},
-                new double[]{result[1], upper_motor_value_1}
-        ) * (7.0 / 15.0);
+        /// idk what this did
+//        lower_motor_interporation_result = launcher.interpolate_points(
+//                limelightsystem.getDistance_from_apriltag(sparkfun.expecteddistance, false),
+//                new double[]{result[0], lower_motor_value_0},
+//                new double[]{result[1], lower_motor_value_1}
+//        ) * (7.0 / 15.0);
+//
+//        upper_motor_interporation_result = launcher.interpolate_points(
+//                limelightsystem.getDistance_from_apriltag(sparkfun.expecteddistance, false),
+//                new double[]{result[0], upper_motor_value_0},
+//                new double[]{result[1], upper_motor_value_1}
+//        ) * (7.0 / 15.0);
 
 
 

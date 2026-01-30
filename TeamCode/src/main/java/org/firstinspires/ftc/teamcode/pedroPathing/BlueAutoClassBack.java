@@ -131,11 +131,11 @@ public class BlueAutoClassBack extends OpMode {
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
                 turningthing.turnBasedOffColor(patternArray[0]);
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0, false));
+                launcher.shoot(limelightclass.getDistance_from_apriltag( false));
                 turningthing.turnBasedOffColor(patternArray[1]);
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0, false));
+                launcher.shoot(limelightclass.getDistance_from_apriltag( false));
                 turningthing.turnBasedOffColor(patternArray[2]);
-                launcher.shoot(limelightclass.getDistance_from_apriltag(0, false));
+                launcher.shoot(limelightclass.getDistance_from_apriltag( false));
                 follower.followPath(pickup1);
                 setPathState(1);
                 break;
@@ -158,11 +158,11 @@ public class BlueAutoClassBack extends OpMode {
             case 3:
                 if (!follower.isBusy()) {
                     turningthing.turnBasedOffColor(patternArray[0]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( false)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[1]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( false)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( false)); //actually shoots
                     follower.followPath(pickup2);
                     setPathState(4);
                 }
@@ -186,11 +186,11 @@ public class BlueAutoClassBack extends OpMode {
             case 6:
                 if (!follower.isBusy()) {
                     turningthing.turnBasedOffColor(patternArray[0]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( false)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[1]);
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( false)); //actually shoots
                     turningthing.turnBasedOffColor(patternArray[2]); //these make it turns
-                    launcher.shoot(limelightclass.getDistance_from_apriltag(0, false)); //actually shoots
+                    launcher.shoot(limelightclass.getDistance_from_apriltag( false)); //actually shoots
                     setPathState(-1);
                 }
                 break;
