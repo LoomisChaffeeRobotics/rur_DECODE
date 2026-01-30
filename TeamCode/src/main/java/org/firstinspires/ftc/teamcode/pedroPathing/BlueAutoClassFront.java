@@ -85,14 +85,17 @@ public class BlueAutoClassFront extends OpMode {
 
 //        turningthing.turnBasedOffColor(patternArray[0]);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 1476.7) { //fix times
+        while (actionTimer.getElapsedTime() < 1076.7) { //fix times
             launcher.shoot(shootingdistance);
         }
         flipper.setPosition(0);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //this is probably okay
+        while (actionTimer.getElapsedTime() < 476.7){ //this is probably okay
         }
         flipper.setPosition(0.3778);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 400) {
+        }
 //        turningthing.turnBasedOffColor(patternArray[1]);
         turningthing.turn(false);
         actionTimer.resetTimer();
@@ -101,11 +104,14 @@ public class BlueAutoClassFront extends OpMode {
             launcher.shoot(shootingdistance);
         }
 
-        flipper.setPosition(0.03);
+        flipper.setPosition(0);
         actionTimer.resetTimer();
         while (actionTimer.getElapsedTime() < 676.7){ //should probably be same as 2nd
         }
         flipper.setPosition(0.3778);
+        actionTimer.resetTimer();
+        while (actionTimer.getElapsedTime() < 400) {
+        }
 //        turningthing.turnBasedOffColor(patternArray[2]);
         turningthing.turn(false);
         actionTimer.resetTimer();
@@ -113,6 +119,7 @@ public class BlueAutoClassFront extends OpMode {
             launcher.shoot(shootingdistance);
             turningthing.indexerUpdate();
         }
+        flipper.setPosition(0);
         actionTimer.resetTimer();
         while (actionTimer.getElapsedTime() < 676.7){ //same as 2nd
         }
@@ -255,7 +262,9 @@ public class BlueAutoClassFront extends OpMode {
     @Override
     public void loop() {
 ////        turningthing.sensecolor();
-//        turningthing.indexerUpdate();
+        if (pathState == 4) {
+            turningthing.indexerUpdate();
+        }
         follower.update();
 //        limelightclass.turntoAT(20);
         autoUpdate();
