@@ -7,7 +7,7 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.stopRobot;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.telemetryM;
 
-import com.acmerobotics.dashboard.FtcDashboard;
+//import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
@@ -1010,8 +1010,8 @@ class Line extends OpMode {
 class CentripetalTuner extends OpMode {
     public static double DISTANCE = 20;
     private boolean forward = true;
-    FtcDashboard dash = FtcDashboard.getInstance();
-    Telemetry t = dash.getTelemetry();
+//    FtcDashboard dash = FtcDashboard.getInstance();
+//    Telemetry t = dash.getTelemetry();
     private Path forwards;
     private Path backwards;
 
