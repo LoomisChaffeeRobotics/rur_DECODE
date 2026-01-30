@@ -44,6 +44,7 @@ public class LimeLightTurretSystem {
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.setMsTransmissionInterval(11);
         limelight.pipelineSwitch(0);
+        limelight.setPollRateHz(50);
         sparkfun = new sparkFunMethodsClass();
         sparkfun.init(hardwareMap,telemetry);
         limelight.start();;
