@@ -50,7 +50,7 @@ public class SimpleAuto extends OpMode {
         }
         flipper.setPosition(0.3189);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 476.7){
+        while (actionTimer.getElapsedTime() < 676.7){
         }
         flipper.setPosition(0.6741);
         turningthing.turn(false);
