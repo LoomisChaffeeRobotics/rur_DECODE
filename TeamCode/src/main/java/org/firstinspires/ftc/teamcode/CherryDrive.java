@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -48,8 +49,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
     /** List of Motors: */
-    DcMotor launcher; // top
-    DcMotor launcher2; // bottom (i think)
+    DcMotorEx launcher; // top
+    DcMotorEx launcher2; // bottom (i think)
     // v drive motors v
     DcMotor left_front;
     DcMotor right_front;
@@ -85,8 +86,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         launchClass.init(hardwareMap, telemetry);
         //Setting the motors
 //        intake = hardwareMap.get(DcMotor.class,"intake");
-        launcher = hardwareMap.get(DcMotor.class,"launcher");
-        launcher2 = hardwareMap.get(DcMotor.class,"launcher2");
+        launcher = hardwareMap.get(DcMotorEx.class,"launcher");
+        launcher2 = hardwareMap.get(DcMotorEx.class,"launcher2");
         left_front = hardwareMap.get(DcMotor.class, "leftFront");
         right_front = hardwareMap.get(DcMotor.class, "rightFront");
         left_back = hardwareMap.get(DcMotor.class, "leftBack");
@@ -207,15 +208,17 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             indexClass.indexerUpdate();
         }
 
-        telemetry.addData("desiered", indexClass.targetPosition);
-        telemetry.addData("position", indexClass.intake.getCurrentPosition());
-        telemetry.addData("sum", indexClass.sum);
+
+        telemetry.addData("motor up speed", launcher2.getVelocity());
+        telemetry.addData("motor down speed", launcher.getVelocity());
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
         telemetry.addData("flipper", flipperUp.getElapsedTime());
-        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0);
-        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1);
-        telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0);
-        telemetry.addData("lower motor speed 1", launchClass.lower_motor_value_1);
+        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
+        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
+        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0*(7.0 / 15.0));
+        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1*(7.0 / 15.0));
+        telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0*(7.0 / 15.0));
+        telemetry.addData("lower motor speed 1", launchClass.lower_motor_value_1*(7.0 / 15.0));
         telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed));
 
 //        telemetry.update();

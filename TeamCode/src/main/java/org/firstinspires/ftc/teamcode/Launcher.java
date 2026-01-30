@@ -99,7 +99,7 @@ public class Launcher {
         boolean interpolation_set = false;
 
         result = find_closest_x(distance); //finds distance from apriltag - two numbers: upper and lower bound
-
+        // result is the upper and lower bounds on the x
         if (result[1] != target_ranges[0] && result[0] != target_ranges[target_ranges.length - 1]) {
 
             time_in_flight_value_0 = time_in_flights[(int) ((result[0] / spacing) - (target_ranges[0] / spacing))];
@@ -108,6 +108,7 @@ public class Launcher {
             time_in_flight_value_1 = time_in_flights[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) + 1)];
             lower_motor_value_1 = lower_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) + 1)];
             upper_motor_value_1 = upper_motor_speeds[(int) ((result[0] / spacing) - (target_ranges[0] / spacing) + 1)];
+            //value 1 and 0 are the upper and lower bounds respectively, the later code interpolates between them (i think)
 
         } else if (result[1] == target_ranges[0]) {
 
@@ -154,23 +155,23 @@ public class Launcher {
 
 //            ^^^^^^
 
-        flight_time_interporation_result = time_in_flights[time_in_flights.length - 1]
+            flight_time_interporation_result = time_in_flights[time_in_flights.length - 1]
                     + (time_in_flights[time_in_flights.length - 1]
                         - time_in_flights[time_in_flights.length - 2])
                     * (distance - target_ranges[target_ranges.length - 1]);
 
 
-        lower_motor_interporation_result = lower_motor_speeds[lower_motor_speeds.length - 1]
+            lower_motor_interporation_result = lower_motor_speeds[lower_motor_speeds.length - 1]
                     + (lower_motor_speeds[lower_motor_speeds.length - 1]
                         - lower_motor_speeds[lower_motor_speeds.length - 2])
                     * (distance - target_ranges[target_ranges.length - 1]);
 
 
-        upper_motor_interporation_result = upper_motor_speeds[upper_motor_speeds.length - 1]
+            upper_motor_interporation_result = upper_motor_speeds[upper_motor_speeds.length - 1]
                     + (upper_motor_speeds[upper_motor_speeds.length - 1]
                         - upper_motor_speeds[upper_motor_speeds.length - 2])
                     * (distance - target_ranges[target_ranges.length - 1]);
-    }
+        }
 //        else {
 //
 //            time_in_flight_value_0 = time_in_flights[0];
@@ -185,7 +186,7 @@ public class Launcher {
 //        lower_motor_value_1 = result[1] >= 2 ? lower_motor_speeds[(int) (result[1] * 2)] : lower_motor_speeds[(result[1] == 0.5 ? 1 : 2)]; // lower motor speed for upper and lower
 //        upper_motor_value_1 = result[1] >= 2 ? upper_motor_speeds[(int) (result[1] * 2)] : upper_motor_speeds[(result[1] == 0.5 ? 1 : 2)]; // upper motor speed for upper and lower
 
-        //legit no idea if thats going tow ork
+        //legit no idea if thats going tow ork //it didnt :)
         if (!interpolation_set) {
             flight_time_interporation_result = interpolate_points(
                     distance, // distance
