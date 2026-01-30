@@ -15,7 +15,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.pedropathing.util.Timer;
+import java.util.Timer;
+
+//import com.pedropathing.util.Timer;
 
 @TeleOp // FINAL TELE-OP CLASS
 public class CherryDrive extends OpMode { //this clas is called CherryDrive because Cherry is a placeholder robot name
@@ -43,7 +45,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     /** weather or not we turn the turret automatically (do we want ts?) */
     boolean autoTurn = true;
     /** if this isn't self-explanatory re-do you are 5th grade education */
-    Timer flipperUp;
+    com.pedropathing.util.Timer flipperUp;
     // whether we're red alliance or not - can be set
     boolean isRed = false;
 
@@ -128,7 +130,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
         flipper(false);
-        flipperUp = new Timer();
+        flipperUp = new com.pedropathing.util.Timer();
         flipperUp.resetTimer();
 
     }
@@ -212,7 +214,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("motor up speed", launcher2.getVelocity());
         telemetry.addData("motor down speed", launcher.getVelocity());
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
-        telemetry.addData("flipper", flipperUp.getElapsedTime());
+//        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
 //        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
 //        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0*(7.0 / 15.0));
