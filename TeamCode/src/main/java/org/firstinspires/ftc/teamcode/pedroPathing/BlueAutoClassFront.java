@@ -162,7 +162,7 @@ public class BlueAutoClassFront extends OpMode {
                     break;
             case 2:
                     if (!follower.isBusy()){
-                    shootingMacro(limelightclass.getDistance_from_apriltag(0, false));
+                    shootingMacro(limelightclass.getDistance_from_apriltag( false));
 //                    shootingMacro(1); //uhhhhh this should probably work lowkey
 
                     setPathState(3);

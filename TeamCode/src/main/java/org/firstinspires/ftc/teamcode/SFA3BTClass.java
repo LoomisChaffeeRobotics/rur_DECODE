@@ -47,14 +47,14 @@ public class SFA3BTClass extends OpMode {
             desiredID = 20;
         }
 
-
+///     commented out this section because it uses 'rsult' no longer a class variable
         //makes the results list
-        List<LLResultTypes.FiducialResult> results = limelight.result.getFiducialResults();
+//        List<LLResultTypes.FiducialResult> results = limelight.result.getFiducialResults();
 
 
-        if (!limelight.result.getFiducialResults().isEmpty()){
-            ATSeen = true;
-        }
+//        if (!limelight.result.getFiducialResults().isEmpty()){
+//            ATSeen = true;
+//        }
 
         // by NOW atseen is accurate
 

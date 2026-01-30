@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class LimeLightTurretSystem {
     public Position positionrelativetoapriltag;
     public boolean yesorno = true;
 
-    public LLResult result;
     public double botposeangle;
     public double angleerror = targetangle - botposeangle;
     public double velocityheading;
@@ -47,13 +47,13 @@ public class LimeLightTurretSystem {
         limelight.setPollRateHz(50);
         sparkfun = new sparkFunMethodsClass();
         sparkfun.init(hardwareMap,telemetry);
-        limelight.start();;
+        limelight.start();
+        // so botpose is never null
+        botpose = new Pose3D(new Position(), new YawPitchRollAngles(AngleUnit.DEGREES,0,0,0,0));
 
 
     }
     public void turnWithKinetic() { //this doesn't work we need to ask doc sbout this
-        botpose = (result != null) ? result.getBotpose() : botpose;
-        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
         velocityheading = sparkfun.velocity.h; //i dont know what velocity.h is but im hoping it's the angle of the velocity
         kineticerror = targetangle-velocityheading;
         angleerror = (targetangle - botposeangle) + kineticerror; //you might need to add kineticerror or subtract (targetangle-botposeangle) from it
@@ -70,19 +70,12 @@ public class LimeLightTurretSystem {
     public void turntoAT(double id) { //i think i got numbers right maybe
 
 
-        result = limelight.getLatestResult();
-        List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
-        if (result == null || id != fiducialResults.get(0).getFiducialId()){
-            turretSpin.setPower(0);
-            yesorno = false;
-            return;
 
-        }
         yesorno = true;
-        botpose = result.getBotpose();
         if (id == fiducialResults.get(0).getFiducialId()) {
             botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-            angleerror = result.getTx(); //targetangle - botposeangle;
+            ///  fix this
+//            angleerror = result.getTx(); //targetangle - botposeangle;
             if (encoder.getCurrentPosition() < 90/encoderDegreesPerTick && encoder.getCurrentPosition() > -90/encoderDegreesPerTick) { //change the big number
                 if (angleerror < -1) {
                     turretSpin.setPower(0.2);
@@ -107,18 +100,18 @@ public class LimeLightTurretSystem {
         turretSpin.setPower(power);
     }
 
-
-    public double getDistance_from_apriltag(double value /*im not sure what that does */, boolean isBlue) {
-        //BLUEEEEEEEEE
-        result = limelight.getLatestResult();
-        botpose = (result != null) ? result.getBotpose() : botpose;
-        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + (isBlue? 1.413: -1.413), 0, 0);
-        if (value == 0) {
-            distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
-        } else {
-            return value;
+    public void update(){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
+        LLResult result = limelight.getLatestResult();
+        if (result.getBotpose().getPosition().x != 0){
+            botpose = result.getBotpose();
         }
+    }
+
+    public double getDistance_from_apriltag(boolean isBlue) {
+        //BLUEEEEEEEEE
+        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + (isBlue? 1.413: -1.413), 0, 0);
+        distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
+
 
         angleerror = targetangle - botposeangle;
         return distance_from_apriltag;
@@ -134,12 +127,8 @@ public class LimeLightTurretSystem {
 
     /** gives the position relative to the april tag */
     public Pose2D getPositionCenterRelative(boolean isBlue){
-        result = limelight.getLatestResult();
-        botpose = (result != null) ? result.getBotpose() : botpose;
-
-        botposeangle = botpose.getOrientation().getYaw(AngleUnit.DEGREES);
-        double robox = botpose.getPosition().x + 1.482 + Math.cos(botposeangle);
-        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413) + Math.sin(botposeangle);
+        double robox = botpose.getPosition().x + 1.482 + Math.cos(Math.toRadians(botposeangle));
+        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413) + Math.sin(Math.toRadians(botposeangle));
         return new Pose2D(DistanceUnit.METER, robox, roboy, AngleUnit.DEGREES, botposeangle);
     }
 }

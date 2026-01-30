@@ -147,7 +147,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     @Override
     public void loop() {
-
+        limeLightTurretSystem.update();
         indexClass.sensecolor();
 
         //  INTAKE - gp1 RT, gp2 RB
@@ -216,7 +216,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1);
         telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0);
         telemetry.addData("lower motor speed 1", launchClass.lower_motor_value_1);
-        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(0, !isRed));
+        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed));
 
 //        telemetry.update();
 
@@ -285,7 +285,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             launcher2.setPower(0);
             return;
         }
-        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(0, !isRed));
+        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed));
         telemetry.addData("turret power: ", power);
     }
     public void flipper(boolean up){ // Done!
