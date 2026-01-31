@@ -55,12 +55,10 @@ import java.util.List;
 @Configurable
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
-    public static double indexerP = 0.0005;
-    //0.00007 is 0-ball
-    public static double indexerF = 0.00;
+    public static double indexerP = 0.000125;
+    public static double indexerF = 0;
     public static double indexerI = 0.000001;
-    public static double indexerD = 0.000038;
-    public static double indexerSpeedCap = 0.15;
+    public static double indexerD = 0.000015;
     LimeLightTurretSystem limelightclass;
     IMU imu;
 
@@ -128,7 +126,8 @@ public class Indexer {
 
         double product = indexerP * error;
         double derivative = (error - prevError)/PIDTimer.seconds();
-        double rotationRate = (imu.getRobotAngularVelocity(AngleUnit.DEGREES).yRotationRate - prevRotationRate)/PIDTimer.seconds();
+        double rotationRate = imu.getRobotAngularVelocity(AngleUnit.DEGREES).yRotationRate;
+        double rotationAccel = (rotationRate - prevRotationRate)/PIDTimer.seconds();
         if (absError< 100){
             indexer.setPower(0);
             sum = 0;
@@ -136,7 +135,7 @@ public class Indexer {
             sum += error * indexerI;
             if (Math.abs(sum) > 0.5) {sum = Math.signum(sum)*0.5;}
 
-            power = rotationRate * indexerF + product + sum + (indexerD * derivative);
+            power = -rotationAccel * indexerF + product + sum + (indexerD * derivative);
 //            power = Math.max(Math.min(power,indexerSpeedCap), -indexerSpeedCap);
             indexer.setPower(power);
 
@@ -249,7 +248,7 @@ public class Indexer {
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         limelightclass = new LimeLightTurretSystem();
         limelightclass.init(hardwareMap, telemetry);
-        imu = hardwareMap.get(IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, "imu2");
 
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");

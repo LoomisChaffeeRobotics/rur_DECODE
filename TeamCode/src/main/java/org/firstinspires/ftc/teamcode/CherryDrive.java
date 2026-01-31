@@ -41,6 +41,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
     /** we use this for finding motor speeds VERY IMPORTANT even tho only used once */
     Launcher launchClass;
+    LauncherLegacy launcherLegacy;
 
     /** weather or not we turn the turret automatically (do we want ts?) */
     boolean autoTurn = true;
@@ -84,8 +85,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         limeLightTurretSystem.init(hardwareMap, telemetry);
         indexClass = new Indexer();
         indexClass.init(hardwareMap, telemetry);
-        launchClass = new Launcher();
-        launchClass.init(hardwareMap, telemetry);
+//        launchClass = new Launcher();
+//        launchClass.init(hardwareMap, telemetry);
+        launcherLegacy = new LauncherLegacy();
+        launcherLegacy.init(hardwareMap, telemetry);
         //Setting the motors
 //        intake = hardwareMap.get(DcMotor.class,"intake");
         launcher = hardwareMap.get(DcMotorEx.class,"launcher");
@@ -153,6 +156,21 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         limeLightTurretSystem.update();
         indexClass.sensecolor();
 
+        telemetry.addData("motor up speed", launcher2.getVelocity());
+        telemetry.addData("motor down speed", launcher.getVelocity());
+        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+//        telemetry.addData("flipper", flipperUp.getElapsedTime());
+//        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
+//        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
+//        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0*(7.0 / 15.0));
+//        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1*(7.0 / 15.0));
+//        telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0*(7.0 / 15.0));
+//        telemetry.addData("lowerpower", launchClass.lower_motor_interporation_result*(15.0/7.0));
+//        telemetry.addData("higherpower", launchClass.upper_motor_interporation_result*(15.0/7.0));
+
+//        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.4);
+        telemetry.addData("current distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.1);
+
         //  INTAKE - gp1 RT, gp2 RB
         if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/ /*nevermind keep this*/) {
             runIntake(1d);
@@ -211,19 +229,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
 
-        telemetry.addData("motor up speed", launcher2.getVelocity());
-        telemetry.addData("motor down speed", launcher.getVelocity());
-        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
-//        telemetry.addData("flipper", flipperUp.getElapsedTime());
-//        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
-//        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
-//        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0*(7.0 / 15.0));
-//        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1*(7.0 / 15.0));
-//        telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0*(7.0 / 15.0));
-//        telemetry.addData("lowerpower", launchClass.lower_motor_interporation_result*(15.0/7.0));
-//        telemetry.addData("higherpower", launchClass.upper_motor_interporation_result*(15.0/7.0));
 
-        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.4);
 
 //        telemetry.update();
 
@@ -292,8 +298,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             launcher2.setPower(0);
             return;
         }
-        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.4 /*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/);
-        telemetry.addData("turret power: ", power);
+        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.9);/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
+
     }
     public void flipper(boolean up){ // Done!
         //flip

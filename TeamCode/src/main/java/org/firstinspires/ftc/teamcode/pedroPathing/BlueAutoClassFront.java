@@ -38,10 +38,11 @@ public class BlueAutoClassFront extends OpMode {
     Pose controlPoint1 = new Pose(66.7958,83.5325,Math.PI);
     Pose pickupPose1 = new Pose (39.5,82.6, Math.PI);
     Pose intake1 = new Pose(16, 88.6, Math.PI);
+    Pose leavePose = new Pose(32, 75, Math.toRadians(137));
     Pose controlPoint2 = new Pose(68.80518,58.5278,Math.PI);
     Pose pickupPose2 = new Pose (39.5,60.09273570324575, Math.PI);
     Pose intake2 = new Pose(9.137, 60.092735, Math.PI);
-    private Path detectAT, scorePreload, pickup1, launch1, pickup2, launch2;
+    private Path detectAT, scorePreload, pickup1, launch1, leave1, pickup2, launch2;
     private PathChain intake1chain, intake2chain;
     public void buildPaths() {
 
@@ -60,7 +61,9 @@ public class BlueAutoClassFront extends OpMode {
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
         launch1 =  new Path(new BezierCurve(intake1, launchPoseMain));
-        launch1.setLinearHeadingInterpolation(Math.PI, 0);
+        launch1.setLinearHeadingInterpolation(Math.PI, Math.toRadians(137));
+        leave1 = new Path(new BezierCurve(launchPoseMain, leavePose));
+        leave1.setConstantHeadingInterpolation(Math.toRadians(137));
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
 
@@ -184,7 +187,7 @@ public class BlueAutoClassFront extends OpMode {
                 break;
             case 5:
                 if (!follower.isBusy()) {
-//                    intake.setPower(0);
+                    intake.setPower(0);
                     follower.followPath(launch1);
                     setPathState(6);
                 }
@@ -192,15 +195,14 @@ public class BlueAutoClassFront extends OpMode {
 
             case 6:
                 if (!follower.isBusy()) {
-                    follower.turnTo(Math.toRadians(137));
 //                    shootingMacro(limelightclass.getDistance_from_apriltag(true));
                     shootingMacro(1.3);
 
                     //STOP HERE FOR QUAL UNLESS EXTRA TIME
                     //GO FIX STUFF THAT ARE BROKEN
-
+                    follower.followPath(leave1);
 //                    follower.followPath(pickup2);
-                    setPathState(7);
+                    setPathState(-1);
                 }
                 break;
 //            case 6:
