@@ -169,7 +169,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //        telemetry.addData("higherpower", launchClass.upper_motor_interporation_result*(15.0/7.0));
 
 //        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.4);
-        telemetry.addData("current distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.1);
+        telemetry.addData("current distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.9);
 
         //  INTAKE - gp1 RT, gp2 RB
         if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/ /*nevermind keep this*/) {
@@ -298,7 +298,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             launcher2.setPower(0);
             return;
         }
-        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.9);/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
+        launcherLegacy.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.9);/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
 
     }
     public void flipper(boolean up){ // Done!
