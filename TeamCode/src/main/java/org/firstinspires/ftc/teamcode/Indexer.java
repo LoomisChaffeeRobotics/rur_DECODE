@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 
 import android.graphics.Color;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -55,13 +56,12 @@ import java.util.List;
 @Configurable
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
-    public static double indexerP = 0.000125;
+    public static double indexerP = 0.0002;
     public static double indexerF = 0;
-    public static double indexerI = 0.000001;
+    public static double indexerI = 0.000006;
     public static double indexerD = 0.000015;
     LimeLightTurretSystem limelightclass;
     IMU imu;
-
     float gain = 3.5F;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;

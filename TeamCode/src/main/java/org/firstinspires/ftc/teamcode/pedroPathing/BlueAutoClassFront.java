@@ -36,8 +36,8 @@ public class BlueAutoClassFront extends OpMode {
     Pose detectPose = new Pose(34.68712123,107.7528485, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
     Pose launchPoseMain = new Pose(45.40340030911901,97.706336939721788, 2.3911);
     Pose controlPoint1 = new Pose(66.7958,83.5325,Math.PI);
-    Pose pickupPose1 = new Pose (39.5,82.6, Math.PI);
-    Pose intake1 = new Pose(16, 88.6, Math.PI);
+    Pose pickupPose1 = new Pose (39.5,84.6, Math.PI);
+    Pose intake1 = new Pose(16, 84.6, Math.PI);
     Pose leavePose = new Pose(32, 75, Math.toRadians(137));
     Pose controlPoint2 = new Pose(68.80518,58.5278,Math.PI);
     Pose pickupPose2 = new Pose (39.5,60.09273570324575, Math.PI);
@@ -88,7 +88,7 @@ public class BlueAutoClassFront extends OpMode {
 
 //        turningthing.turnBasedOffColor(patternArray[0]);
         actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 876.7) { //fix times
+        while (actionTimer.getElapsedTime() < 2776.7) { //fix times
             launcher.shoot(shootingdistance);
         }
         flipper.setPosition(0);
@@ -174,6 +174,7 @@ public class BlueAutoClassFront extends OpMode {
                 break;
             case 3:
                 if (!follower.isBusy()) {
+//                    follower.followPath(leave1);
                     follower.followPath(pickup1);
                     setPathState(4);
                 }
@@ -181,7 +182,7 @@ public class BlueAutoClassFront extends OpMode {
             case 4:
                 if (!follower.isBusy()) {
                     intake.setPower(-1);
-                    follower.followPath(intake1chain, 0.4, true); //maxPower should go down probably
+                    follower.followPath(intake1chain, 0.3, true); //maxPower should go down probably
                     setPathState(5);
                 }
                 break;
@@ -192,7 +193,7 @@ public class BlueAutoClassFront extends OpMode {
                     setPathState(6);
                 }
                 break;
-
+//
             case 6:
                 if (!follower.isBusy()) {
 //                    shootingMacro(limelightclass.getDistance_from_apriltag(true));
