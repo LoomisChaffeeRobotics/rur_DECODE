@@ -113,16 +113,16 @@ public class LauncherLegacy {
 
         boolean interpolation_set = false;
 
-        if (distance == 1.3) {
-            upper_motor_interporation_result = upper_motor_speeds[0] * (0.4666666667);
-            lower_motor_interporation_result = lower_motor_speeds[0] * (0.466667);
-        } else if (distance == 3) {
-            upper_motor_interporation_result = upper_motor_speeds[1] * (0.46666667);
-            lower_motor_interporation_result = lower_motor_speeds[1] * (0.466666667);
-        } else if (distance == 0) {
-            upper_motor_interporation_result = 0;
-            lower_motor_interporation_result = 0;
-        }
+//        if (distance == 1.3) {
+//            upper_motor_interporation_result = upper_motor_speeds[0] * (0.4666666667);
+//            lower_motor_interporation_result = lower_motor_speeds[0] * (0.466667);
+//        } else if (distance == 3) {
+//            upper_motor_interporation_result = upper_motor_speeds[1] * (0.46666667);
+//            lower_motor_interporation_result = lower_motor_speeds[1] * (0.466666667);
+//        } else if (distance == 0) {
+//            upper_motor_interporation_result = 0;
+//            lower_motor_interporation_result = 0;
+//        }
 
         result = find_closest_x(distance); //finds distance from apriltag - two numbers: upper and lower bound
         // result is the upper and lower bounds on the x
