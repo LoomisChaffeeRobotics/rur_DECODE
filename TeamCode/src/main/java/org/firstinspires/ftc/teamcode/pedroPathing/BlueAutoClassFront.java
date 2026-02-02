@@ -36,8 +36,8 @@ public class BlueAutoClassFront extends OpMode {
     Pose detectPose = new Pose(34.68712123,107.7528485, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
     Pose launchPoseMain = new Pose(45.40340030911901,97.706336939721788, 2.3911);
     Pose controlPoint1 = new Pose(66.7958,83.5325,Math.PI);
-    Pose pickupPose1 = new Pose (39.5,84.6, Math.PI);
-    Pose intake1 = new Pose(16, 84.6, Math.PI);
+    Pose pickupPose1 = new Pose (43.5,84.6, Math.PI);
+    Pose intake1 = new Pose(18, 84.6, Math.PI);
     Pose leavePose = new Pose(32, 75, Math.toRadians(137));
     Pose controlPoint2 = new Pose(68.80518,58.5278,Math.PI);
     Pose pickupPose2 = new Pose (39.5,60.09273570324575, Math.PI);
@@ -52,7 +52,7 @@ public class BlueAutoClassFront extends OpMode {
         scorePreload = new Path(new BezierCurve(detectPose, launchPoseMain));
         scorePreload.setLinearHeadingInterpolation(Math.toRadians(65), Math.toRadians(137), 0.8);
         pickup1 =  new Path(new BezierCurve(launchPoseMain, controlPoint1, pickupPose1));
-        pickup1.setLinearHeadingInterpolation(Math.toRadians(65), Math.PI);
+        pickup1.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
 
         intake1chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose1, intake1))
@@ -190,6 +190,7 @@ public class BlueAutoClassFront extends OpMode {
                 if (!follower.isBusy()) {
                     intake.setPower(0);
                     follower.followPath(launch1);
+                    follower.turnToDegrees(137);
                     setPathState(6);
                 }
                 break;
@@ -201,8 +202,8 @@ public class BlueAutoClassFront extends OpMode {
 
                     //STOP HERE FOR QUAL UNLESS EXTRA TIME
                     //GO FIX STUFF THAT ARE BROKEN
-                    follower.followPath(leave1);
-//                    follower.followPath(pickup2);
+//                    follower.followPath(leave1);
+                    follower.followPath(pickup2);
                     setPathState(-1);
                 }
                 break;
