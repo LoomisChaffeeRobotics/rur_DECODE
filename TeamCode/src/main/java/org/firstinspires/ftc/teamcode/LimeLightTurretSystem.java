@@ -105,6 +105,7 @@ public class LimeLightTurretSystem {
         if (result.getBotpose().getPosition().x != 0){
             botpose = result.getBotpose();
         }
+        botposeangle = botpose.getOrientation().getYaw();
     }
 
     public double getDistance_from_apriltag(boolean isBlue) {
@@ -129,6 +130,8 @@ public class LimeLightTurretSystem {
     public Pose2D getPositionCenterRelative(boolean isBlue){
         double robox = botpose.getPosition().x + 1.482 + Math.cos(Math.toRadians(botposeangle));
         double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413) + Math.sin(Math.toRadians(botposeangle));
+        robox -= Math.cos(botposeangle);
+        roboy -= Math.sin(botposeangle);
         return new Pose2D(DistanceUnit.METER, robox, roboy, AngleUnit.DEGREES, botposeangle);
     }
 }
