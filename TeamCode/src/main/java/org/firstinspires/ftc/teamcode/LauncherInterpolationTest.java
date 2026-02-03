@@ -2,17 +2,20 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class LauncherInterpolationTest extends OpMode {
 
-    Launcher launcherClass;
+    LauncherLegacy launcherClass;
     LimeLightTurretSystem limelight;
+    Servo flipper;
     double distance;
 
     @Override
     public void init() {
-        launcherClass = new Launcher();
+        flipper = hardwareMap.get(Servo.class, "flipper");
+        launcherClass = new LauncherLegacy();
         launcherClass.init(hardwareMap, telemetry);
         limelight = new LimeLightTurretSystem();
         limelight.init(hardwareMap, telemetry);
@@ -27,8 +30,13 @@ public class LauncherInterpolationTest extends OpMode {
         } else if (gamepad1.b){
             distance -= 0.01;
         }
+        if (gamepad1.right_trigger>0.2){
+            flipper.setPosition(0);
+        } else {
+            flipper.setPosition(0.3578);
+        }
         telemetry.addData("Distance, meters", distance);
-       telemetry.addData("botpose", limelight.botpose);
+//       telemetry.addData("botpose", limelight.botpose);
 
        telemetry.update();
     }
