@@ -83,7 +83,7 @@ public class LimeLightTurretSystem {
                     turretSpin.setPower(-0.2);
                 } else if (angleerror < 1 && angleerror > -1) {
                     turretSpin.setPower(0);
-                } //TODO: Dylan Dorman wants a PID here but this is fine for now I GUESS>:c
+                } //TODO: Dylan Dorman wants a PID here but this is fine for now I GUESS
             } else if (encoder.getCurrentPosition() < -90/encoderDegreesPerTick && angleerror > 0) { //so if the encoder is past a certain point either way turn back the other way
                 turretSpin.setPower(-0.2); //idk which direction is right
                 // noih
@@ -100,12 +100,15 @@ public class LimeLightTurretSystem {
         turretSpin.setPower(power);
     }
 
-    public void update(){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
+    public boolean update(){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
         LLResult result = limelight.getLatestResult();
-        if (result.getBotpose().getPosition().x != 0){
+        boolean seen =  (result.getBotpose().getPosition().x != 0);
+        if (seen){
             botpose = result.getBotpose();
         }
         botposeangle = botpose.getOrientation().getYaw();
+
+        return seen;
     }
 
     public double getDistance_from_apriltag(boolean isBlue) {
@@ -128,10 +131,8 @@ public class LimeLightTurretSystem {
 
     /** gives the position relative to the april tag */
     public Pose2D getPositionCenterRelative(boolean isBlue){
-        double robox = botpose.getPosition().x + 1.482 + Math.cos(Math.toRadians(botposeangle));
-        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413) + Math.sin(Math.toRadians(botposeangle));
-        robox -= Math.cos(botposeangle);
-        roboy -= Math.sin(botposeangle);
+        double robox = botpose.getPosition().x + 1.482 - 0.18*Math.cos(Math.toRadians(botposeangle));
+        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413) - 0.18*Math.sin(Math.toRadians(botposeangle));
         return new Pose2D(DistanceUnit.METER, robox, roboy, AngleUnit.DEGREES, botposeangle);
     }
 }

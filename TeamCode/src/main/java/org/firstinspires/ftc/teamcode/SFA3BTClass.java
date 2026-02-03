@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -20,9 +21,10 @@ public class SFA3BTClass extends OpMode {
     /** SPARK FUN AS AN APRILTAG BACKUP TESTING CLASS */
     sparkFunMethodsClass sparkfun;
     LimeLightTurretSystem limelight;
-    String teamColor = "none";
+    String teamColor = "blue";
     int desiredID = 0;
     SparkFunOTOS.Pose2D roboPoseRelativeToAT;
+    DcMotorEx encoder;
 
 
     @Override
@@ -31,14 +33,15 @@ public class SFA3BTClass extends OpMode {
         limelight.init(hardwareMap,telemetry);
         sparkfun = new sparkFunMethodsClass();
         sparkfun.init(hardwareMap,telemetry);
+        encoder = hardwareMap.get(DcMotorEx.class, "encoder");
+        roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(0,0,0);
     }
 
 
     @Override
     public void loop() {
         boolean ATSeen = false;
-        limelight.update();
-
+        ATSeen = limelight.update();
         if (gamepad1.a && Objects.equals(teamColor, "none")){ // Objects.equals(String, String) just sees if theyre equal
             teamColor = "red";
             desiredID = 24;
@@ -48,25 +51,22 @@ public class SFA3BTClass extends OpMode {
             desiredID = 20;
         }
 
-///     commented out this section because it uses 'rsult' no longer a class variable
-        //makes the results list
-//        List<LLResultTypes.FiducialResult> results = limelight.result.getFiducialResults();
-
-
-//        if (!limelight.result.getFiducialResults().isEmpty()){
-//            ATSeen = true;
-//        }
-
-        // by NOW atseen is accurate
 
         if(ATSeen){
             Pose2D ATSeenRoboPose = limelight.getPositionCenterRelative(Objects.equals(teamColor, "blue"));
-            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.METER), ATSeenRoboPose.getY(DistanceUnit.METER), ATSeenRoboPose.getHeading(AngleUnit.DEGREES));
+            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.INCH), ATSeenRoboPose.getY(DistanceUnit.INCH), ATSeenRoboPose.getHeading(AngleUnit.DEGREES) +90);
             sparkfun.myOtos.setPosition(roboPoseRelativeToAT);
         }
         else {
-            sparkfun.myOtos.getPosition();
+            roboPoseRelativeToAT = sparkfun.myOtos.getPosition();
         }
 
+        telemetry.addData("x",roboPoseRelativeToAT.x);
+        telemetry.addData("y",roboPoseRelativeToAT.y);
+        telemetry.addData("h",roboPoseRelativeToAT.h);
+
+        if (!ATSeen){
+            telemetry.addLine("NO AT SEEN");
+        }
     }
 }
