@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
 import android.graphics.Color;
@@ -63,7 +64,7 @@ public class Indexer {
     public static double indexerD = 0.000015;
     LimeLightTurretSystem limelightclass;
     IMU imu;
-    float gain = 3.5F;
+    public float gain = 4.5F;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
     double targetPosition=0;
@@ -272,15 +273,18 @@ public class Indexer {
 
     }
     public void sensecolor() { //must be run at all times. Senses the color
+        colors1 = colorSensor1.getNormalizedColors();
 
+        colorSensor1.setGain(gain);
         Color.colorToHSV(colors1.toColor(), hsvValues1);
             if (hsvValues1[0] >= 150 && hsvValues1[0] <= 170) {
                 SensedColorAll.set(0, SensedColor.GREEN);
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 290) { //MUST BE CHANGED ASAPPPPPPPPP // UPDATED 1/29 TO EMMA'S NUMBERS
                 SensedColorAll.set(0, SensedColor.PURPLE);
-            } else {
-                SensedColorAll.set(0, SensedColor.NEITHER);
             }
+//            } else {
+//                SensedColorAll.set(0, SensedColor.NEITHER);
+//            }
 //            else {
 //                CurrentColor2 = SensedColor.NEITHER;
 //            }

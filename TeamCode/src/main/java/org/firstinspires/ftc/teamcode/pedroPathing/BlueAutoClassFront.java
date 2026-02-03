@@ -34,7 +34,7 @@ public class BlueAutoClassFront extends OpMode {
     private int pathState;
     Pose startPose = new Pose(21.36630602782071,123.52395672333849, Math.toRadians(143)); //heading in radians
     Pose detectPose = new Pose(34.68712123,107.7528485, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
-    Pose launchPoseMain = new Pose(45.40340030911901,97.706336939721788, 2.3911);
+    Pose launchPoseMain = new Pose(45.40340030911901,97.706336939721788, Math.toRadians(137));
     Pose controlPoint1 = new Pose(66.7958,83.5325,Math.PI);
     Pose pickupPose1 = new Pose (43.5,84.6, Math.PI);
     Pose intake1 = new Pose(18, 84.6, Math.PI);
@@ -66,7 +66,7 @@ public class BlueAutoClassFront extends OpMode {
         leave1.setConstantHeadingInterpolation(Math.toRadians(137));
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
-
+        pickup2.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
         intake2chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose2, intake2))
                 .setConstantHeadingInterpolation(Math.PI)
@@ -190,7 +190,6 @@ public class BlueAutoClassFront extends OpMode {
                 if (!follower.isBusy()) {
                     intake.setPower(0);
                     follower.followPath(launch1);
-                    follower.turnToDegrees(137);
                     setPathState(6);
                 }
                 break;
@@ -258,7 +257,8 @@ public class BlueAutoClassFront extends OpMode {
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
-        follower.setStartingPose(startPose);
+//        follower.setStartingPose(startPose);
+        follower.setStartingPose(intake1);
         setPathState(0);
         turningthing.SensedColorAll.set(0, Indexer.SensedColor.PURPLE); //preload
         turningthing.SensedColorAll.set(1, Indexer.SensedColor.PURPLE);

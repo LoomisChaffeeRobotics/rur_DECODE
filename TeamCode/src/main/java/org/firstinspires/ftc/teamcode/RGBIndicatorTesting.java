@@ -1,17 +1,23 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.bylazar.lights.RGBIndicator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class RGBIndicatorTesting extends OpMode {
 
     Servo light = null;
+    RGBIndicator light2;
 
     @Override
     public void init(){
+
         light = hardwareMap.get(Servo.class,"light");
+
+
     }
     @Override
     public void loop(){
@@ -20,7 +26,7 @@ public class RGBIndicatorTesting extends OpMode {
         } else if (gamepad1.b) {
             light.setPosition(0.500);
         } else {
-            light.setPosition(0);
+            light.setPosition(0.000);
         }
     }
 
