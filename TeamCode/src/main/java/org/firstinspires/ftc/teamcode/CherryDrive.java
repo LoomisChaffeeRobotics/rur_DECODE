@@ -197,6 +197,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         //  TURRET - gp2 LT
         if (gamepad2.left_trigger > 0.2) {
             startTurret(3);
+        } else {
+            startTurret(0);
         }
 
         //  FLIPPER - gp2 RT
@@ -212,12 +214,21 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         // SPINNER - gp2 X and B
         if (gamepad2.x && !xdepressed) {
-            turnSpinner(true);
+//            turnSpinner(true);
+            indexClass.turnBasedOffColor(Indexer.SensedColor.PURPLE);
             xdepressed = true;
         } else if (gamepad2.b && !bdepressed) {
-            turnSpinner(false);
+//            turnSpinner(false);
+            indexClass.turnBasedOffColor(Indexer.SensedColor.GREEN);
             bdepressed = true;
         }
+
+        if (gamepad2.y && !xdepressed) {
+//            turnSpinner(true);
+            indexClass.turnBasedOffColor(Indexer.SensedColor.NEITHER);
+            xdepressed = true;
+        }
+
         if (!gamepad2.x){
             xdepressed = false;
         }
@@ -243,6 +254,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (gamepad1.start){
             imu.resetYaw();
         }
+
+        telemetry.addData("error", indexClass.error);
 
         t2.addData("inner cur velo", launchClass.launcher.getVelocity());
         t2.addData("outer cur velo", launchClass.launcher2.getVelocity());
@@ -291,15 +304,12 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         left_front.setPower(left_front_velocity/denominator);
         left_back.setPower(left_back_velocity/denominator);
 
-        telemetry.addData("imu", Yaw);
-        telemetry.addData("denominator", denominator);
 
     }
 
     /** runs the intake at power power. 0 for stop 1 for go .5 for 50% speed*/
     public void runIntake(double power){ // Done!
 
-        telemetry.addData("intake power: ",power);
         indexClass.spinIn(power);
     }
     public void startTurret(double power){ // Done?
@@ -309,9 +319,11 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     public void flipper(boolean up){ // Done!
         //flip
+
         double flipDown = 0.3578d;
         double flipUP = 0.0d;
         flipper.setPosition(up? flipUP : flipDown);
+        indexClass.removefirst(indexClass.SensedColorAll);
         telemetry.addData("flipper upness: ", up);
     }
     public void turnSpinner(boolean direction) {

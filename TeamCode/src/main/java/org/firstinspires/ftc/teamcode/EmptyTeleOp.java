@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+
 import android.text.ParcelableSpan;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -30,11 +32,23 @@ public class EmptyTeleOp extends OpMode {
         timer.reset();
     }
 
+    long counter = 0;
+
     @Override
     public void loop() {
-        if (gamepad1.left_trigger > 0.2 && (Math.abs(indexClass.error) < 100)) {
+        if (!indexClass.indexer_is_moving) {
             indexClass.sensecolor();
+            counter++;
         }
+
+        if (gamepad1.dpadLeftWasPressed()) {
+            indexClass.gain++;
+        } else if (gamepad1.dpadRightWasPressed()) {
+            indexClass.gain--;
+        }
+        indexClass.colorSensor1.setGain(indexClass.gain);
+        telemetry.addData("gain", indexClass.gain);
+        telemetry.addData("ran color sensor x", counter);
 
         if (gamepad1.bWasPressed()) {
             indexClass.turnBasedOffColor(Indexer.SensedColor.GREEN);
@@ -52,6 +66,8 @@ public class EmptyTeleOp extends OpMode {
         indexClass.indexerUpdate();
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
         telemetry.addData("error", indexClass.error);
+        telemetry.addData("current color hsv", indexClass.hsvValues1[0]);
+        telemetry.addData("current color but color", indexClass.SensedColorAll.get(0));
         telemetry.update();
         t2.addData("curPose", indexClass.curPose);
         t2.addData("Targ", indexClass.targetPosition);

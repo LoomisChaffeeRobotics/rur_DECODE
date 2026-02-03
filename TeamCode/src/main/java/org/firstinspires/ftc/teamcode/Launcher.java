@@ -18,8 +18,8 @@ public class Launcher {
     public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
-    public static double launcherF;
-    public static double launcherP;
+    public static double launcherF = 17;
+    public static double launcherP = 25;
     public static double launcherI;
     public static double launcherD;
     public PIDFCoefficients launcherPIDF;
@@ -52,7 +52,7 @@ public class Launcher {
         launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
     }
     public boolean checkIfSpunUp() {
-        if (Math.abs((launcher2.getVelocity()) - upper_motor_interporation_result) < 30 && Math.abs((launcher.getVelocity()) - lower_motor_interporation_result) < 30) {
+        if (Math.abs((launcher2.getVelocity()) - upper_motor_interporation_result * (7.0/15.0)) < 30 && Math.abs((launcher.getVelocity()) - lower_motor_interporation_result * (7.0/15.0)) < 30) {
             return true;
         } else {
             return false;
@@ -100,7 +100,7 @@ public class Launcher {
 
         launcher.setVelocity(lower_motor_interporation_result*(7.0/15.0));
         launcher2.setVelocity(upper_motor_interporation_result*(7.0/15.0));
-        indexer.removefirst(indexer.SensedColorAll); //remove? color sensor stuff must be tested before messing with this
+//        indexer.removefirst(indexer.SensedColorAll); //remove? color sensor stuff must be tested before messing with this
 //        flap1.setPosition(0.2);
 //        waitAuto(0.5);
 //        flap1.setPosition(0);
