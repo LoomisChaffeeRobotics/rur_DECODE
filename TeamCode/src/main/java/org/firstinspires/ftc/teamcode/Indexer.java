@@ -79,6 +79,8 @@ public class Indexer {
     double prevError = 0;
     double prevRotationRate = 0;
     public double power;
+
+    public boolean indexer_is_moving = false;
     ElapsedTime PIDTimer = new ElapsedTime();
     ///  I removed "currentColor" because it was useless. we only need one list.
     public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(SensedColor.NEITHER, SensedColor.NEITHER, SensedColor.NEITHER));
@@ -144,6 +146,8 @@ public class Indexer {
         prevError = error;
         prevRotationRate = rotationRate;
         PIDTimer.reset();
+
+        indexer_is_moving = absError >= 100;
 
 
         panlesTelem.addData("product: ", indexerP);
