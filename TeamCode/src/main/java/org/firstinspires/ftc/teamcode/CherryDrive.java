@@ -194,7 +194,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         //  TURRET - gp2 LT
         if (gamepad2.left_trigger > 0.2) {
-            startTurret(limeLightTurretSystem.getDistance_from_apriltag(!isRed));
+            startTurret(3);
         }
 
         //  FLIPPER - gp2 RT
@@ -244,8 +244,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         t2.addData("inner cur velo", launchClass.launcher.getVelocity());
         t2.addData("outer cur velo", launchClass.launcher2.getVelocity());
-        t2.addData("inner targ velo", launchClass.lower_motor_interporation_result);
-        t2.addData("outer targ velo", launchClass.upper_motor_interporation_result);
+        t2.addData("inner targ velo", launchClass.lower_motor_interporation_result * (7.0/15.0));
+        t2.addData("outer targ velo", launchClass.upper_motor_interporation_result* (7.0/15.0));
         t2.update();
         telemetry.update();
 

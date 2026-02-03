@@ -2,18 +2,27 @@ package org.firstinspires.ftc.teamcode;
 
 import static java.lang.Thread.sleep;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+@Config
 public class Launcher {
     ElapsedTime elapsedTime;
     Indexer indexer;
     public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
+    public static double launcherF;
+    public static double launcherP;
+    public static double launcherI;
+    public static double launcherD;
+    public PIDFCoefficients launcherPIDF;
 
 //    double velocity_towards_target = 0;
 //    double time_in_air = 0;
@@ -34,7 +43,7 @@ public class Launcher {
     double[] upper_motor_speeds = {797.66, 752.05, 713.45, 679.53, 654.97, 646.78, 636.26, 632.75, 636.26};
 
     public double lower_motor_interporation_result;
-    double upper_motor_interporation_result;
+    public double upper_motor_interporation_result;
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         elapsedTime = new ElapsedTime();
         indexer = new Indexer();
@@ -69,6 +78,9 @@ public class Launcher {
     public boolean shoot(double distance) {
 
         boolean interpolation_set = false;
+        launcherPIDF = new PIDFCoefficients(launcherP, launcherI, launcherD, launcherF);
+        launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);
+        launcher2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);
 
         int result = find_index(distance); //finds idnex
             //value 1 and 0 are the upper and lower bounds respectively, the later code interpolates between them (i think)
