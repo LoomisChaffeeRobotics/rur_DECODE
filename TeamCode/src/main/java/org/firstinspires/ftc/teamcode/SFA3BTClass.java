@@ -64,8 +64,12 @@ public class SFA3BTClass extends OpMode {
             sparkfun.myOtos.setPosition(roboPoseRelativeToAT);
         }
         else {
-            sparkfun.myOtos.getPosition();
+            roboPoseRelativeToAT = sparkfun.myOtos.getPosition();
         }
+
+        telemetry.addData("x", roboPoseRelativeToAT.x);
+        telemetry.addData("y", roboPoseRelativeToAT.y);
+        telemetry.addData("h", roboPoseRelativeToAT.h);
 
     }
 }

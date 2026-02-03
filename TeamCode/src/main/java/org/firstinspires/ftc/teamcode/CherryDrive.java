@@ -44,8 +44,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     Indexer indexClass;
 
     /** we use this for finding motor speeds VERY IMPORTANT even tho only used once */
-//    Launcher launchClass;
-    LauncherLegacy launcherLegacy;
+    Launcher launchClass;
+//    LauncherLegacy launcherLegacy;
 
     /** weather or not we turn the turret automatically (do we want ts?) */
     boolean autoTurn = true;
@@ -89,10 +89,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         limeLightTurretSystem.init(hardwareMap, telemetry);
         indexClass = new Indexer();
         indexClass.init(hardwareMap, telemetry);
-//        launchClass = new Launcher();
-//        launchClass.init(hardwareMap, telemetry);
-        launcherLegacy = new LauncherLegacy();
-        launcherLegacy.init(hardwareMap, telemetry);
+        launchClass = new Launcher();
+        launchClass.init(hardwareMap, telemetry);
+//        launcherLegacy = new LauncherLegacy();
+//        launcherLegacy.init(hardwareMap, telemetry);
         //Setting the motors
 //        intake = hardwareMap.get(DcMotor.class,"intake");
         launcher = hardwareMap.get(DcMotorEx.class,"launcher");
@@ -202,7 +202,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
         //  FLIPPER - gp2 RT
-        if (gamepad2.right_trigger > 0.2 && Math.abs(indexClass.error) < 200 && launcherLegacy.checkIfSpunUp()){
+        if (gamepad2.right_trigger > 0.2 && Math.abs(indexClass.error) < 200 && launchClass.checkIfSpunUp()){
             flipperUp.resetTimer();
             flipper(true);
 //            flipperUp = true;
@@ -246,10 +246,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             imu.resetYaw();
         }
 
-        t2.addData("inner cur velo", launcherLegacy.launcher.getVelocity());
-        t2.addData("outer cur velo", launcherLegacy.launcher2.getVelocity());
-        t2.addData("inner targ velo", launcherLegacy.lower_motor_interporation_result);
-        t2.addData("outer targ velo", launcherLegacy.upper_motor_interporation_result);
+        t2.addData("inner cur velo", launchClass.launcher.getVelocity());
+        t2.addData("outer cur velo", launchClass.launcher2.getVelocity());
+        t2.addData("inner targ velo", launchClass.lower_motor_interporation_result);
+        t2.addData("outer targ velo", launchClass.upper_motor_interporation_result);
         t2.update();
         telemetry.update();
 
@@ -306,7 +306,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     public void startTurret(double power){ // Done?
 
-        launcherLegacy.shoot(power);/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
+        launchClass.shoot(power);/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
 
     }
     public void flipper(boolean up){ // Done!

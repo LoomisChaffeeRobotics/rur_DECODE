@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class ArtimisLauncherStratey extends OpMode {
+public class LauncherValuesTest extends OpMode {
 
     DcMotorEx launcher;
     DcMotorEx launcher2;
