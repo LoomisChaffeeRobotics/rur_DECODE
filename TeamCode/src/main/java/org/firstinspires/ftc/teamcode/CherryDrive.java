@@ -158,7 +158,9 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     @Override
     public void loop() {
 //        limeLightTurretSystem.update();
-        indexClass.sensecolor();
+        if (!indexClass.indexer_is_moving) {
+            indexClass.sensecolor();
+        }
 
         telemetry.addData("motor up speed", launcher2.getVelocity());
         telemetry.addData("motor down speed", launcher.getVelocity());
@@ -313,6 +315,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("flipper upness: ", up);
     }
     public void turnSpinner(boolean direction) {
+        indexClass.sensecolor();
         indexClass.turn(direction);
 
     }
