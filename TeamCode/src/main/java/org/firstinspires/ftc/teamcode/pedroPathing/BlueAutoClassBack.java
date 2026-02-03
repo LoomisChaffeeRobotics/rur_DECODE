@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.paths.Path;
@@ -39,49 +40,45 @@ public class BlueAutoClassBack extends OpMode {
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
     Pose startPose = new Pose(56,9 , Math.PI); //heading in radians
-    Pose pickupPose1 =  new Pose(39.5,35.6656, Math.PI);
-    Pose controlPoint1 =  new Pose(65.7585,37.226, Math.PI);
-    Pose intakePose1 = new Pose(9.0743, 35.6656, Math.PI);
-    Pose launchPoint1 = new Pose (61.5232,9.808, Math.PI);
-    Pose controlPoint2 = new Pose(79.23384,61.873,Math.PI);
-    Pose pickupPose2 = new Pose (39.5,60.6315, Math.PI);
-    Pose intakePose2 = new Pose(9.0743, 60.6315, Math.PI);
-    Pose launchPoint2 = new Pose(64.4210,83.8142,Math.PI);
+    Pose scorepreload = new Pose(58.493, 23.888,Math.PI);
+    Pose pickupPose1 =  new Pose(41.163, 35.749, Math.PI);
+    Pose controlPoint1 =  new Pose(59.870, 37.758, Math.PI);
+    Pose intakePose1 = new Pose(13.902, 35.749, Math.PI);
+    Pose launchPoint1 = new Pose(58.702, 24.112, Math.PI);
+    Pose controlPoint2 = new Pose(65.556, 61.840,Math.PI);
+    Pose pickupPose2 = new Pose(41.405, 60.247, Math.PI);
+//    Pose intakePose2 = new Pose(9.0743, 60.6315, Math.PI);
+//    Pose launchPoint2 = new Pose(64.4210,83.8142,Math.PI);
     public LLResultTypes.FiducialResult fr;
-    private Path pickup1, run2, pickup2, run3;
+    private Path scorePreload, pickup1, run2, pickup2, run3;
     private PathChain intake1chain, intake2chain;
-    public void buildPaths() {
 
-        pickup1 =  new Path((new BezierCurve(startPose, controlPoint1, pickupPose1)));
+
+    public void buildPaths() {
+        scorePreload = new Path((new BezierCurve(startPose,scorepreload)));
+        scorePreload.setConstantHeadingInterpolation(Math.PI);
+        //shoot the artifacts .addParametricCallback(0.3,() -> turningthing.turn(true))
+
+        pickup1 = new Path((new BezierCurve(scorepreload,controlPoint1, pickupPose1)));
         pickup1.setConstantHeadingInterpolation(Math.PI);
 
         intake1chain = follower.pathBuilder()
-                .addPath(new BezierCurve(pickupPose1, intakePose1))
+                .addPath(new BezierCurve(pickupPose1,intakePose1))
                 .setConstantHeadingInterpolation(Math.PI)
                 .addParametricCallback(0.3, () -> turningthing.turn(true))
-                .addParametricCallback(0.6, () -> turningthing.turn(true))
+                .addParametricCallback(0.6, ()-> turningthing.turn(true))
                 .build();
 
-        run2 =  new Path(new BezierCurve(intakePose1, launchPoint1));
+        run2 = new Path((new BezierCurve(intakePose1,launchPoint1)));
         run2.setConstantHeadingInterpolation(Math.PI);
 
-        pickup2 = new Path(new BezierCurve(launchPoint1, controlPoint2, pickupPose2));
+        pickup2 = new Path(new BezierCurve(launchPoint1,controlPoint2,pickupPose2));
         pickup2.setConstantHeadingInterpolation(Math.PI);
 
-        intake2chain = follower.pathBuilder()
-                .addPath(new BezierCurve(pickupPose2, intakePose2))
-                .setConstantHeadingInterpolation(Math.PI)
-                .addParametricCallback(0.3, () -> turningthing.turn(true))
-                .addParametricCallback(0.6, () -> turningthing.turn(true))
-                .build();
 
 
-        run3 = new Path(new BezierCurve(intakePose2,launchPoint2));
-        run3.setConstantHeadingInterpolation(Math.PI);
-        //Path chains are chains of paths - so you can add multiple as shown below
-        //i didn't import stuff because pepa 1.0.8 which we used to build this sample code last year uses different formatting and stuff so i had to change it
+}
 
-    }
     public Indexer.SensedColor[] patternArray = {
             Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE
     };
