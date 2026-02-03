@@ -243,6 +243,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (gamepad1.start){
             imu.resetYaw();
         }
+        indexClass.updateIndicator();
 
         t2.addData("inner cur velo", launchClass.launcher.getVelocity());
         t2.addData("outer cur velo", launchClass.launcher2.getVelocity());

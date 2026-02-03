@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -79,6 +80,8 @@ public class Indexer {
     double prevError = 0;
     double prevRotationRate = 0;
     public double power;
+
+    Servo light = null;
 
     public boolean indexer_is_moving = false;
     ElapsedTime PIDTimer = new ElapsedTime();
@@ -265,6 +268,8 @@ public class Indexer {
         panlesTelem = PanelsTelemetry.INSTANCE.getTelemetry();
         PIDTimer.reset();
 
+        light = hardwareMap.get(Servo.class,"light");
+
     }
     public void sensecolor() { //must be run at all times. Senses the color
 
@@ -281,7 +286,18 @@ public class Indexer {
 //            }
     }
 //**
-    public void spinIn (double power){ // I thought having 2 indexer motors would be bad but the probelm is still there.
+    public void spinIn(double power){ // I thought having 2 indexer motors would be bad but the probelm is still there.
         intake.setPower(-power);
+    }
+
+    public void updateIndicator(){
+        if (SensedColorAll.get(0) == SensedColor.PURPLE){
+            light.setPosition(0.722);
+        } else if(SensedColorAll.get(0) == SensedColor.GREEN){
+            light.setPosition(0.500);
+        } else {
+            light.setPosition(0);
+        }
+
     }
 }
