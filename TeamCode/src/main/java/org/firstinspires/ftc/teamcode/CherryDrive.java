@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -15,7 +16,11 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.pedropathing.util.Timer;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import java.util.Timer;
+
+//import com.pedropathing.util.Timer;
 
 @TeleOp // FINAL TELE-OP CLASS
 public class CherryDrive extends OpMode { //this clas is called CherryDrive because Cherry is a placeholder robot name
@@ -25,7 +30,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     //name of indexer is indexer
     //uncomment out the stuff later
 
-
+    FtcDashboard dash = FtcDashboard.getInstance();
+    Telemetry t2 = dash.getTelemetry();
 
 
 
@@ -38,12 +44,13 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     Indexer indexClass;
 
     /** we use this for finding motor speeds VERY IMPORTANT even tho only used once */
-    Launcher launchClass;
+//    Launcher launchClass;
+    LauncherLegacy launcherLegacy;
 
     /** weather or not we turn the turret automatically (do we want ts?) */
     boolean autoTurn = true;
     /** if this isn't self-explanatory re-do you are 5th grade education */
-    Timer flipperUp;
+    com.pedropathing.util.Timer flipperUp;
     // whether we're red alliance or not - can be set
     boolean isRed = false;
 
@@ -82,8 +89,10 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         limeLightTurretSystem.init(hardwareMap, telemetry);
         indexClass = new Indexer();
         indexClass.init(hardwareMap, telemetry);
-        launchClass = new Launcher();
-        launchClass.init(hardwareMap, telemetry);
+//        launchClass = new Launcher();
+//        launchClass.init(hardwareMap, telemetry);
+        launcherLegacy = new LauncherLegacy();
+        launcherLegacy.init(hardwareMap, telemetry);
         //Setting the motors
 //        intake = hardwareMap.get(DcMotor.class,"intake");
         launcher = hardwareMap.get(DcMotorEx.class,"launcher");
@@ -128,7 +137,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
         flipper(false);
-        flipperUp = new Timer();
+        flipperUp = new com.pedropathing.util.Timer();
         flipperUp.resetTimer();
 
     }
@@ -148,8 +157,23 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     @Override
     public void loop() {
-        limeLightTurretSystem.update();
+//        limeLightTurretSystem.update();
         indexClass.sensecolor();
+
+        telemetry.addData("motor up speed", launcher2.getVelocity());
+        telemetry.addData("motor down speed", launcher.getVelocity());
+        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+//        telemetry.addData("flipper", flipperUp.getElapsedTime());
+//        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
+//        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
+//        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0*(7.0 / 15.0));
+//        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1*(7.0 / 15.0));
+//        telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0*(7.0 / 15.0));
+//        telemetry.addData("lowerpower", launchClass.lower_motor_interporation_result*(15.0/7.0));
+//        telemetry.addData("higherpower", launchClass.upper_motor_interporation_result*(15.0/7.0));
+
+//        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.4);
+//        telemetry.addData("current distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.9);
 
         //  INTAKE - gp1 RT, gp2 RB
         if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/ /*nevermind keep this*/) {
@@ -162,21 +186,22 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
         if (gamepad2.dpad_up){ //reverse launcher gp2 DIP-DUP
-            launcher.setPower(-0.5);
-            launcher2.setPower(-0.5);
+            launcher.setPower(-0.2);
+            launcher2.setPower(-0.2);
         } else
 
 
 
         //  TURRET - gp2 LT
         if (gamepad2.left_trigger > 0.2){
-            startTurret(1d);
+            startTurret(limeLightTurretSystem.getDistance_from_apriltag(!isRed)+0.4);
         } else {
-            startTurret(0d);
+            launcher.setPower(0);
+            launcher2.setPower(0);
         }
 
         //  FLIPPER - gp2 RT
-        if (gamepad2.right_trigger > 0.2 && Math.abs(indexClass.error) < 500){
+        if (gamepad2.right_trigger > 0.2 && Math.abs(indexClass.error) < 200 && launcherLegacy.checkIfSpunUp()){
             flipperUp.resetTimer();
             flipper(true);
 //            flipperUp = true;
@@ -209,17 +234,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
 
-        telemetry.addData("motor up speed", launcher2.getVelocity());
-        telemetry.addData("motor down speed", launcher.getVelocity());
-        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
-        telemetry.addData("flipper", flipperUp.getElapsedTime());
-        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
-        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
-        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0*(7.0 / 15.0));
-        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1*(7.0 / 15.0));
-        telemetry.addData("lower motor speed 0", launchClass.lower_motor_value_0*(7.0 / 15.0));
-        telemetry.addData("lower motor speed 1", launchClass.lower_motor_value_1*(7.0 / 15.0));
-        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed));
+
 
 //        telemetry.update();
 
@@ -229,6 +244,23 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (gamepad1.start){
             imu.resetYaw();
         }
+
+        t2.addData("inner cur velo", launcherLegacy.launcher.getVelocity());
+        t2.addData("outer cur velo", launcherLegacy.launcher2.getVelocity());
+        t2.addData("inner targ velo", launcherLegacy.lower_motor_interporation_result);
+        t2.addData("outer targ velo", launcherLegacy.upper_motor_interporation_result);
+
+
+        t2.addData("lower motor lower bound", launcherLegacy.lower_motor_value_0);
+        t2.addData("lower motor lower bound", launcherLegacy.lower_motor_value_1);
+        t2.addData("upper motor lower bound", launcherLegacy.upper_motor_value_0);
+        t2.addData("upper motor lower bound", launcherLegacy.upper_motor_value_1);
+
+        t2.addData("lower distance bound", launcherLegacy.result[0]);
+        t2.addData("upper distance bound", launcherLegacy.result[1]);
+
+
+        t2.update();
         telemetry.update();
 
     }
@@ -283,17 +315,13 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         indexClass.spinIn(power);
     }
     public void startTurret(double power){ // Done?
-        if (power == 0) {
-            launcher.setPower(0);
-            launcher2.setPower(0);
-            return;
-        }
-        launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed));
-        telemetry.addData("turret power: ", power);
+
+        launcherLegacy.shoot(power + 0.4);/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
+
     }
     public void flipper(boolean up){ // Done!
         //flip
-        double flipDown = 0.3778d;
+        double flipDown = 0.3578d;
         double flipUP = 0.0d;
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);

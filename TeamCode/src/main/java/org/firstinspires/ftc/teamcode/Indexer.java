@@ -4,17 +4,20 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 
 import android.graphics.Color;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,14 +56,12 @@ import java.util.List;
 @Configurable
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
-    public static double indexerP = 0.0005;
-    //0.00007 is 0-ball
-    public static double indexerF = 0.00;
-    public static double indexerI = 0.000001;
-    public static double indexerD = 0.000038;
-    public static double indexerSpeedCap = 0.15;
-
-
+    public static double indexerP = 0.0002;
+    public static double indexerF = 0;
+    public static double indexerI = 0.000006;
+    public static double indexerD = 0.000015;
+    LimeLightTurretSystem limelightclass;
+    IMU imu;
     float gain = 3.5F;
     float[] hsvValues1 = new float[3];
     int canTurn = 0;
@@ -76,6 +77,7 @@ public class Indexer {
     public double sum;
     double prevPosition = 0;
     double prevError = 0;
+    double prevRotationRate = 0;
     public double power;
     ElapsedTime PIDTimer = new ElapsedTime();
     ///  I removed "currentColor" because it was useless. we only need one list.
@@ -124,6 +126,8 @@ public class Indexer {
 
         double product = indexerP * error;
         double derivative = (error - prevError)/PIDTimer.seconds();
+        double rotationRate = imu.getRobotAngularVelocity(AngleUnit.DEGREES).yRotationRate;
+        double rotationAccel = (rotationRate - prevRotationRate)/PIDTimer.seconds();
         if (absError< 100){
             indexer.setPower(0);
             sum = 0;
@@ -131,13 +135,14 @@ public class Indexer {
             sum += error * indexerI;
             if (Math.abs(sum) > 0.5) {sum = Math.signum(sum)*0.5;}
 
-            power = Math.signum(error)* indexerF + product + sum + (indexerD * derivative);
+            power = -rotationAccel * indexerF + product + sum + (indexerD * derivative);
 //            power = Math.max(Math.min(power,indexerSpeedCap), -indexerSpeedCap);
             indexer.setPower(power);
 
         }
         prevPosition = intake.getCurrentPosition();
         prevError = error;
+        prevRotationRate = rotationRate;
         PIDTimer.reset();
 
 
@@ -241,6 +246,9 @@ public class Indexer {
         }
     }
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+        limelightclass = new LimeLightTurretSystem();
+        limelightclass.init(hardwareMap, telemetry);
+        imu = hardwareMap.get(IMU.class, "imu2");
 
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");

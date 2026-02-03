@@ -37,6 +37,7 @@ public class SFA3BTClass extends OpMode {
     @Override
     public void loop() {
         boolean ATSeen = false;
+        limelight.update();
 
         if (gamepad1.a && Objects.equals(teamColor, "none")){ // Objects.equals(String, String) just sees if theyre equal
             teamColor = "red";

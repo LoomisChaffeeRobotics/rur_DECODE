@@ -29,6 +29,7 @@ import java.util.List;
 public class BlueAutoClassBack extends OpMode {
     LLResultTypes.FiducialResult result;
     DcMotor intake;
+
     Servo flipper;
     Limelight3A limelight;
     LimeLightTurretSystem limelightclass;
