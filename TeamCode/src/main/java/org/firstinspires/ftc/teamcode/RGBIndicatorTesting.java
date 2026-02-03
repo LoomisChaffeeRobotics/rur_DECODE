@@ -13,7 +13,6 @@ public class RGBIndicatorTesting extends OpMode {
     public void init(){
         light = hardwareMap.get(Servo.class,"light");
     }
-
     @Override
     public void loop(){
         if (gamepad1.a) {
@@ -23,7 +22,6 @@ public class RGBIndicatorTesting extends OpMode {
         } else {
             light.setPosition(0);
         }
-
     }
 
 }
