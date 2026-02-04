@@ -1,8 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-
-import android.text.ParcelableSpan;
+package org.firstinspires.ftc.teamcode.testingClasses;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -12,9 +8,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Indexer;
 
 @TeleOp
-public class EmptyTeleOp extends OpMode {
+public class IndexerTestingOpMode extends OpMode {
     Indexer indexClass;
     TelemetryManager t;
     ElapsedTime timer;

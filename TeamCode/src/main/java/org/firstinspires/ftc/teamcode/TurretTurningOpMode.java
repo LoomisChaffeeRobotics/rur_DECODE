@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @TeleOp
-public class LauncherTestingOpMode extends OpMode {
+public class TurretTurningOpMode extends OpMode {
     //formerly blahblahblah2
 
     DcMotorEx encoder;

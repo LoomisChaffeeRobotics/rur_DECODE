@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testingClasses;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -60,9 +60,9 @@ public class GamepadTesting extends OpMode {
             runIndexer(0d);
         }
         if (gamepad1.dpadUpWasPressed()) {
-            flip(0.01); // up 0.1889
+            flip(0.01); // up
         } else if (gamepad1.dpadDownWasPressed()) {
-            flip(-.01); // down .51
+            flip(-.01); // down
         } else {
             flip(0);
         }

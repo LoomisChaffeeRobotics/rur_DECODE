@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class LauncherLegacy {
+public class LauncherOldLUTs {
     ElapsedTime elapsedTime;
     Indexer indexer;
     public double MotorVelocity;

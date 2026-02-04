@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class OpModeforTesting extends OpMode {
+public class TestingOpMode extends OpMode {
     sparkFunMethodsClass sparkfun;
 
     public SparkFunOTOS.Pose2D pos;

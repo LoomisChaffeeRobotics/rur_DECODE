@@ -1,18 +1,14 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testingClasses;
 
 import android.graphics.Color;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
-import org.opencv.core.Mat;
-
 @TeleOp
-public class colorSensorTestingApple extends OpMode {
+public class ColorSensorTestingClass extends OpMode {
     DcMotor intake;
     NormalizedColorSensor sensor;
     int hsvvalue;

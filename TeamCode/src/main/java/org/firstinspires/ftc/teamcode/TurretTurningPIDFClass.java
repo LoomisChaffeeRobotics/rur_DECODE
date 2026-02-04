@@ -1,15 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 
+@Config
 @TeleOp
-public class TurretTurningTestingTeleop extends OpMode { // alliteration
+public class TurretTurningPIDFClass extends OpMode { // alliteration
     public static double Kf = 0;
     public static double Kp = 0 ;
     public static double Ki = 0;
