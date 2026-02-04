@@ -182,7 +182,7 @@ public class BlueAutoClassFront extends OpMode {
             case 4:
                 if (!follower.isBusy()) {
                     intake.setPower(-1);
-                    follower.followPath(intake1chain, 0.3, true); //maxPower should go down probably
+                    follower.followPath(intake1chain, 0.3, false); //maxPower should go down probably
                     setPathState(5);
                 }
                 break;
@@ -258,7 +258,7 @@ public class BlueAutoClassFront extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
 //        follower.setStartingPose(startPose);
-        follower.setStartingPose(intake1);
+        follower.setStartingPose(startPose);
         setPathState(0);
         turningthing.SensedColorAll.set(0, Indexer.SensedColor.PURPLE); //preload
         turningthing.SensedColorAll.set(1, Indexer.SensedColor.PURPLE);
