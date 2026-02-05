@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
@@ -14,6 +16,11 @@ public class LauncherVideoThingamajig extends OpMode {
     double launcher2speed = 0.0;
     LimeLightTurretSystem limelight;
     Servo flipper;
+    public static double launcherF = 16.1;
+    public static double launcherP = 60;
+    public static double launcherI = 3;
+    public static double launcherD = 1;
+
 
     @Override
     public void init() {
@@ -22,6 +29,9 @@ public class LauncherVideoThingamajig extends OpMode {
         flipper = hardwareMap.get(Servo.class, "flipper");
         limelight = new LimeLightTurretSystem();
         limelight.init(hardwareMap, telemetry);
+        PIDFCoefficients launcherPIDF = new PIDFCoefficients(launcherP, launcherI, launcherD, launcherF);
+        launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);
+        launcher2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);
 
     }
 

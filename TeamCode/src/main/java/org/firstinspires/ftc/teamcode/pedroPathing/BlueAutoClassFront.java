@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.pedroPathing;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.geometry.BezierCurve;
+import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
@@ -35,6 +36,7 @@ public class BlueAutoClassFront extends OpMode {
     Pose startPose = new Pose(21.36630602782071,123.52395672333849, Math.toRadians(143)); //heading in radians
     Pose detectPose = new Pose(34.68712123,107.7528485, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
     Pose launchPoseMain = new Pose(45.40340030911901,97.706336939721788, Math.toRadians(137));
+    Pose launchPose1 = new Pose(45.40340030911901,97.706336939721788, Math.toRadians(84));
     Pose controlPoint1 = new Pose(66.7958,83.5325,Math.PI);
     Pose pickupPose1 = new Pose (43.5,84.6, Math.PI);
     Pose intake1 = new Pose(18, 84.6, Math.PI);
@@ -56,14 +58,11 @@ public class BlueAutoClassFront extends OpMode {
 
         intake1chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose1, intake1))
-                .setConstantHeadingInterpolation(Math.PI)
                 .addParametricCallback(0.2, () -> turningthing.turn(true)) //adjust these t values when needed
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
         launch1 =  new Path(new BezierCurve(intake1, launchPoseMain));
         launch1.setLinearHeadingInterpolation(Math.PI, Math.toRadians(137));
-        leave1 = new Path(new BezierCurve(launchPoseMain, leavePose));
-        leave1.setConstantHeadingInterpolation(Math.toRadians(137));
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
         pickup2.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
@@ -72,6 +71,7 @@ public class BlueAutoClassFront extends OpMode {
                 .setConstantHeadingInterpolation(Math.PI)
                 .addParametricCallback(0.3, () -> turningthing.turn(true))
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
+                
                 .build();
         launch2 = new Path(new BezierCurve(intake2,launchPoseMain));
         //Path chains are chains of paths - so you can add multiple as shown below
@@ -133,53 +133,53 @@ public class BlueAutoClassFront extends OpMode {
             //these cases can also be used to check for time (if(pathTimer.getElapsedTimeSeconds() >1) {}
             //it can also be used to get the X value of the robot's position
             //IE: if(follower.getPose().getX() > 36) {}
-            case 0:
-                intake.setPower(-0.2);
-                follower.followPath(detectAT);
-//                if (limelightclass.result != null) {
-//                    result = limelightclass.result.getFiducialResults().get(0); //might break
-//                    if (result.getFiducialId() == 23) {
-//                        patternArray[0] = Indexer.SensedColor.PURPLE;
-//                        patternArray[1] = Indexer.SensedColor.PURPLE;
-//                        patternArray[2] = Indexer.SensedColor.GREEN;
-//                    } else if (result.getFiducialId() == 22) {
-//                        patternArray[0] = Indexer.SensedColor.PURPLE;
-//                        patternArray[1] = Indexer.SensedColor.GREEN;
-//                        patternArray[2] = Indexer.SensedColor.PURPLE;
-//                    } else if (result.getFiducialId() == 21) {
-//                        patternArray[0] = Indexer.SensedColor.GREEN;
-//                        patternArray[1] = Indexer.SensedColor.PURPLE;
-//                        patternArray[2] = Indexer.SensedColor.PURPLE;
+//            case 0:
+//                intake.setPower(-0.2);
+//                follower.followPath(detectAT);
+////                if (limelightclass.result != null) {
+////                    result = limelightclass.result.getFiducialResults().get(0); //might break
+////                    if (result.getFiducialId() == 23) {
+////                        patternArray[0] = Indexer.SensedColor.PURPLE;
+////                        patternArray[1] = Indexer.SensedColor.PURPLE;
+////                        patternArray[2] = Indexer.SensedColor.GREEN;
+////                    } else if (result.getFiducialId() == 22) {
+////                        patternArray[0] = Indexer.SensedColor.PURPLE;
+////                        patternArray[1] = Indexer.SensedColor.GREEN;
+////                        patternArray[2] = Indexer.SensedColor.PURPLE;
+////                    } else if (result.getFiducialId() == 21) {
+////                        patternArray[0] = Indexer.SensedColor.GREEN;
+////                        patternArray[1] = Indexer.SensedColor.PURPLE;
+////                        patternArray[2] = Indexer.SensedColor.PURPLE;
+////
+////                    } else {
+////                        telemetry.addLine("nothing");
+////                    }
+////                }
 //
-//                    } else {
-//                        telemetry.addLine("nothing");
-//                    }
+//                setPathState(1);
+//                break;
+//            case 1:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(scorePreload);
+//                    setPathState(2);
 //                }
-
-                setPathState(1);
-                break;
-            case 1:
-                if (!follower.isBusy()) {
-                    follower.followPath(scorePreload);
-                    setPathState(2);
-                }
-                    break;
-            case 2:
-                    if (!follower.isBusy()){
-//                    shootingMacro(limelightclass.getDistance_from_apriltag( true));
-                    shootingMacro(1.3); //uhhhhh this should probably work lowkey
-
-                    setPathState(3);
-                }
-                break;
-            case 3:
-                if (!follower.isBusy()) {
-//                    follower.followPath(leave1);
-                    follower.followPath(pickup1);
-                    setPathState(4);
-                }
-                break;
-            case 4:
+//                    break;
+//            case 2:
+//                    if (!follower.isBusy()){
+////                    shootingMacro(limelightclass.getDistance_from_apriltag( true));
+//                    shootingMacro(1.3); //uhhhhh this should probably work lowkey
+//
+//                    setPathState(3);
+//                }
+//                break;
+//            case 3:
+//                if (!follower.isBusy()) {
+////                    follower.followPath(leave1);
+//                    follower.followPath(pickup1);
+//                    setPathState(4);
+//                }
+//                break;
+            case 0:
                 if (!follower.isBusy()) {
                     intake.setPower(-1);
                     follower.followPath(intake1chain, 0.3, false); //maxPower should go down probably
@@ -258,7 +258,7 @@ public class BlueAutoClassFront extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
 //        follower.setStartingPose(startPose);
-        follower.setStartingPose(startPose);
+        follower.setStartingPose(pickupPose1);
         setPathState(0);
         turningthing.SensedColorAll.set(0, Indexer.SensedColor.PURPLE); //preload
         turningthing.SensedColorAll.set(1, Indexer.SensedColor.PURPLE);

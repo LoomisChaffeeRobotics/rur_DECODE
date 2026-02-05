@@ -198,7 +198,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         //  TURRET - gp2 LT
         if (gamepad2.left_trigger > 0.2) {
-            startTurret(3);
+            startTurret(1);
         } else {
             startTurret(0);
         }
