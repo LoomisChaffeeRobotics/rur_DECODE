@@ -33,6 +33,10 @@ public class BlueAutoClassFront extends OpMode {
     Follower follower;
     Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
+
+    public Indexer.SensedColor[] patternArray = {
+            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN
+    };
     Pose startPose = new Pose(21.36630602782071,123.52395672333849, Math.toRadians(143)); //heading in radians
     Pose detectPose = new Pose(34.68712123,107.7528485, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
     Pose launchPoseMain = new Pose(45.40340030911901,97.706336939721788, Math.toRadians(137));
@@ -58,11 +62,11 @@ public class BlueAutoClassFront extends OpMode {
 
         intake1chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose1, intake1))
+                .setConstantHeadingInterpolation(Math.PI)
                 .addParametricCallback(0.2, () -> turningthing.turn(true)) //adjust these t values when needed
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
         launch1 =  new Path(new BezierCurve(intake1, launchPoseMain));
-        launch1.setLinearHeadingInterpolation(Math.PI, Math.toRadians(137));
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
         pickup2.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
@@ -77,9 +81,6 @@ public class BlueAutoClassFront extends OpMode {
         //Path chains are chains of paths - so you can add multiple as shown below
 
     }
-    public Indexer.SensedColor[] patternArray = {
-            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN
-    };
     public void setPathState(int state) { //state machine :)
         pathState = state;
         pathTimer.resetTimer();
@@ -189,6 +190,7 @@ public class BlueAutoClassFront extends OpMode {
             case 5:
                 if (!follower.isBusy()) {
                     intake.setPower(0);
+                    launch1.setLinearHeadingInterpolation(follower.getHeading(), Math.toRadians(137), 0.8);
                     follower.followPath(launch1);
                     setPathState(6);
                 }
