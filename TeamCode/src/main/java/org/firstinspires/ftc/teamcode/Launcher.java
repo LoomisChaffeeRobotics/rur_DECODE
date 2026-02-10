@@ -18,10 +18,10 @@ public class Launcher {
     public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
-    public static double launcherF = 16.1;
-    public static double launcherP = 60;
-    public static double launcherI = 3;
-    public static double launcherD = 1;
+    public static double launcherF = 16;
+    public static double launcherP = 50;
+    public static double launcherI = 0.9;
+    public static double launcherD = 0;
     public PIDFCoefficients launcherPIDF;
 
 //    double velocity_towards_target = 0;
