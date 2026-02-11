@@ -107,10 +107,11 @@ public class BlueAutoClassFront extends OpMode {
     }
     public void shootingMacro(double shootingdistance) { //can replace turnbasedoffcolor to just turn() if needed
 
-//        turningthing.turnBasedOffColor(patternArray[0]);
+        turningthing.turnBasedOffColor(patternArray[0]);
         actionTimer.resetTimer();
         while (actionTimer.getElapsedTime() < 1576.7) { //fix times
             launcher.shoot(shootingdistance);
+            turningthing.removefirst(turningthing.SensedColorAll);
         }
         flipper.setPosition(0);
         actionTimer.resetTimer();
@@ -120,12 +121,12 @@ public class BlueAutoClassFront extends OpMode {
         actionTimer.resetTimer();
         while (actionTimer.getElapsedTime() < 400) {
         }
-//        turningthing.turnBasedOffColor(patternArray[1]);
-        turningthing.turn(false);
+        turningthing.turnBasedOffColor(patternArray[1]);
         actionTimer.resetTimer();
         while (actionTimer.getElapsedTime() < 676.7) { //fix timings
             turningthing.indexerUpdate();
             launcher.shoot(shootingdistance);
+            turningthing.removefirst(turningthing.SensedColorAll);
         }
 
         flipper.setPosition(0);
@@ -136,12 +137,13 @@ public class BlueAutoClassFront extends OpMode {
         actionTimer.resetTimer();
         while (actionTimer.getElapsedTime() < 400) {
         }
-//        turningthing.turnBasedOffColor(patternArray[2]);
-        turningthing.turn(false);
+        turningthing.turnBasedOffColor(patternArray[2]);
         actionTimer.resetTimer();
         while (actionTimer.getElapsedTime() < 676.7) { //fix
             launcher.shoot(shootingdistance);
             turningthing.indexerUpdate();
+
+            turningthing.removefirst(turningthing.SensedColorAll);
         }
         flipper.setPosition(0);
         actionTimer.resetTimer();
@@ -188,8 +190,8 @@ public class BlueAutoClassFront extends OpMode {
                     break;
             case 2:
                     if (!follower.isBusy()){
-
-                        intake.setPower(0);
+                    intake.setPower(0);
+                    limelightclass.limelight.close();
 //                    shootingMacro(limelightclass.getDistance_from_apriltag( true));
                     shootingMacro(1.3); //uhhhhh this should probably work lowkey
 
@@ -296,44 +298,33 @@ public class BlueAutoClassFront extends OpMode {
     }
     @Override
     public void loop() {
-        if (pathState == 0) {
+        if (pathState == 1) {
             limelightclass.update();
-            if (limelightclass.limelight.isRunning()) {
-                results = limelightclass.result.getFiducialResults(); //might break
-                if (results != null) {
-                    for (LLResultTypes.FiducialResult result : results) {
-                        if (result.getFiducialId() == 23) {
-                            patternArray[0] = Indexer.SensedColor.PURPLE;
-                            patternArray[1] = Indexer.SensedColor.PURPLE;
-                            patternArray[2] = Indexer.SensedColor.GREEN;
-                            limelightclass.limelight.close();
-                        } else if (result.getFiducialId() == 22) {
-                            patternArray[0] = Indexer.SensedColor.PURPLE;
-                            patternArray[1] = Indexer.SensedColor.GREEN;
-                            patternArray[2] = Indexer.SensedColor.PURPLE;
-                            limelightclass.limelight.close();
-                        } else if (result.getFiducialId() == 21) {
-                            patternArray[0] = Indexer.SensedColor.GREEN;
-                            patternArray[1] = Indexer.SensedColor.PURPLE;
-                            patternArray[2] = Indexer.SensedColor.PURPLE;
-                            limelightclass.limelight.close();
-                        } else {
-                            telemetry.addLine("nothing");
-                        }
+            results = limelightclass.result.getFiducialResults(); //might break
+            if (results != null) {
+                for (LLResultTypes.FiducialResult result : results) {
+                    if (result.getFiducialId() == 23) {
+                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN};
+                    } else if (result.getFiducialId() == 22) {
+                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN, Indexer.SensedColor.PURPLE};
+                    } else if (result.getFiducialId() == 21) {
+                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.GREEN, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE};
                     }
                 }
             }
         }
-////        turningthing.sensecolor();
+        if (!turningthing.indexer_is_moving) {
+            turningthing.sensecolor();
+        }
         turningthing.indexerUpdate();
         follower.update();
 //        limelightclass.turntoAT(20);
         autoUpdate();
         telemetry.addData("path state", pathState);
-        telemetry.addData("isbusy", follower.isBusy());
-        telemetry.addData("headingerror", follower.getHeadingError());
-        telemetry.addData("headingGoal", follower.getHeadingGoal(1));
+        telemetry.addData("Hue value", turningthing.hsvValues1[0]);
+        telemetry.addData("isrunning", limelightclass.limelight.isRunning());
         telemetry.addData("patterna rray", Arrays.toString(patternArray));
+        telemetry.addData("SensedCOlorAll", turningthing.SensedColorAll);
         telemetry.update();
     }
 }

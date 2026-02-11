@@ -140,7 +140,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
 
-        flipper(false);
         flipperUp = new com.pedropathing.util.Timer();
         flipperUp.resetTimer();
 
@@ -211,6 +210,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (gamepad2.right_trigger > 0.2 && Math.abs(indexClass.error) < 200 && launchClass.checkIfSpunUp()){
             flipperUp.resetTimer();
             flipper(true);
+            indexClass.removefirst(indexClass.SensedColorAll);
 //            flipperUp = true;
         } else {
             flipper(false);
@@ -339,7 +339,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         double flipDown = 0.3578d;
         double flipUP = 0.0d;
         flipper.setPosition(up? flipUP : flipDown);
-        indexClass.removefirst(indexClass.SensedColorAll);
         telemetry.addData("flipper upness: ", up);
     }
     public void turnSpinner(boolean direction) {

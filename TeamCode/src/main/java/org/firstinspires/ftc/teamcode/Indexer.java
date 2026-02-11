@@ -55,13 +55,13 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-@Configurable
+@Config
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
     public static double indexerP = 0.0002;
     public static double indexerF = 0;
-    public static double indexerI = 0.000006;
-    public static double indexerD = 0.000015;
+    public static double indexerI = 0.0000006;
+    public static double indexerD = 0.000008;
     public LimeLightTurretSystem limelightclass;
     public IMU imu;
     public float gain = 4.5F;
@@ -150,7 +150,7 @@ public class Indexer {
         prevRotationRate = rotationRate;
         PIDTimer.reset();
 
-        indexer_is_moving = absError >= 100;
+        indexer_is_moving = absError >= 200;
 
 
         panlesTelem.addData("product: ", indexerP);
