@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.Indexer;
 import org.firstinspires.ftc.teamcode.Launcher;
 import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
 
+import java.util.Arrays;
+import java.util.List;
 
 
 //only auto class that should theoretically work
@@ -24,7 +26,7 @@ import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
 
 @Autonomous
 public class BlueAutoClassFront extends OpMode {
-    public LLResultTypes.FiducialResult result;
+    public List<LLResultTypes.FiducialResult> results;
     DcMotor intake;
     Servo flipper;
     LimeLightTurretSystem limelightclass;
@@ -35,7 +37,7 @@ public class BlueAutoClassFront extends OpMode {
     private int pathState;
 
     public Indexer.SensedColor[] patternArray = {
-            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN
+            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE
     };
     Pose startPose = new Pose(21.36630602782071,123.52395672333849, Math.toRadians(143)); //heading in radians
     Pose detectPose = new Pose(34.68712123,107.7528485, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
@@ -46,14 +48,15 @@ public class BlueAutoClassFront extends OpMode {
     Pose intakePose1 = new Pose(18, 86.6, Math.PI);//this too
     Pose leavePose = new Pose(32, 75, Math.toRadians(137));
     Pose controlPoint2 = new Pose(68.80518,58.5278,Math.PI);
-    Pose pickupPose2 = new Pose (39.5,60.09273570324575, Math.PI);
-    Pose intake2 = new Pose(9.137, 60.092735, Math.PI);
+    Pose pickupPose2 = new Pose (42.5,61.09273570324575, Math.PI);
+    Pose intake2 = new Pose(9.137, 61.092735, Math.PI);
+    Pose controlPoint3 = new Pose(64.5429, 54.37311, Math.PI);
     private Path detectAT, scorePreload, pickup1, launch1, leave1, pickup2, launch2;
-    private PathChain intake1chain, launch1chain, pickup2chain, intake2chain;
+    private PathChain intake1chain, launch1chain, pickup2chain, launch2chain, intake2chain;
     public void buildPaths() {
 
         detectAT = new Path(new BezierCurve(startPose, detectPose));
-        detectAT.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(65));
+        detectAT.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(45));
 
         scorePreload = new Path(new BezierCurve(detectPose, launchPoseMain));
         scorePreload.setLinearHeadingInterpolation(Math.toRadians(65), Math.toRadians(137), 0.8);
@@ -81,6 +84,7 @@ public class BlueAutoClassFront extends OpMode {
                 .addPath(pickup2)
                 .setLinearHeadingInterpolation(launchPoseMain.getHeading(), pickupPose2.getHeading())
                 .build();
+
         intake2chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose2, intake2))
                 .setConstantHeadingInterpolation(Math.PI)
@@ -88,7 +92,12 @@ public class BlueAutoClassFront extends OpMode {
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 
                 .build();
-        launch2 = new Path(new BezierCurve(intake2,launchPoseMain));
+        launch2 = new Path(new BezierCurve(intake2, controlPoint3, launchPoseMain));
+        launch2.setLinearHeadingInterpolation(intake2.getHeading(), launchPoseMain.getHeading());
+        launch2chain = follower.pathBuilder()
+                .addPath(launch2)
+                .setLinearHeadingInterpolation(intake2.getHeading(), launchPoseMain.getHeading())
+                .build();
         //Path chains are chains of paths - so you can add multiple as shown below
 
     }
@@ -219,31 +228,30 @@ public class BlueAutoClassFront extends OpMode {
                     //STOP HERE FOR QUAL UNLESS EXTRA TIME
                     //GO FIX STUFF THAT ARE BROKEN
 //                    follower.followPath(leave1);
-                    follower.followPath(pickup2);
+                    follower.followPath(pickup2chain, true);
+                    setPathState(7);
+                }
+                break;
+            case 7:
+                if (!follower.isBusy()) {
+                    //run intake
+                    intake.setPower(-1);
+                    follower.followPath(intake2chain, 0.7, true);
+                    setPathState(8);
+                }
+                break;
+            case 8:
+                if (!follower.isBusy()) {
+                    follower.followPath(launch2chain, true);
+                    setPathState(9);
+                }
+                break;
+            case 9:
+                if (!follower.isBusy()) {
+                    shootingMacro(1.3);
                     setPathState(-1);
                 }
                 break;
-//            case 6:
-//                if (!follower.isBusy()) {
-//                    //run intake
-//                    intake.setPower(1);
-//                    follower.updateCallbacks();
-//                    follower.followPath(intake2chain, 0.5, true);
-//                    setPathState(7);
-//                }
-//                break;
-//            case 7:
-//                if (!follower.isBusy()) {
-//                    follower.followPath(launch2);
-//                    setPathState(8);
-//                }
-//                break;
-//            case 8:
-//                if (!follower.isBusy()) {
-//                    shootingMacro(limelightclass.getDistance_from_apriltag(0, true));
-//                    setPathState(-1);
-//                }
-//                break;
 //            case 8:
 //                if (!follower.isBusy()) {
 //                    follower.followPath(pickupMain);
@@ -282,7 +290,40 @@ public class BlueAutoClassFront extends OpMode {
         turningthing.SensedColorAll.set(2, Indexer.SensedColor.GREEN);
     }
     @Override
+    public void start() {
+        limelightclass.limelight.start();
+        limelightclass.limelight.setPollRateHz(100);
+    }
+    @Override
     public void loop() {
+        if (pathState == 0) {
+            limelightclass.update();
+            if (limelightclass.limelight.isRunning()) {
+                results = limelightclass.result.getFiducialResults(); //might break
+                if (results != null) {
+                    for (LLResultTypes.FiducialResult result : results) {
+                        if (result.getFiducialId() == 23) {
+                            patternArray[0] = Indexer.SensedColor.PURPLE;
+                            patternArray[1] = Indexer.SensedColor.PURPLE;
+                            patternArray[2] = Indexer.SensedColor.GREEN;
+                            limelightclass.limelight.close();
+                        } else if (result.getFiducialId() == 22) {
+                            patternArray[0] = Indexer.SensedColor.PURPLE;
+                            patternArray[1] = Indexer.SensedColor.GREEN;
+                            patternArray[2] = Indexer.SensedColor.PURPLE;
+                            limelightclass.limelight.close();
+                        } else if (result.getFiducialId() == 21) {
+                            patternArray[0] = Indexer.SensedColor.GREEN;
+                            patternArray[1] = Indexer.SensedColor.PURPLE;
+                            patternArray[2] = Indexer.SensedColor.PURPLE;
+                            limelightclass.limelight.close();
+                        } else {
+                            telemetry.addLine("nothing");
+                        }
+                    }
+                }
+            }
+        }
 ////        turningthing.sensecolor();
         turningthing.indexerUpdate();
         follower.update();
@@ -292,6 +333,7 @@ public class BlueAutoClassFront extends OpMode {
         telemetry.addData("isbusy", follower.isBusy());
         telemetry.addData("headingerror", follower.getHeadingError());
         telemetry.addData("headingGoal", follower.getHeadingGoal(1));
+        telemetry.addData("patterna rray", Arrays.toString(patternArray));
         telemetry.update();
     }
 }

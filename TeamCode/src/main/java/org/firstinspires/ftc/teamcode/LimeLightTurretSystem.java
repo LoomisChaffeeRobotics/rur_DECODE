@@ -19,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import java.util.List;
 
 public class LimeLightTurretSystem {
+    public LLResult result;
     public DcMotor encoder;
     sparkFunMethodsClass sparkfun;
     public double targetangle = 165; //chnsge
@@ -101,7 +102,7 @@ public class LimeLightTurretSystem {
     }
 
     public boolean update(){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
-        LLResult result = limelight.getLatestResult();
+        result = limelight.getLatestResult();
         boolean seen =  (result.getBotpose().getPosition().x != 0);
         if (seen){
             botpose = result.getBotpose();
