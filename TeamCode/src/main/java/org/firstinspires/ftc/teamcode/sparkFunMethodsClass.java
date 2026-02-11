@@ -93,7 +93,7 @@ public class sparkFunMethodsClass {
         // inverse of the error. For example, if you move the robot 100 inches and
         // the sensor reports 103 inches, set the linear scalar to 100/103 = 0.971
 //        myOtos.setLinearScalar(1.02833322007722);
-        myOtos.setLinearScalar(1.0591);
+        myOtos.setLinearScalar(1.0179);
         myOtos.setAngularScalar(0.978101568);
 
         // The IMU on the OTOS includes a gyroscope and accelerometer, which could
