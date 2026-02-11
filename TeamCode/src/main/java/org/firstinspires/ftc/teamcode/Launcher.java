@@ -76,7 +76,11 @@ public class Launcher {
         return x_times_slope + y_intercept;
     }
     public boolean shoot(double distance) {
-
+        if (distance == 0) {
+            launcher.setVelocity(0);
+            launcher2.setVelocity(0);
+            return true;
+        }
         boolean interpolation_set = false;
         launcherPIDF = new PIDFCoefficients(launcherP, launcherI, launcherD, launcherF);
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);

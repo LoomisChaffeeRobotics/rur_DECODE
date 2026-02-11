@@ -78,6 +78,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     /** depressed stuffs */
     boolean xdepressed = false;
     boolean bdepressed = false;
+    boolean ydepressed = false;
+    boolean adepressed = false;
 
 
 
@@ -166,6 +168,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         telemetry.addData("motor up speed", launcher2.getVelocity());
         telemetry.addData("motor down speed", launcher.getVelocity());
+        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
+        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
 //        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
@@ -225,17 +229,26 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             bdepressed = true;
         }
 
-        if (gamepad2.y && !xdepressed) {
+        if (gamepad2.y && !ydepressed) {
 //            turnSpinner(true);
             indexClass.turnBasedOffColor(Indexer.SensedColor.NEITHER);
-            xdepressed = true;
+            ydepressed = true;
         }
-
+        if (gamepad2.a && !adepressed) {
+            indexClass.turn(true);
+            adepressed = true;
+        }
+        if (!gamepad2.a){
+            adepressed = false;
+        }
         if (!gamepad2.x){
             xdepressed = false;
         }
         if (!gamepad2.b){
             bdepressed = false;
+        }
+        if (!gamepad2.y){
+            ydepressed = false;
         }
 
         //spindexer cannot spin with the flipper up
