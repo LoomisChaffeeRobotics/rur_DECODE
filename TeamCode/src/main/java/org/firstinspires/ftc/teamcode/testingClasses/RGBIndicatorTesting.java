@@ -24,6 +24,10 @@ public class RGBIndicatorTesting extends OpMode {
             light.setPosition(0.722);
         } else if (gamepad1.b) {
             light.setPosition(0.500);
+        } else if (gamepad1.x) {
+            light.setPosition(0.666);
+        } else if (gamepad1.y) {
+            light.setPosition(0.444);
         } else {
             light.setPosition(0.000);
         }

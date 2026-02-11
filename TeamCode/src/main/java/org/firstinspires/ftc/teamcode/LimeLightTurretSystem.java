@@ -132,9 +132,13 @@ public class LimeLightTurretSystem {
 
     /** gives the position relative to the april tag */
     public Pose2D getPositionCenterRelative(boolean isBlue){
-        double robox = botpose.getPosition().x + 1.482 + 0.18*Math.cos(Math.toRadians(botposeangle));
-        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413) + 0.18*Math.sin(Math.toRadians(botposeangle));
-        return new Pose2D(DistanceUnit.METER, robox, roboy, AngleUnit.DEGREES, botposeangle);
+        double shiftedHeading = botposeangle + 135;
+        double robox = botpose.getPosition().x + 1.482;// + 0.18 //*Math.cos(Math.toRadians(botposeangle));
+        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413);// + 0.18 //*Math.sin(Math.toRadians(botposeangle));
+        double roboxRotated = (robox-roboy) * 0.707106781187;
+        double roboyRotated = (robox+roboy) * 0.707106781187;
+        roboyRotated -= 0.25;
+        return new Pose2D(DistanceUnit.METER, roboxRotated, roboyRotated, AngleUnit.DEGREES, shiftedHeading);
     }
 }
 
