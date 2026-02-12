@@ -43,6 +43,7 @@ public class ColorSensorTestingClass extends OpMode {
             telemetry.addLine("PUJPEL");
         }
         telemetry.addData("hue", hsv[0]);
+        telemetry.addData("gain", gain);
         telemetry.update();
 
     }

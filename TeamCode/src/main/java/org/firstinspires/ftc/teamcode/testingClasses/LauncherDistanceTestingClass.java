@@ -43,6 +43,9 @@ public class LauncherDistanceTestingClass extends OpMode {
         }
         telemetry.addData("Distance, meters", distance);
 //       telemetry.addData("botpose", limelight.botpose);
+        telemetry.addData("Interoplation lower motor", launcherClass.lower_motor_interporation_result);
+        telemetry.addData("Interoplation upper motor", launcherClass.upper_motor_interporation_result);
+//        telemetry.addData("Interoplation upper motor", launcherClass.upper_motor_interporation_result);
         t2.addData("inner cur velo", launcherClass.launcher.getVelocity());
         t2.addData("outer cur velo", launcherClass.launcher2.getVelocity());
         t2.addData("inner targ velo", launcherClass.lower_motor_interporation_result * (7.0/15.0));

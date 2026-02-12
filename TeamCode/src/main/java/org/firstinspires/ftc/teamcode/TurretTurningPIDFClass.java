@@ -16,16 +16,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @TeleOp
 public class TurretTurningPIDFClass extends OpMode { // alliteration
     public static double Kf = 0;
-    public static double Kp = 0;
+    public static double Kp = 0.1;
     public static double Ki = 0;
-    public static double Kd = 0;
+    public static double Kd = 0.01;
     FtcDashboard dash = FtcDashboard.getInstance();
     Telemetry t2 = dash.getTelemetry();
 
     PIDFController turretControl;
     DcMotorEx encoder;
     CRServo turretSpin;
-    double targetRotation = 50;
+    double targetRotation = 35;
 
     @Override
     public void init() {
