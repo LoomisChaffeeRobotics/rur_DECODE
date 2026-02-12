@@ -23,6 +23,8 @@ public class Launcher {
     public static double launcherI = 0.9;
     public static double launcherD = 0;
     public PIDFCoefficients launcherPIDF;
+    public double launcherError;
+    public double launcher2Error;
 
 //    double velocity_towards_target = 0;
 //    double time_in_air = 0;
@@ -101,7 +103,8 @@ public class Launcher {
             upper_motor_interporation_result = interpolate_points(distance, result, upper_motor_speeds);
 
         }
-
+        launcherError = launcher.getVelocity() - lower_motor_interporation_result*(7.0/15.0);
+        launcher2Error = launcher2.getVelocity() - upper_motor_interporation_result*(7.0/15.0);
         launcher.setVelocity(lower_motor_interporation_result*(7.0/15.0));
         launcher2.setVelocity(upper_motor_interporation_result*(7.0/15.0));
 //        indexer.removefirst(indexer.SensedColorAll); //remove? color sensor stuff must be tested before messing with this
