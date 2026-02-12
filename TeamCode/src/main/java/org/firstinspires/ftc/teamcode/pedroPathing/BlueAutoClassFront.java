@@ -313,6 +313,7 @@ public class BlueAutoClassFront extends OpMode {
             case 6:
                 if (!follower.isBusy()) {
                     intake.setPower(0);
+                    launcher.shoot(1.3);
                     follower.followPath(launch1chain, true);
                     setPathState(7);
                 }
@@ -325,38 +326,37 @@ public class BlueAutoClassFront extends OpMode {
 //                    shootingMacro(limelightclass.getDistance_from_apriltag(true));
                     startShooting(1.3);
 
-                    //STOP HERE FOR QUAL UNLESS EXTRA TIME
-                    //GO FIX STUFF THAT ARE BROKEN
 //                    follower.followPath(leave1);
                     setPathState(8);
                 }
                 break;
             case 8:
                 if (shootingState == 9) {
+                    launcher.shoot(0);
                     follower.followPath(pickup2chain, true);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if (!follower.isBusy()) {
-                    //run intake
-                    intake.setPower(-1);
-                    follower.followPath(intake2chain, 0.7, true);
-                    setPathState(10);
-                }
-                break;
-            case 10:
-                if (!follower.isBusy()) {
-                    follower.followPath(launch2chain, true);
-                    setPathState(11);
-                }
-                break;
-            case 11:
-                if (!follower.isBusy()) {
-                    startShooting(1.3);
                     setPathState(-1);
                 }
                 break;
+//            case 9:
+//                if (!follower.isBusy()) {
+//                    //run intake
+//                    intake.setPower(-1);
+//                    follower.followPath(intake2chain, 0.7, true);
+//                    setPathState(10);
+//                }
+//                break;
+//            case 10:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(launch2chain, true);
+//                    setPathState(11);
+//                }
+//                break;
+//            case 11:
+//                if (!follower.isBusy()) {
+//                    startShooting(1.3);
+//                    setPathState(-1);
+//                }
+//                break;
 //            case 8:
 //                if (!follower.isBusy()) {
 //                    follower.followPath(pickupMain);

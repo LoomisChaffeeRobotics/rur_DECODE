@@ -64,7 +64,7 @@ public class Indexer {
     public static double indexerD = 0.000008;
     public LimeLightTurretSystem limelightclass;
     public IMU imu;
-    public float gain = 6.4F;
+    public float gain = 8.4F;
     public float[] hsvValues1 = new float[3];
     public double targetPosition=0;
     public DcMotor intake;
