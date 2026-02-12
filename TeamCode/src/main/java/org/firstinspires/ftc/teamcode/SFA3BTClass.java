@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -41,7 +42,10 @@ public class SFA3BTClass extends OpMode {
     @Override
     public void loop() {
         boolean ATSeen = false;
+        double turretSpin = encoder.getCurrentPosition() * -0.00877192982456;
         ATSeen = limelight.update();
+
+
         if (gamepad1.a && Objects.equals(teamColor, "none")){ // Objects.equals(String, String) just sees if theyre equal
             teamColor = "red";
             desiredID = 24;
@@ -54,7 +58,7 @@ public class SFA3BTClass extends OpMode {
 
         if(ATSeen){
             Pose2D ATSeenRoboPose = limelight.getPositionCenterRelative(Objects.equals(teamColor, "blue"));
-            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.INCH), ATSeenRoboPose.getY(DistanceUnit.INCH), ATSeenRoboPose.getHeading(AngleUnit.DEGREES));
+            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.INCH), ATSeenRoboPose.getY(DistanceUnit.INCH), ATSeenRoboPose.getHeading(AngleUnit.DEGREES) - turretSpin);
             sparkfun.myOtos.setPosition(roboPoseRelativeToAT); // the problem could be due to the turning
         }
         else {
@@ -64,6 +68,7 @@ public class SFA3BTClass extends OpMode {
         telemetry.addData("x",roboPoseRelativeToAT.x);
         telemetry.addData("y",roboPoseRelativeToAT.y);
         telemetry.addData("h",roboPoseRelativeToAT.h);
+        telemetry.addData("spin", turretSpin);
 
         if (!ATSeen){
             telemetry.addLine("NO AT SEEN");
