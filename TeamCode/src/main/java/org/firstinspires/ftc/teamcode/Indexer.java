@@ -64,7 +64,7 @@ public class Indexer {
     public static double indexerD = 0.000008;
     public LimeLightTurretSystem limelightclass;
     public IMU imu;
-    public float gain = 4.5F;
+    public float gain = 6.4F;
     public float[] hsvValues1 = new float[3];
     public double targetPosition=0;
     public DcMotor intake;
@@ -150,7 +150,7 @@ public class Indexer {
         prevRotationRate = rotationRate;
         PIDTimer.reset();
 
-        indexer_is_moving = absError >= 200;
+        indexer_is_moving = absError >= 100;
 
 
         panlesTelem.addData("product: ", indexerP);
@@ -276,7 +276,7 @@ public class Indexer {
 
         colorSensor1.setGain(gain);
         Color.colorToHSV(colors1.toColor(), hsvValues1);
-            if (hsvValues1[0] >= 150 && hsvValues1[0] <= 170) {
+            if (hsvValues1[0] >= 151 && hsvValues1[0] <= 170) {
                 SensedColorAll.set(0, SensedColor.GREEN);
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 290) { //MUST BE CHANGED ASAPPPPPPPPP // UPDATED 1/29 TO EMMA'S NUMBERS
                 SensedColorAll.set(0, SensedColor.PURPLE);
