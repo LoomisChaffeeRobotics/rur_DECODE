@@ -1,7 +1,7 @@
 
 HELLO!!
 
-The foloowing are the classes we use:
+The following are the classes we use:
 1: Cherry Drive
 2: LimeLightTurretSystem
 3: Indexer
@@ -13,7 +13,7 @@ will find some names separated_by_underscores others withCapitalLettersLikeThis 
 that, some things like Indexer and sparkFunMethodsClass are analogous but are named differently. One might expect that they would be
 named either indexerMethodsClass and SparkFunMethodsClass or Indexer and Sparkfun. The mixing of how things are named will
 probably make it confusing, so make sure to watch out for that. If you ever get confused, one thing that may possibly help is holding
-the 'command' or 'cntrl' key while clicking a method or class (this is an android studio thing and idk how much you know about android
+the 'command' or 'ctrl' key while clicking a method or class (this is an android studio thing and idk how much you know about android
 studio. If you didn't already know this it is very helpful).
 
 I don't know how much you know about ftc and how everything generally works so skip this paragraph if you know that already I guess.
