@@ -160,7 +160,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     @Override
     public void loop() {
-//        limeLightTurretSystem.update();
+        limeLightTurretSystem.update(!isRed);
         if (!indexClass.indexer_is_moving) {
             indexClass.sensecolor();
         }

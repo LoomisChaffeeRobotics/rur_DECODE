@@ -267,16 +267,22 @@ public class Indexer {
         light = hardwareMap.get(Servo.class,"light");
 
     }
-    public void sensecolor() { //must be run at all times. Senses the color
+    public int sensecolor() { //must be run at all times. Senses the color
         colors1 = colorSensor1.getNormalizedColors();
 
         colorSensor1.setGain(gain);
         Color.colorToHSV(colors1.toColor(), hsvValues1);
             if (hsvValues1[0] >= 151 && hsvValues1[0] <= 170) {
                 SensedColorAll.set(0, SensedColor.GREEN);
+                return 1;
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 290) { //MUST BE CHANGED ASAPPPPPPPPP // UPDATED 1/29 TO EMMA'S NUMBERS
                 SensedColorAll.set(0, SensedColor.PURPLE);
+                return 2;
             }
+            else {
+                return 0;
+            }
+
 //            } else {
 //                SensedColorAll.set(0, SensedColor.NEITHER);
 //            }

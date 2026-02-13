@@ -33,9 +33,9 @@ public class SFA3BTClass extends OpMode {
     public static double SFKi = 0;
     public static double SFKd = 0.01;
     public static double TXKf = 0;
-    public static double TXKp = 0.1;
+    public static double TXKp = 0.0;
     public static double TXKi = 0;
-    public static double TXKd = 0.01;
+    public static double TXKd = 0.05;
     FtcDashboard dash = FtcDashboard.getInstance();
     Telemetry t2 = dash.getTelemetry();
     CRServo turretSpin;
@@ -72,7 +72,7 @@ public class SFA3BTClass extends OpMode {
     public void loop() {
         boolean ATSeen = false;
         double turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
-        ATSeen = limelight.update();
+        ATSeen = limelight.update(true);
 
 
         if (gamepad1.a && Objects.equals(teamColor, "none")){ // Objects.equals(String, String) just sees if theyre equal

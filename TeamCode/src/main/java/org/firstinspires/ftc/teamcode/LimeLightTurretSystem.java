@@ -53,6 +53,8 @@ public class LimeLightTurretSystem {
     public List<LLResultTypes.FiducialResult> fiducialResults;
     PIDFController turretControl; //when sfa3b
     PIDFController turretFineControl; //when ATseen
+    boolean ATSeen = false;
+    SparkFunOTOS.Pose2D roboPoseRelativeToAT;
 
     double encoderDegreesPerTick = 0.008772; //THIS IS THE CORRECT COEFFICIANT!!!!!!!!!
 
@@ -90,20 +92,17 @@ public class LimeLightTurretSystem {
 
     }
     public void turntoAT(boolean isBlue) { //COMPLETE RE-DO USING SFA3B!!!!!
-        boolean ATSeen = false;
+
         double turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
-        ATSeen = update();
+        ATSeen = update(isBlue);
 
 
         if(ATSeen){
-            Pose2D ATSeenRoboPose = getPositionCenterRelative(isBlue);
-            SparkFunOTOS.Pose2D roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.INCH), ATSeenRoboPose.getY(DistanceUnit.INCH), ATSeenRoboPose.getHeading(AngleUnit.DEGREES) - turretPosition);
-            sparkfun.myOtos.setPosition(roboPoseRelativeToAT); // the problem could be due to the turning
-
             turretFineControl.updatePosition(limelight.getLatestResult().getTx());
             turretFineControl.setTargetPosition(0);
-            if (Math.abs(roboPoseRelativeToAT.h) < 20 ) {turretSpin.setPower(turretFineControl.run());}
-            else {
+            if (Math.abs(roboPoseRelativeToAT.h) < 20 ) {
+                turretSpin.setPower(turretFineControl.run());
+            } else {
                 turretControl.updatePosition(turretPosition);
                 if (Math.abs(roboPoseRelativeToAT.h) < 30) {
                     turretControl.setTargetPosition(-roboPoseRelativeToAT.h);
@@ -125,12 +124,19 @@ public class LimeLightTurretSystem {
         turretSpin.setPower(power);
     }
 
-    public boolean update(){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
+    public boolean update(boolean isBlue){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
+        double turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
         result = limelight.getLatestResult();
         boolean seen =  (result.getBotpose().getPosition().x != 0);
         if (seen){
+            ATSeen = true;
             botpose = result.getBotpose();
+            Pose2D ATSeenRoboPose = getPositionCenterRelative(isBlue);
+            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.INCH), ATSeenRoboPose.getY(DistanceUnit.INCH), ATSeenRoboPose.getHeading(AngleUnit.DEGREES) - turretPosition);
+            sparkfun.myOtos.setPosition(roboPoseRelativeToAT); // the problem could be due to the turning
+
         }
+        ATSeen = false;
         botposeangle = botpose.getOrientation().getYaw();
 
         return seen;
@@ -156,11 +162,17 @@ public class LimeLightTurretSystem {
 
     /** gives the position relative to the april tag */
     public Pose2D getPositionCenterRelative(boolean isBlue){
-        double shiftedHeading = botposeangle + 135;
-        double robox = botpose.getPosition().x + 1.482;// + 0.18 //*Math.cos(Math.toRadians(botposeangle));
-        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413);// + 0.18 //*Math.sin(Math.toRadians(botposeangle));
-        double roboxRotated = (robox-roboy) * 0.707106781187;
-        double roboyRotated = (robox+roboy) * 0.707106781187;
+        double shiftedHeading = botposeangle + (isBlue? 135: -135);
+        double robox = botpose.getPosition().x + 1.482;
+        double roboy = botpose.getPosition().y + (isBlue?1.413:-1.413);
+        double roboyRotated = (robox-roboy) * 0.707106781187;
+        double roboxRotated = (robox+roboy) * 0.707106781187;
+
+        if (isBlue) {
+            roboxRotated = (robox - roboy) * 0.707106781187;
+            roboyRotated = (robox + roboy) * 0.707106781187;
+        }
+
         roboyRotated += 0.25;
         return new Pose2D(DistanceUnit.METER, roboxRotated, roboyRotated, AngleUnit.DEGREES, shiftedHeading);
     }
