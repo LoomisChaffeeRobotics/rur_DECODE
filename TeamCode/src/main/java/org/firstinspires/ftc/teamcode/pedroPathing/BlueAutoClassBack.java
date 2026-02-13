@@ -257,7 +257,7 @@ public class BlueAutoClassBack extends OpMode {
         turningthing.sensecolor();
         turningthing.indexerUpdate();
         follower.update();
-        limelightclass.turntoAT(20);
+//        limelightclass.turntoAT(20);
         autoUpdate();
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());

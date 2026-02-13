@@ -265,6 +265,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
 //         Driving
+        autoTurn();
         fieldCentricDriving();
         if (gamepad1.start){
             imu.resetYaw();
@@ -363,11 +364,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         return false;
     }
     public void autoTurn(){ // Done?
-        if (isRed) {
-            limeLightTurretSystem.turntoAT(24);
-        } else {
-            limeLightTurretSystem.turntoAT(20);
-        }
+        limeLightTurretSystem.turntoAT(!isRed);
 
     }
     public void turretTurnTo(double angle){ //not using

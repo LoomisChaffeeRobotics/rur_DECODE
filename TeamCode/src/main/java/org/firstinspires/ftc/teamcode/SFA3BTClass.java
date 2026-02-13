@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
@@ -23,6 +24,8 @@ import java.util.Objects;
 import java.util.Vector;
 
 @TeleOp
+
+@Config
 public class SFA3BTClass extends OpMode {
     /** SPARK FUN AS AN APRILTAG BACKUP TESTING CLASS */
     public static double SFKf = 0;
@@ -90,15 +93,22 @@ public class SFA3BTClass extends OpMode {
             turretFineControl.setCoefficients(new PIDFCoefficients(TXKp,TXKi, TXKd, TXKf));
 
             turretFineControl.updatePosition(limelight.limelight.getLatestResult().getTx());
-            turretFineControl.setTargetPosition(-roboPoseRelativeToAT.h);
-            turretSpin.setPower(turretFineControl.run());
+            turretFineControl.setTargetPosition(0);
+            if (Math.abs(roboPoseRelativeToAT.h) < 20 ) {turretSpin.setPower(turretFineControl.run());}
+            else {
+                turretControl.updatePosition(turretPosition);
+                if (Math.abs(roboPoseRelativeToAT.h) < 30) {
+                    turretControl.setTargetPosition(-roboPoseRelativeToAT.h);
+                }
+                turretSpin.setPower(turretControl.run());
+            }
         }
         else {
             roboPoseRelativeToAT = sparkfun.myOtos.getPosition();
             turretControl.setCoefficients(new PIDFCoefficients(SFKp,SFKi, SFKd, SFKf));
 
             turretControl.updatePosition(turretPosition);
-            if (Math.abs(-roboPoseRelativeToAT.h) < 30 ) {turretControl.setTargetPosition(-roboPoseRelativeToAT.h);}
+            if (Math.abs(roboPoseRelativeToAT.h) < 30 ) {turretControl.setTargetPosition(-roboPoseRelativeToAT.h);}
             turretSpin.setPower(turretControl.run());
         }
 
@@ -114,11 +124,11 @@ public class SFA3BTClass extends OpMode {
 
 
 
-        t2.addData("encoder postiton", turretPosition);
+        t2.addData("encoder postiton", limelight.limelight.getLatestResult().getTx());
         t2.addData("turret power", turretSpin.getPower());
-        t2.addData("target thihng", -roboPoseRelativeToAT.h);
-        t2.addData("error", turretControl.getError());
-        t2.addData("current thing", turretPosition);
+        t2.addData("target thihng", 0);
+        t2.addData("error", turretFineControl.getError());
+        t2.addData("current thing", limelight.limelight.getLatestResult().getTx());
         t2.update();
 
     }

@@ -24,7 +24,7 @@ public class TurretTurningOpMode extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("encoder: ",encoder.getCurrentPosition());
-        limelight.turntoAT(20); //change
+//        limelight.turntoAT(20); //change
         telemetry.addData("result",limelight.yesorno);
         telemetry.addData("tx",limelight.angleerror);
         telemetry.addData("powertotrutrretpsi", limelight.turretSpin.getPower());

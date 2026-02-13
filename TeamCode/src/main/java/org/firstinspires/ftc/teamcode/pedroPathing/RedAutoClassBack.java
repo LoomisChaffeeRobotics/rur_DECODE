@@ -225,7 +225,7 @@ public class RedAutoClassBack extends OpMode {
         turningthing.sensecolor();
         turningthing.indexerUpdate();
         follower.update();
-        limelightclass.turntoAT(24);
+//        limelightclass.turntoAT(24);
         autoUpdate();
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
