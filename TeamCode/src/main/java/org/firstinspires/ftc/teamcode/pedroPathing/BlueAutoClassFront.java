@@ -128,7 +128,7 @@ public class BlueAutoClassFront extends OpMode {
 
             case 1:
                 if (actionTimer.getElapsedTime() > 1576.7) {//time for turret to spin up - change
-                    turningthing.removefirst(turningthing.SensedColorAll);
+
                     flipper.setPosition(0);
                     actionTimer.resetTimer();
                     shootingState = 2;
@@ -138,6 +138,7 @@ public class BlueAutoClassFront extends OpMode {
             case 2:
                 if (actionTimer.getElapsedTime() > 676.7) {//time for flipper to finish going up
                     flipper.setPosition(0.3778);
+                    turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 3;
                 }
@@ -154,7 +155,6 @@ public class BlueAutoClassFront extends OpMode {
 
             case 4:
                 if (actionTimer.getElapsedTime() > 1076.7) { // time to let indexer turn
-                    turningthing.removefirst(turningthing.SensedColorAll);
                     flipper.setPosition(0);
                     actionTimer.resetTimer();
                     shootingState = 5;
@@ -164,6 +164,7 @@ public class BlueAutoClassFront extends OpMode {
             case 5:
                 if (actionTimer.getElapsedTime() > 676.7) { //time to flipper go up
                     flipper.setPosition(0.3778);
+                    turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 6;
                 }
@@ -179,8 +180,8 @@ public class BlueAutoClassFront extends OpMode {
 
             case 7:
                 if (actionTimer.getElapsedTime() > 1076.7) { //indexer turn itme
-                    turningthing.removefirst(turningthing.SensedColorAll);
                     flipper.setPosition(0);
+                    turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 8;
                 }
