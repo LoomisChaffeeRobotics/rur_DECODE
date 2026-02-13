@@ -220,22 +220,22 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
         // SPINNER - gp2 X and B
         if (gamepad2.x && !xdepressed) {
-//            turnSpinner(true);
-            indexClass.turnBasedOffColor(Indexer.SensedColor.PURPLE);
+            turnSpinner(true);
+//            indexClass.turnBasedOffColor(Indexer.SensedColor.PURPLE);
             xdepressed = true;
         } else if (gamepad2.b && !bdepressed) {
-//            turnSpinner(false);
-            indexClass.turnBasedOffColor(Indexer.SensedColor.GREEN);
+            turnSpinner(false);
+//            indexClass.turnBasedOffColor(Indexer.SensedColor.GREEN);
             bdepressed = true;
         }
 
         if (gamepad2.y && !ydepressed) {
 //            turnSpinner(true);
-            indexClass.turnBasedOffColor(Indexer.SensedColor.NEITHER);
+//            indexClass.turnBasedOffColor(Indexer.SensedColor.NEITHER);
             ydepressed = true;
         }
         if (gamepad2.a && !adepressed) {
-            indexClass.turn(true);
+//            indexClass.turn(true);
             adepressed = true;
         }
         if (!gamepad2.a){
@@ -333,7 +333,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         if (power == 0) {
             launcher.setPower(0);
             launcher2.setPower(0);
-            return;
         } else {
             launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed));/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
         }

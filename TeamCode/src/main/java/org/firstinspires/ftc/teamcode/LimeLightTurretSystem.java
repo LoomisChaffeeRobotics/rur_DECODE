@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -23,7 +24,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import java.util.List;
 import java.util.Objects;
 
+@Config
 public class LimeLightTurretSystem {
+    public static double SFKf = 0;
+    public static double SFKp = 0.1;
+    public static double SFKi = 0;
+    public static double SFKd = 0.01;
+    public static double TXKf = 0;
+    public static double TXKp = 0.1;
+    public static double TXKi = 0;
+    public static double TXKd = 0.01;
+
     public LLResult result;
     public DcMotorEx encoder;
     sparkFunMethodsClass sparkfun;
