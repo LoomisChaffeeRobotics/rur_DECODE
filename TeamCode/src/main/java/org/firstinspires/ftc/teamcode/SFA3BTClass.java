@@ -25,16 +25,21 @@ import java.util.Vector;
 @TeleOp
 public class SFA3BTClass extends OpMode {
     /** SPARK FUN AS AN APRILTAG BACKUP TESTING CLASS */
-    public static double Kf = 0;
-    public static double Kp = 0.1;
-    public static double Ki = 0;
-    public static double Kd = 0.01;
+    public static double SFKf = 0;
+    public static double SFKp = 0.1;
+    public static double SFKi = 0;
+    public static double SFKd = 0.01;
+    public static double TXKf = 0;
+    public static double TXKp = 0.1;
+    public static double TXKi = 0;
+    public static double TXKd = 0.01;
     FtcDashboard dash = FtcDashboard.getInstance();
     Telemetry t2 = dash.getTelemetry();
     CRServo turretSpin;
     double targetRotation = 0.0;
 
     PIDFController turretControl;
+    PIDFController turretFineControl;
     sparkFunMethodsClass sparkfun;
     LimeLightTurretSystem limelight;
     String teamColor = "blue";
@@ -52,7 +57,8 @@ public class SFA3BTClass extends OpMode {
         encoder = hardwareMap.get(DcMotorEx.class, "encoder");
         roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(0,0,0);
 
-        turretControl = new PIDFController(new PIDFCoefficients(Kp, Ki, Kd, Kf));
+        turretControl = new PIDFController(new PIDFCoefficients(SFKp,SFKi, SFKd, SFKf));
+        turretFineControl = new PIDFController(new PIDFCoefficients(TXKp,TXKi, TXKd, TXKf));
         turretControl.setTargetPosition(targetRotation);
         turretSpin = hardwareMap.get(CRServo.class, "turretSpin");
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -80,9 +86,20 @@ public class SFA3BTClass extends OpMode {
             Pose2D ATSeenRoboPose = limelight.getPositionCenterRelative(Objects.equals(teamColor, "blue"));
             roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.INCH), ATSeenRoboPose.getY(DistanceUnit.INCH), ATSeenRoboPose.getHeading(AngleUnit.DEGREES) - turretPosition);
             sparkfun.myOtos.setPosition(roboPoseRelativeToAT); // the problem could be due to the turning
+
+            turretFineControl.setCoefficients(new PIDFCoefficients(TXKp,TXKi, TXKd, TXKf));
+
+            turretFineControl.updatePosition(limelight.limelight.getLatestResult().getTx());
+            turretFineControl.setTargetPosition(-roboPoseRelativeToAT.h);
+            turretSpin.setPower(turretFineControl.run());
         }
         else {
             roboPoseRelativeToAT = sparkfun.myOtos.getPosition();
+            turretControl.setCoefficients(new PIDFCoefficients(SFKp,SFKi, SFKd, SFKf));
+
+            turretControl.updatePosition(turretPosition);
+            if (Math.abs(-roboPoseRelativeToAT.h) < 30 ) {turretControl.setTargetPosition(-roboPoseRelativeToAT.h);}
+            turretSpin.setPower(turretControl.run());
         }
 
         telemetry.addData("x",roboPoseRelativeToAT.x);
@@ -92,13 +109,10 @@ public class SFA3BTClass extends OpMode {
 
         if (!ATSeen){
             telemetry.addLine("NO AT SEEN");
+
         }
 
-        turretControl.setCoefficients(new PIDFCoefficients(Kp, Ki, Kd, Kf));
 
-        turretControl.updatePosition(turretPosition);
-        if (Math.abs(-roboPoseRelativeToAT.h) < 30 ) {turretControl.setTargetPosition(-roboPoseRelativeToAT.h);}
-        turretSpin.setPower(turretControl.run());
 
         t2.addData("encoder postiton", turretPosition);
         t2.addData("turret power", turretSpin.getPower());
