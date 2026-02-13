@@ -44,13 +44,17 @@ public class LauncherDistanceTestingClass extends OpMode {
         telemetry.addData("Distance, meters", distance);
 //       telemetry.addData("botpose", limelight.botpose);
         telemetry.addData("Interoplation lower motor", launcherClass.lower_motor_interporation_result);
+        telemetry.addData("upper bound for lower motor", launcherClass.lower_motor_value_0);
+        telemetry.addData("lower bound for lower motor", launcherClass.lower_motor_value_1);
         telemetry.addData("Interoplation upper motor", launcherClass.upper_motor_interporation_result);
+        telemetry.addData("upper bound for upper motor", launcherClass.upper_motor_value_0);
+        telemetry.addData("lower bound for upper motor", launcherClass.upper_motor_value_1);
 //        telemetry.addData("Interoplation upper motor", launcherClass.upper_motor_interporation_result);
-        t2.addData("inner cur velo", launcherClass.launcher.getVelocity());
-        t2.addData("outer cur velo", launcherClass.launcher2.getVelocity());
-        t2.addData("inner targ velo", launcherClass.lower_motor_interporation_result * (7.0/15.0));
-        t2.addData("outer targ velo", launcherClass.upper_motor_interporation_result * (7.0/15.0));
-        t2.update();
+        telemetry.addData("inner cur velo", launcherClass.launcher.getVelocity());
+        telemetry.addData("outer cur velo", launcherClass.launcher2.getVelocity());
+        telemetry.addData("inner targ velo", launcherClass.lower_motor_interporation_result * (7.0/15.0));
+        telemetry.addData("outer targ velo", launcherClass.upper_motor_interporation_result * (7.0/15.0));
+      
        telemetry.update();
     }
 
