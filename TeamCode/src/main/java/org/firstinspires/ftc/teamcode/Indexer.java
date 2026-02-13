@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
-
 import android.graphics.Color;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -293,11 +289,19 @@ public class Indexer {
         intake.setPower(-power);
     }
 
-    public void updateIndicator(){
+    public void updateIndicator(boolean turretGood){
         if (SensedColorAll.get(0) == SensedColor.PURPLE){
-            light.setPosition(0.722);
+            if (turretGood && Math.abs(error) < 100){
+                light.setPosition(0.722);
+            } else {
+                light.setPosition(0.666);
+            }
         } else if(SensedColorAll.get(0) == SensedColor.GREEN){
-            light.setPosition(0.500);
+            if (turretGood && Math.abs(error) < 100){
+                light.setPosition(0.388);
+            } else {
+                light.setPosition(0.500);
+            }
         } else {
             light.setPosition(0);
         }
