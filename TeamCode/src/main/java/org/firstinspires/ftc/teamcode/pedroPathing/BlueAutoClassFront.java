@@ -403,7 +403,7 @@ public class BlueAutoClassFront extends OpMode {
     @Override
     public void loop() {
         if (pathState == 1 || pathState == 2) {
-            limelightclass.update();
+            limelightclass.update(true);
             results = limelightclass.result.getFiducialResults(); //might break
             if (results != null) {
                 for (LLResultTypes.FiducialResult result : results) {

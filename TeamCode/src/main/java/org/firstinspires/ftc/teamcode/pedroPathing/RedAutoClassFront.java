@@ -268,7 +268,7 @@ public class RedAutoClassFront extends OpMode {
     public void loop() {
 ////        turningthing.sensecolor();
         turningthing.indexerUpdate();
-        limelightclass.update();
+        limelightclass.update(false);
         follower.update();
 //        limelightclass.turntoAT(20);
         autoUpdate();

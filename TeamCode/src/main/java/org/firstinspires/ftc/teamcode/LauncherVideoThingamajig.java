@@ -38,7 +38,7 @@ public class LauncherVideoThingamajig extends OpMode {
     @Override
     public void loop() {
 
-        limelight.update();
+        limelight.update(true);
         if (gamepad1.dpad_up){
             launcherspeed -= 1;
         }
