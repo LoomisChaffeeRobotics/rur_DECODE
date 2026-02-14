@@ -96,6 +96,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         indexClass.init(hardwareMap, telemetry);
         launchClass = new Launcher();
         launchClass.init(hardwareMap, telemetry);
+        coloracc = new ColorSensorAccuracyClass();
 //        launcherLegacy = new LauncherLegacy();
 //        launcherLegacy.init(hardwareMap, telemetry);
         //Setting the motors
@@ -172,6 +173,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
         telemetry.addData("sensed color", indexClass.hsvValues1[0]);
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+        telemetry.addData("NEITHER sense confidence", coloracc.emptyAccuracy);
+        telemetry.addData("NEITHER sense count", coloracc.wrongCount);
 //        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
 //        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
