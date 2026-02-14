@@ -265,7 +265,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
 //         Driving
-        autoTurn();
+//        autoTurn();
         fieldCentricDriving();
         if (gamepad1.start){
             imu.resetYaw();
