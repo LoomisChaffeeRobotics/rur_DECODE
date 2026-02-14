@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-public class ColorSensorAccuracy extends OpMode {
+public class ColorSensorAccuracyTesting extends OpMode {
 
     Indexer indexClass;
-    double emptyAccuracy = 0;
-    double accCount = 0;
-    double wrongCount = 0;
+    public double emptyAccuracy = 0;
+    public double accCount = 1;
+    public double wrongCount = 0;
 
     @Override
     public void init() {

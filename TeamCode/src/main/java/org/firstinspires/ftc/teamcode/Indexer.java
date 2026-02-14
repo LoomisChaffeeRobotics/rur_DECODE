@@ -59,6 +59,7 @@ public class Indexer {
     public static double indexerI = 0.0000006;
     public static double indexerD = 0.000008;
     public LimeLightTurretSystem limelightclass;
+    public ColorSensorAccuracyClass coloracc;
     public IMU imu;
     public float gain = 8.4F;
     public float[] hsvValues1 = new float[3];
@@ -161,6 +162,8 @@ public class Indexer {
 
     }
     public void turn(boolean direction) { // true is right
+
+        coloracc.reset();
 
 //        sensecolor();
 
@@ -280,6 +283,14 @@ public class Indexer {
                 return 2;
             }
             else {
+
+                // CHECK TO MAKE SURE THE FOLLOWING WORKS:
+
+                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 250) {
+                    coloracc.reset();
+                    SensedColorAll.set(0, SensedColor.NEITHER);
+                }
+
                 return 0;
             }
 
