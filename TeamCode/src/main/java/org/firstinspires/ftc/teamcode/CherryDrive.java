@@ -41,6 +41,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     private TelemetryManager panelsTelemetry;
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
     LimeLightTurretSystem limeLightTurretSystem;
+    ColorSensorAccuracyClass coloracc;
 //    TelemetryManager panelsTelemetry;
     /** Class for the Spnidexer and the color sensor */
     Indexer indexClass;
@@ -163,6 +164,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         limeLightTurretSystem.update(!isRed);
         if (!indexClass.indexer_is_moving) {
             indexClass.sensecolor();
+            coloracc.update();
         }
 
         telemetry.addData("motor up speed", launcher2.getVelocity());
