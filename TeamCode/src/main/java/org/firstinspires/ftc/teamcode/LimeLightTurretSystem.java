@@ -26,14 +26,14 @@ import java.util.Objects;
 
 @Config
 public class LimeLightTurretSystem {
-    public static double SFKf = 0;
     public static double SFKp = 0.1;
     public static double SFKi = 0;
     public static double SFKd = 0.01;
-    public static double TXKf = 0;
-    public static double TXKp = 0.1;
+    public static double SFKf = 0;
+    public static double TXKp = 0.02;
     public static double TXKi = 0;
-    public static double TXKd = 0.01;
+    public static double TXKd = 0.0;
+    public static double TXKf = 0;
 
     public LLResult result;
     public DcMotorEx encoder;
@@ -71,8 +71,8 @@ public class LimeLightTurretSystem {
         limelight.start();
         // so botpose is never null
         botpose = new Pose3D(new Position(), new YawPitchRollAngles(AngleUnit.DEGREES,0,0,0,0));
-        turretControl = new PIDFController(new PIDFCoefficients(0.1,0, 0.01, 0));
-        turretFineControl = new PIDFController(new PIDFCoefficients(0.02,0, 0.00, 0));
+        turretControl = new PIDFController(new PIDFCoefficients(SFKp, SFKi, SFKd, SFKf));
+        turretFineControl = new PIDFController(new PIDFCoefficients(TXKp,TXKi, TXKd, TXKf));
         turretControl.setTargetPosition(0);
         turretFineControl.setTargetPosition(0);
 
