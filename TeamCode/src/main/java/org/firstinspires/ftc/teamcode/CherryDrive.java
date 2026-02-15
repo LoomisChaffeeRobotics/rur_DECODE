@@ -41,7 +41,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     private TelemetryManager panelsTelemetry;
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
     LimeLightTurretSystem limeLightTurretSystem;
-    ColorSensorAccuracyClass coloracc;
+//    ColorSensorAccuracyClass coloracc;
 //    TelemetryManager panelsTelemetry;
     /** Class for the Spnidexer and the color sensor */
     Indexer indexClass;
@@ -82,6 +82,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     boolean ydepressed = false;
     boolean adepressed = false;
 
+    boolean startdepressed = false;
 
 
 
@@ -161,19 +162,34 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     }
     @Override
     public void loop() {
-        limeLightTurretSystem.update(!isRed);
+        if (gamepad2.start && !startdepressed){
+            isRed = !isRed;
+        }
+        startdepressed = gamepad2.start;
         if (!indexClass.indexer_is_moving) {
             indexClass.sensecolor();
-            coloracc.update();
+//            coloracc.update();
         }
 
-        telemetry.addData("motor up speed", launcher2.getVelocity());
-        telemetry.addData("motor down speed", launcher.getVelocity());
-        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
-        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
-        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+//        telemetry.addData("motor up speed", launcher2.getVelocity());
+//        telemetry.addData("motor down speed", launcher.getVelocity());
+//        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
+//        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
+//        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+        telemetry.addData("isred", isRed);
+        telemetry.addData("index", limeLightTurretSystem.index);
+        telemetry.addData("seen", limeLightTurretSystem.ATSeen);
+        if (limeLightTurretSystem.result != null){
+            telemetry.addData("size", limeLightTurretSystem.result.getFiducialResults().size());
+            if( limeLightTurretSystem.index != -1){
+                telemetry.addData("tx", limeLightTurretSystem.result.getFiducialResults().get(limeLightTurretSystem.index).getTargetXDegrees());
+
+            }
+
+        }
+         telemetry.addData("encoder", limeLightTurretSystem.encoder.getCurrentPosition());
 //        telemetry.addData("flipper", flipperUp.getElapsedTime());
-//        telemetry.addData("result 0",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[0]);
+//        telemetry.addData("resuurretSystem.getDistance_from_apriltag(true))[0]);
 //        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
 //        telemetry.addData("upper motor speed 0", launchClass.upper_motor_value_0*(7.0 / 15.0));
 //        telemetry.addData("upper motor speed 1", launchClass.upper_motor_value_1*(7.0 / 15.0));
@@ -266,22 +282,34 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //        telemetry.update();
 
 
-//         Driving
+//         Driving\\]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 //        autoTurn();
         fieldCentricDriving();
         if (gamepad1.start){
             imu.resetYaw();
         }
-        indexClass.updateIndicator(launchClass.checkIfSpunUp());
 
+
+        indexClass.updateIndicator(launchClass.checkIfSpunUp());
+        if (gamepad2.start){
+            if (isRed){
+                indexClass.light.setPosition(0.279);
+            } else{
+                indexClass.light.setPosition(0.611);
+            }
+        }
         telemetry.addData("error", indexClass.error);
 
         t2.addData("inner cur velo", launchClass.launcher.getVelocity());
         t2.addData("outer cur velo", launchClass.launcher2.getVelocity());
         t2.addData("inner targ velo", launchClass.lower_motor_interporation_result * (7.0/15.0));
         t2.addData("outer targ velo", launchClass.upper_motor_interporation_result* (7.0/15.0));
+        t2.addData("indexerpos", indexClass.intake.getCurrentPosition());
+        t2.addData("indexertargpos", indexClass.targetPosition);
         t2.update();
         telemetry.update();
+
+
 
     }
 

@@ -21,6 +21,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,6 +57,7 @@ public class LimeLightTurretSystem {
     PIDFController turretFineControl; //when ATseen
     boolean ATSeen = false;
     SparkFunOTOS.Pose2D roboPoseRelativeToAT;
+    int index = -1;
 
     double encoderDegreesPerTick = 0.008772; //THIS IS THE CORRECT COEFFICIANT!!!!!!!!!
 
@@ -71,8 +74,8 @@ public class LimeLightTurretSystem {
         limelight.start();
         // so botpose is never null
         botpose = new Pose3D(new Position(), new YawPitchRollAngles(AngleUnit.DEGREES,0,0,0,0));
-        turretControl = new PIDFController(new PIDFCoefficients(SFKp, SFKi, SFKd, SFKf));
-        turretFineControl = new PIDFController(new PIDFCoefficients(TXKp,TXKi, TXKd, TXKf));
+        turretControl = new PIDFController(new PIDFCoefficients(0, 0, 0, 0.02));
+        turretFineControl = new PIDFController(new PIDFCoefficients(0.06,0, 0.0001, 0));
         turretControl.setTargetPosition(0);
         turretFineControl.setTargetPosition(0);
 
@@ -95,10 +98,10 @@ public class LimeLightTurretSystem {
 
         double turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
         ATSeen = update(isBlue);
+        List<LLResultTypes.FiducialResult> results = result.getFiducialResults();;
 
-
-        if(ATSeen){
-            turretFineControl.updatePosition(limelight.getLatestResult().getTx());
+        if(index != -1){
+            turretFineControl.updatePosition(results.get(index).getTargetXDegrees());
             turretFineControl.setTargetPosition(0);
             if (Math.abs(roboPoseRelativeToAT.h) < 20 ) {
                 turretSpin.setPower(turretFineControl.run());
@@ -127,8 +130,18 @@ public class LimeLightTurretSystem {
     public boolean update(boolean isBlue){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
         double turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
         result = limelight.getLatestResult();
+        List<LLResultTypes.FiducialResult> results = new ArrayList<LLResultTypes.FiducialResult>();
+
         boolean seen =  (result.getBotpose().getPosition().x != 0);
+        index = -1; // -1 means the specific AT not seen
         if (seen){
+            results = result.getFiducialResults();
+            for(int i = 0; i < results.size(); i++ ){
+                if (results.get(i).getFiducialId() == (isBlue? 20: 24)){
+                    index = i;
+                    break;
+                }
+            }
             ATSeen = true;
             botpose = result.getBotpose();
             Pose2D ATSeenRoboPose = getPositionCenterRelative(isBlue);

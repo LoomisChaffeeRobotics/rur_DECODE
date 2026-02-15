@@ -54,10 +54,10 @@ import java.util.List;
 @Config
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
-    public static double indexerP = 0.0002;
+    public static double indexerP = 0.00015;
     public static double indexerF = 0;
-    public static double indexerI = 0.0000006;
-    public static double indexerD = 0.000008;
+    public static double indexerI = 0.000005;
+    public static double indexerD = 0.00002;
     public LimeLightTurretSystem limelightclass;
     public ColorSensorAccuracyClass coloracc;
     public IMU imu;
@@ -163,7 +163,7 @@ public class Indexer {
     }
     public void turn(boolean direction) { // true is right
 
-        coloracc.reset();
+//        coloracc.reset();
 
 //        sensecolor();
 
@@ -286,10 +286,10 @@ public class Indexer {
 
                 // CHECK TO MAKE SURE THE FOLLOWING WORKS:
 
-                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 250) {
-                    coloracc.reset();
-                    SensedColorAll.set(0, SensedColor.NEITHER);
-                }
+//                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 250) {
+//                    coloracc.reset();
+//                    SensedColorAll.set(0, SensedColor.NEITHER);
+//                }
 
                 return 0;
             }

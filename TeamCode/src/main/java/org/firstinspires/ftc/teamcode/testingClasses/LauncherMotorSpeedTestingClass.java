@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -13,11 +14,12 @@ import org.firstinspires.ftc.teamcode.Launcher;
 
 @TeleOp
 public class LauncherMotorSpeedTestingClass extends OpMode {
-    FtcDashboard dash;
+    FtcDashboard dash = FtcDashboard.getInstance();
 
     Telemetry t2 = dash.getTelemetry();
     DcMotorEx bottom_motor;
     DcMotorEx top_motor;
+    public PIDFCoefficients launcherPIDF;
     Servo flipper;
     double bottom_velocity = 0;
     double top_velocity = 0;
@@ -37,8 +39,9 @@ public class LauncherMotorSpeedTestingClass extends OpMode {
 
     @Override
     public void loop() {
-        top_motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcher.launcherPIDF);
-        bottom_motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcher.launcherPIDF);
+        launcherPIDF = new PIDFCoefficients(launcher.launcherP, launcher.launcherI, launcher.launcherD, launcher.launcherF);
+        top_motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);
+        bottom_motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);
         if (gamepad1.x) {
             flipper.setPosition(0); // down
 //            leftFront.setPower(gamepad1.left_stick_y);
@@ -59,7 +62,7 @@ public class LauncherMotorSpeedTestingClass extends OpMode {
             top_velocity = 0;
             top_motor.setVelocity(top_velocity);
 
-
+        }
             t2.addData("Upper set value", top_velocity * 7.0 / 15.0);
             t2.addData("Lower set value", bottom_velocity * 7.0 / 15.0);
             t2.addData("Upper current value", top_motor.getVelocity());
@@ -72,4 +75,4 @@ public class LauncherMotorSpeedTestingClass extends OpMode {
             telemetry.update();
         }
     }
-    }
+
