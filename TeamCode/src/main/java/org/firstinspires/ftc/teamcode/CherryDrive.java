@@ -41,7 +41,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     private TelemetryManager panelsTelemetry;
     /** Class for detecting AT using limelight and turning turret to the AT also using limelight */
     LimeLightTurretSystem limeLightTurretSystem;
-//    ColorSensorAccuracyClass coloracc;
+    ColorSensorAccuracyClass coloracc;
 //    TelemetryManager panelsTelemetry;
     /** Class for the Spnidexer and the color sensor */
     Indexer indexClass;
@@ -97,6 +97,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         indexClass.init(hardwareMap, telemetry);
         launchClass = new Launcher();
         launchClass.init(hardwareMap, telemetry);
+//        coloracc = new ColorSensorAccuracyClass();
 //        launcherLegacy = new LauncherLegacy();
 //        launcherLegacy.init(hardwareMap, telemetry);
         //Setting the motors
@@ -166,28 +167,19 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             isRed = !isRed;
         }
         startdepressed = gamepad2.start;
+        limeLightTurretSystem.update(!isRed);
         if (!indexClass.indexer_is_moving) {
             indexClass.sensecolor();
 //            coloracc.update();
         }
 
-//        telemetry.addData("motor up speed", launcher2.getVelocity());
-//        telemetry.addData("motor down speed", launcher.getVelocity());
-//        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
-//        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
-//        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
-        telemetry.addData("isred", isRed);
-        telemetry.addData("index", limeLightTurretSystem.index);
-        telemetry.addData("seen", limeLightTurretSystem.ATSeen);
-        if (limeLightTurretSystem.result != null){
-            telemetry.addData("size", limeLightTurretSystem.result.getFiducialResults().size());
-            if( limeLightTurretSystem.index != -1){
-                telemetry.addData("tx", limeLightTurretSystem.result.getFiducialResults().get(limeLightTurretSystem.index).getTargetXDegrees());
-
-            }
-
-        }
-         telemetry.addData("encoder", limeLightTurretSystem.encoder.getCurrentPosition());
+        telemetry.addData("motor up speed", launcher2.getVelocity());
+        telemetry.addData("motor down speed", launcher.getVelocity());
+        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
+        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
+        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+        telemetry.addData("NEITHER sense confidence", coloracc.emptyAccuracy);
+        telemetry.addData("NEITHER sense count", coloracc.wrongCount);
 //        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.addData("resuurretSystem.getDistance_from_apriltag(true))[0]);
 //        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
@@ -282,14 +274,12 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //        telemetry.update();
 
 
-//         Driving\\]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+//         Driving
 //        autoTurn();
         fieldCentricDriving();
         if (gamepad1.start){
             imu.resetYaw();
         }
-
-
         indexClass.updateIndicator(launchClass.checkIfSpunUp());
         if (gamepad2.start){
             if (isRed){
@@ -308,8 +298,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         t2.addData("indexertargpos", indexClass.targetPosition);
         t2.update();
         telemetry.update();
-
-
 
     }
 

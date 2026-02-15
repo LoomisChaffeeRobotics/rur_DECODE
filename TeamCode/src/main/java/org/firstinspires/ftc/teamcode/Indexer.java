@@ -255,6 +255,7 @@ public class Indexer {
         limelightclass = new LimeLightTurretSystem();
         limelightclass.init(hardwareMap, telemetry);
         imu = hardwareMap.get(IMU.class, "imu2");
+        coloracc = new ColorSensorAccuracyClass();
 
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
