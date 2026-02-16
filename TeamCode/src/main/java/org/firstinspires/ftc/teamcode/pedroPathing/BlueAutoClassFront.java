@@ -254,26 +254,6 @@ public class BlueAutoClassFront extends OpMode {
             case 0:
                 intake.setPower(-1);
                 follower.followPath(detectAT);
-//                if (limelightclass.result != null) {
-//                    result = limelightclass.result.getFiducialResults().get(0); //might break
-//                    if (result.getFiducialId() == 23) {
-//                        patternArray[0] = Indexer.SensedColor.PURPLE;
-//                        patternArray[1] = Indexer.SensedColor.PURPLE;
-//                        patternArray[2] = Indexer.SensedColor.GREEN;
-//                    } else if (result.getFiducialId() == 22) {
-//                        patternArray[0] = Indexer.SensedColor.PURPLE;
-//                        patternArray[1] = Indexer.SensedColor.GREEN;
-//                        patternArray[2] = Indexer.SensedColor.PURPLE;
-//                    } else if (result.getFiducialId() == 21) {
-//                        patternArray[0] = Indexer.SensedColor.GREEN;
-//                        patternArray[1] = Indexer.SensedColor.PURPLE;
-//                        patternArray[2] = Indexer.SensedColor.PURPLE;
-//
-//                    } else {
-//                        telemetry.addLine("nothing");
-//                    }
-//                }
-
                 setPathState(1);
                 break;
             case 1:

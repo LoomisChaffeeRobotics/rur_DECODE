@@ -39,15 +39,15 @@ public class LauncherMotorSpeedTestingClass extends OpMode {
 
     @Override
     public void loop() {
-        launcherPIDF = new PIDFCoefficients(launcher.launcherP, launcher.launcherI, launcher.launcherD, launcher.launcherF);
+        launcherPIDF = new PIDFCoefficients(Launcher.launcherP, Launcher.launcherI, Launcher.launcherD, Launcher.launcherF);
         top_motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);
         bottom_motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);
         if (gamepad1.x) {
-            flipper.setPosition(0); // down
+            flipper.setPosition(0.8117); // down
 //            leftFront.setPower(gamepad1.left_stick_y);
         }
         if (gamepad1.b) {
-            flipper.setPosition(0.3578); // up
+            flipper.setPosition(0.4694); // up
 //            leftRear.setPower(gamepad1.left_stick_y);
         }
         if (gamepad1.dpadUpWasPressed()) {

@@ -39,34 +39,31 @@ public class RedAutoClassFront extends OpMode {
     private boolean isShooting = false;
     private double shootingDistance;
     public Indexer.SensedColor[] patternArray = {
-            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN
+            Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE
     };
-    Pose startPose = new Pose(144-56,9, Math.toRadians(73)); //heading in radians
-    Pose detectPose = new Pose(34.68712123,107.7528485, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
-    Pose launchPoseMain = new Pose(40.40340030911901,102.706336939721788, Math.toRadians(137));
-    Pose launchPose1 = new Pose(45.40340030911901,97.706336939721788, Math.toRadians(84));
-    Pose controlPoint1 = new Pose(66.7958,83.5325,Math.PI);
-    Pose pickupPose1 = new Pose (43.5,84.6, Math.PI); //this is the one that changes
-    Pose intakePose1 = new Pose(18, 82.6, Math.PI);//this too
-    Pose leavePose = new Pose(35.40340030911901, 127, Math.toRadians(90));
-    Pose controlPoint2 = new Pose(68.80518,58.5278,Math.PI);
-    Pose pickupPose2 = new Pose (42.5,61.09273570324575, Math.PI);
-    Pose intake2 = new Pose(9.137, 61.092735, Math.PI);
-    Pose controlPoint3 = new Pose(64.5429, 54.37311, Math.PI);
+    Pose startPose = new Pose(144-21.36630602782071,123.52395672333849, Math.toRadians(37)); //heading in radians
+    Pose detectPose = new Pose(144-34.68712123,107.7528485, Math.toRadians(135)); //to detect apriltag, same as launchposeMain but different heading
+    Pose launchPoseMain = new Pose(144-40.40340030911901,102.706336939721788, Math.toRadians(43));
+    Pose launchPose1 = new Pose(144-45.40340030911901,97.706336939721788, Math.toRadians(96));
+    Pose controlPoint1 = new Pose(144-66.7958,83.5325,0);
+    Pose pickupPose1 = new Pose (144-43.5,84.6, 0); //this is the one that changes
+    Pose intakePose1 = new Pose(144-18, 82.6, 0);//this too
+    Pose leavePose = new Pose(144-35.40340030911901, 127, Math.toRadians(90));
+    Pose controlPoint2 = new Pose(144-68.80518,58.5278,0);
+    Pose pickupPose2 = new Pose (144-42.5,61.09273570324575, 0);
+    Pose intake2 = new Pose(144-9.137, 61.092735, 0);
+    Pose controlPoint3 = new Pose(144-64.5429, 54.37311, 0);
     private Path detectAT, scorePreload, pickup1, launch1, leave1, pickup2, launch2;
     private PathChain intake1chain, launch1chain, pickup2chain, leavechain, launch2chain, intake2chain;
     public void buildPaths() {
 
         detectAT = new Path(new BezierCurve(startPose, detectPose));
-        detectAT.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(45));
+        detectAT.setLinearHeadingInterpolation(Math.toRadians(37), Math.toRadians(135));
 
         scorePreload = new Path(new BezierCurve(detectPose, launchPoseMain));
-        scorePreload.setLinearHeadingInterpolation(Math.toRadians(65), Math.toRadians(137), 0.8);
+        scorePreload.setLinearHeadingInterpolation(detectPose.getHeading(), launchPoseMain.getHeading(), 0.8);
         pickup1 =  new Path(new BezierCurve(launchPoseMain, controlPoint1, pickupPose1));
-        pickup1.setLinearHeadingInterpolation(Math.toRadians(137), Math.toRadians(178));
-
-        launch1 =  new Path(new BezierCurve(intakePose1, launchPoseMain));
-        launch1.setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(137));
+        pickup1.setLinearHeadingInterpolation(launchPoseMain.getHeading(), pickupPose1.getHeading());
 
         intake1chain = follower.pathBuilder()
                 .addPath(new BezierLine(pickupPose1, intakePose1))
@@ -74,21 +71,19 @@ public class RedAutoClassFront extends OpMode {
                 .addParametricCallback(0.3, () -> turningthing.turn(true)) //adjust these t values when needed
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
+        launch1 =  new Path(new BezierCurve(intakePose1, launchPoseMain));
+        launch1.setLinearHeadingInterpolation(intakePose1.getHeading(), launchPoseMain.getHeading());
         launch1chain = follower.pathBuilder()
                 .addPath(launch1)
                 .setLinearHeadingInterpolation(intakePose1.getHeading(), launchPoseMain.getHeading())
                 .build();
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
-        pickup2.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
+        pickup2.setLinearHeadingInterpolation(launchPoseMain.getHeading(), pickupPose2.getHeading());
 
         pickup2chain = follower.pathBuilder()
                 .addPath(pickup2)
                 .setLinearHeadingInterpolation(launchPoseMain.getHeading(), pickupPose2.getHeading())
-                .build();
-        leavechain = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(launchPoseMain, leavePose)))
-                .setLinearHeadingInterpolation(launchPoseMain.getHeading(), leavePose.getHeading())
                 .build();
         leavechain = follower.pathBuilder()
                 .addPath(new Path(new BezierCurve(launchPoseMain, leavePose)))
@@ -204,61 +199,13 @@ public class RedAutoClassFront extends OpMode {
                 break;
         }
     }
-    public void shootingMacro(double shootingdistance) { //can replace turnbasedoffcolor to just turn() if needed
-
-        turningthing.turnBasedOffColor(patternArray[0]);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 776.7) { //fix times
-            launcher.shoot(shootingdistance);
-            turningthing.removefirst(turningthing.SensedColorAll);
-        }
-        flipper.setPosition(0);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //this is probably okay
-        }
-        flipper.setPosition(0.3778);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 400) {
-        }
-        turningthing.turnBasedOffColor(patternArray[1]);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7) { //fix timings
-            turningthing.indexerUpdate();
-            launcher.shoot(shootingdistance);
-            turningthing.removefirst(turningthing.SensedColorAll);
-        }
-
-        flipper.setPosition(0);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //should probably be same as 2nd
-        }
-        flipper.setPosition(0.3778);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 400) {
-        }
-        turningthing.turnBasedOffColor(patternArray[2]);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7) { //fix
-            launcher.shoot(shootingdistance);
-            turningthing.indexerUpdate();
-
-            turningthing.removefirst(turningthing.SensedColorAll);
-        }
-        flipper.setPosition(0);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //same as 2nd
-        }
-        flipper.setPosition(0.3778);
-    }
     public void autoUpdate() {
         switch (pathState) {
             //these cases can also be used to check for time (if(pathTimer.getElapsedTimeSeconds() >1) {}
             //it can also be used to get the X value of the robot's position
-            //IE: if(follower.getPose().getX() > 36) {}
             case 0:
-
-                startShooting(3.1);
-
+                intake.setPower(-1);
+                follower.followPath(detectAT);
 //                if (limelightclass.result != null) {
 //                    result = limelightclass.result.getFiducialResults().get(0); //might break
 //                    if (result.getFiducialId() == 23) {
@@ -282,71 +229,71 @@ public class RedAutoClassFront extends OpMode {
                 setPathState(1);
                 break;
             case 1:
-                if (shootingState ==9) {
-                    follower.followPath(new Path(new BezierCurve(startPose, new Pose(144-30, 20, Math.toRadians(90)))));
+                if (!follower.isBusy()) {
+                    pathTimer.resetTimer();
+                    setPathState(2);
+                }
+                break;
+            case 2:
+                if (pathTimer.getElapsedTime() > 200) {
+                    intake.setPower(-1);
+                    launcher.shoot(1.2);
+                    follower.followPath(scorePreload);
+                    setPathState(3);
+                }
+                break;
+            case 3:
+                if (!follower.isBusy()){
+                    intake.setPower(-0.5);
+                    limelightclass.limelight.close();
+//                    shootingMacro(limelightclass.getDistance_from_apriltag( true));
+                    startShooting(1.2); //uhhhhh this should probably work lowkey
+
+                    setPathState(4);
+                }
+                break;
+            case 4:
+                if (shootingState == 9) {
+//                    follower.followPath(leave1);
+                    launcher.shoot(0);
+                    follower.followPath(pickup1);
+                    setPathState(5);
+                }
+                break;
+            case 5:
+                if (!follower.isBusy()) {
+                    intake.setPower(-1);
+                    follower.followPath(intake1chain, 0.3, true); //maxPower should go down probably
+                    setPathState(6);
+                }
+                break;
+            case 6:
+                if (!follower.isBusy()) {
+                    intake.setPower(0);
+                    launcher.shoot(1.2);
+                    follower.followPath(launch1chain, true);
+                    setPathState(7);
+                }
+                break;
+//
+            case 7:
+                if (!follower.isBusy()) {
+
+                    intake.setPower(-0.5);
+//                    shootingMacro(limelightclass.getDistance_from_apriltag(true));
+                    startShooting(1.2);
+
+//                    follower.followPath(leave1);
+                    setPathState(8);
+                }
+                break;
+            case 8:
+                if (shootingState == 9) {
+                    launcher.shoot(0);
+                    follower.followPath(leavechain, true);
                     setPathState(-1);
                 }
                 break;
-//            case 2:
-//                if (pathTimer.getElapsedTime() > 200) {
-//                    intake.setPower(-1);
-//                    launcher.shoot(1.2);
-//                    follower.followPath(scorePreload);
-//                    setPathState(3);
-//                }
-//                break;
-//            case 3:
-//                if (!follower.isBusy()){
-//                    intake.setPower(-0.5);
-//                    limelightclass.limelight.close();
-////                    shootingMacro(limelightclass.getDistance_from_apriltag( true));
-//                    startShooting(1.2); //uhhhhh this should probably work lowkey
-//
-//                    setPathState(4);
-//                }
-//                break;
-//            case 4:
-//                if (shootingState == 9) {
-////                    follower.followPath(leave1);
-//                    launcher.shoot(0);
-//                    follower.followPath(pickup1);
-//                    setPathState(5);
-//                }
-//                break;
-//            case 5:
-//                if (!follower.isBusy()) {
-//                    intake.setPower(-1);
-//                    follower.followPath(intake1chain, 0.3, true); //maxPower should go down probably
-//                    setPathState(6);
-//                }
-//                break;
-//            case 6:
-//                if (!follower.isBusy()) {
-//                    intake.setPower(0);
-//                    launcher.shoot(1.2);
-//                    follower.followPath(launch1chain, true);
-//                    setPathState(7);
-//                }
-//                break;
-////
-//            case 7:
-//                if (!follower.isBusy()) {
-//
-//                    intake.setPower(-0.5);
-////                    shootingMacro(limelightclass.getDistance_from_apriltag(true));
-//                    startShooting(1.2);
-//
-////                    follower.followPath(leave1);
-//                    setPathState(8);
-//                }
-//                break;
-//            case 8:
-//                if (shootingState == 9) {
-//                    launcher.shoot(0);
-//                    follower.followPath(leavechain, true);
-//                    setPathState(-1);
-//                }
-//                break;
 //            case 9:
 //                if (!follower.isBusy()) {
 //                    //run intake
@@ -411,21 +358,21 @@ public class RedAutoClassFront extends OpMode {
     }
     @Override
     public void loop() {
-//        if (pathState == 1 || pathState == 2) {
-//            limelightclass.update(true);
-//            results = limelightclass.result.getFiducialResults(); //might break
-//            if (results != null) {
-//                for (LLResultTypes.FiducialResult result : results) {
-//                    if (result.getFiducialId() == 23) {
-//                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN};
-//                    } else if (result.getFiducialId() == 22) {
-//                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN, Indexer.SensedColor.PURPLE};
-//                    } else if (result.getFiducialId() == 21) {
-//                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.GREEN, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE};
-//                    }
-//                }
-//            }
-//        }
+        if (pathState == 1 || pathState == 2) {
+            limelightclass.update(true);
+            results = limelightclass.result.getFiducialResults(); //might break
+            if (results != null) {
+                for (LLResultTypes.FiducialResult result : results) {
+                    if (result.getFiducialId() == 23) {
+                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN};
+                    } else if (result.getFiducialId() == 22) {
+                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN, Indexer.SensedColor.PURPLE};
+                    } else if (result.getFiducialId() == 21) {
+                        patternArray = new Indexer.SensedColor[] {Indexer.SensedColor.GREEN, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE};
+                    }
+                }
+            }
+        }
         if (!turningthing.indexer_is_moving) {
             turningthing.sensecolor();
         }
