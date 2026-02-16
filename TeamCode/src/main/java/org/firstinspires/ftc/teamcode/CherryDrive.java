@@ -98,6 +98,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         launchClass = new Launcher();
         launchClass.init(hardwareMap, telemetry);
         coloracc = new ColorSensorAccuracyClass();
+        coloracc.init(hardwareMap,telemetry);
 //        launcherLegacy = new LauncherLegacy();
 //        launcherLegacy.init(hardwareMap, telemetry);
         //Setting the motors
