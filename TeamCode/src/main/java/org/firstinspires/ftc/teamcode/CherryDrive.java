@@ -180,7 +180,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
         telemetry.addData("NEITHER sense confidence %", coloracc.emptyAccuracy);
         telemetry.addData("NEITHER sense count", coloracc.wrongCount);
-        telemetry.addData("is list not neither", indexClass.SensedColorAll.get(0));
+        telemetry.addData("is list not neither", indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER);
 //        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.addData("resuurretSystem.getDistance_from_apriltag(true))[0]);
 //        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
