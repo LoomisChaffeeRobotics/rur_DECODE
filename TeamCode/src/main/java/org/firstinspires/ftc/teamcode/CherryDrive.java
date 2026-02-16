@@ -178,8 +178,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
         telemetry.addData("sensed color", indexClass.hsvValues1[0]);
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
-        telemetry.addData("NEITHER sense confidence", coloracc.emptyAccuracy);
-        telemetry.addData("NEITHER sense count", coloracc.wrongCount);
+//        telemetry.addData("NEITHER sense confidence", coloracc.emptyAccuracy);
+//        telemetry.addData("NEITHER sense count", coloracc.wrongCount);
 //        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.addData("resuurretSystem.getDistance_from_apriltag(true))[0]);
 //        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
@@ -228,45 +228,24 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
 
-        // SPINNER - gp2 X and B
+        // SPINDEXER - gp2 X and B
         if (gamepad2.x && !xdepressed) {
             turnSpinner(true);
-//            indexClass.turnBasedOffColor(Indexer.SensedColor.PURPLE);
-            xdepressed = true;
-        } else if (gamepad2.b && !bdepressed) {
+        }else if (gamepad2.b && !bdepressed) {
             turnSpinner(false);
-//            indexClass.turnBasedOffColor(Indexer.SensedColor.GREEN);
-            bdepressed = true;
         }
+        xdepressed = gamepad2.x;
+        bdepressed = gamepad2.b;
 
-        if (gamepad2.y && !ydepressed) {
-//            turnSpinner(true);
-//            indexClass.turnBasedOffColor(Indexer.SensedColor.NEITHER);
-            ydepressed = true;
-        }
-        if (gamepad2.a && !adepressed) {
-//            indexClass.turn(true);
-            adepressed = true;
-        }
-        if (!gamepad2.a){
-            adepressed = false;
-        }
-        if (!gamepad2.x){
-            xdepressed = false;
-        }
-        if (!gamepad2.b){
-            bdepressed = false;
-        }
-        if (!gamepad2.y){
-            ydepressed = false;
-        }
-
-        //spindexer cannot spin with the flipper up
-        if (flipperUp.getElapsedTime() <= 1000){
+        indexClass.errorCalc(); // claculates error ~ALWAYS RUNNING~
+        if (flipperUp.getElapsedTime() <= 700) {
             indexer.setPower(0);
         } else {
-            indexClass.indexerUpdate();
+            indexClass.indexerUpdate(); // updates position ~NOT ALWAYS RUNNING~
         }
+
+
+
 
 
 

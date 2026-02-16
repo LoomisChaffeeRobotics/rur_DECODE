@@ -54,10 +54,10 @@ import java.util.List;
 @Config
 public class Indexer {
 //    TelemetryManager panelsTelemetry;
-    public static double indexerP = 0.00015;
-    public static double indexerF = 0;
-    public static double indexerI = 0.000005;
-    public static double indexerD = 0.00002;
+    public static double indexerP = 0.0002;
+    public static double indexerF = 0.03;
+    public static double indexerI = 0.000000;
+    public static double indexerD = 0.00003;
     public LimeLightTurretSystem limelightclass;
     public ColorSensorAccuracyClass coloracc;
     public IMU imu;
@@ -117,8 +117,6 @@ public class Indexer {
 
     public void indexerUpdate(){
         curPose = intake.getCurrentPosition();
-
-        error = targetPosition - intake.getCurrentPosition();
         double absError = Math.abs(error);
 
         if ((targetPosition - prevPosition) * error < 0){
@@ -129,15 +127,16 @@ public class Indexer {
         double product = indexerP * error;
         double derivative = (error - prevError)/PIDTimer.seconds();
         double rotationRate = imu.getRobotAngularVelocity(AngleUnit.DEGREES).yRotationRate;
-        double rotationAccel = (rotationRate - prevRotationRate)/PIDTimer.seconds();
-        if (absError< 100){
-            indexer.setPower(0);
-            sum = 0;
-        } else {
+//        double rotationAccel = (rotationRate - prevRotationRate)/PIDTimer.seconds(); - ????????? wut
+//        if (absError< 100){
+//            indexer.setPower(0);
+//            sum = 0;
+//        } else
+        {
             sum += error * indexerI;
             if (Math.abs(sum) > 0.5) {sum = Math.signum(sum)*0.5;}
 
-            power = -rotationAccel * indexerF + product + sum + (indexerD * derivative);
+            power = Math.signum(error) * indexerF + product + sum + (indexerD * derivative);
 //            power = Math.max(Math.min(power,indexerSpeedCap), -indexerSpeedCap);
             indexer.setPower(power);
 
@@ -161,6 +160,10 @@ public class Indexer {
 
 
     }
+    public void errorCalc(){
+        error = targetPosition - intake.getCurrentPosition();
+    }
+
     public void turn(boolean direction) { // true is right
 
 //        coloracc.reset();
@@ -191,6 +194,7 @@ public class Indexer {
             targetPosition -= 8192/3;
             shift_list(SensedColorAll, !direction);
         }
+
 //        if (Math.abs((intake.getCurrentPosition() % 8192/3) - (8192/3)) > 50 || unitsTraveled < 30) {
 //            unitsTraveled++;
 //            indexer.setPower((direction ? 1 : -1) * 0.27);
