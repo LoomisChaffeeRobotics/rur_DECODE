@@ -20,13 +20,15 @@ public class ColorSensorAccuracyClass {
 
 
     public void update() {
-        accCount++;
-//        indexClass.sensecolor();
-        if (indexClass.sensecolor() == 0 && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
-            wrongCount++;
-        }
+        if (!indexClass.indexer_is_moving) {
+            accCount++;
+            //        indexClass.sensecolor();
+            if (indexClass.sensecolor() == 0 && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
+                wrongCount++;
+            }
 
-        emptyAccuracy = wrongCount/accCount;
+            emptyAccuracy = wrongCount / accCount;
+        }
 
 //        telemetry.addData("confidence % that front ball is empty", Math.round(emptyAccuracy * 10000)/100);
 //        telemetry.update();
