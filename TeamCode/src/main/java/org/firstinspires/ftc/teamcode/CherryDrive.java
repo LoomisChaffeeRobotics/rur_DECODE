@@ -337,8 +337,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     public void flipper(boolean up){ // Done!
         //flip
 
-        double flipDown = 0.3578d;
-        double flipUP = 0.0d;
+        double flipDown = 0.8117;
+        double flipUP = 0.4694; //monday feb 16th values
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
     }
