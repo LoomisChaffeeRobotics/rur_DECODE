@@ -144,5 +144,20 @@ public class Launcher {
 
         return true;
     }
+    public boolean shootFudged(double distance, double fudge, double fudge2) {
+        if (distance == 0) {
+            launcher.setVelocity(0);
+            launcher2.setVelocity(0);
+            return true;
+        }
+
+        lower_motor_interporation_result = linearInterpolate(distance, target_ranges, lower_motor_speeds);
+        upper_motor_interporation_result = linearInterpolate(distance, target_ranges, upper_motor_speeds);
+
+        launcher.setVelocity(lower_motor_interporation_result * 7.0/15.0 + fudge);
+        launcher2.setVelocity(upper_motor_interporation_result * 7.0/15.0 + fudge2);
+
+        return true;
+    }
 
 }
