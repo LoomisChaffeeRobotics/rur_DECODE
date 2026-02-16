@@ -289,25 +289,28 @@ public class Indexer {
                 SensedColorAll.set(0, SensedColor.GREEN);
                 return 1;
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 290) { //MUST BE CHANGED ASAPPPPPPPPP // UPDATED 1/29 TO EMMA'S NUMBERS
-                SensedColorAll.set(0, SensedColor.PURPLE);
 
                 if (SensedColorAll.get(0) != SensedColor.PURPLE) {
                     coloracc.reset();
                 }
+
+                SensedColorAll.set(0, SensedColor.PURPLE);
+
+
                 return 2;
             }
             else {
 
-                if (SensedColorAll.get(0) != SensedColor.NEITHER) {
-                    coloracc.reset();
-                }
+//                if (SensedColorAll.get(0) != SensedColor.NEITHER) {
+//                    coloracc.reset();
+//                }
 
                 // CHECK TO MAKE SURE THE FOLLOWING WORKS:
 
-//                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 250) {
-//                    coloracc.reset();
-//                    SensedColorAll.set(0, SensedColor.NEITHER);
-//                }
+                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 100) {
+                    coloracc.reset();
+                    SensedColorAll.set(0, SensedColor.NEITHER);
+                }
 
                 return 0;
             }
