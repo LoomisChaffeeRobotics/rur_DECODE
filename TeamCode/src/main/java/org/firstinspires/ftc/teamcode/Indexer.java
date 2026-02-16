@@ -166,7 +166,7 @@ public class Indexer {
 
     public void turn(boolean direction) { // true is right
 
-//        coloracc.reset();
+        coloracc.reset();
 
 //        sensecolor();
 

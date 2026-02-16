@@ -20,6 +20,7 @@ public class ColorSensorAccuracyClass {
 
 
     public void update() {
+
         if (!indexClass.indexer_is_moving) {
             accCount++;
             //        indexClass.sensecolor();
