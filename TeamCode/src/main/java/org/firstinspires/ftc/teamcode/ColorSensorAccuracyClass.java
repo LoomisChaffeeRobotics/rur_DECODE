@@ -21,6 +21,7 @@ public class ColorSensorAccuracyClass {
 
     public void update() {
         accCount++;
+//        indexClass.sensecolor();
         if (indexClass.sensecolor() == 0 && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
             wrongCount++;
         }

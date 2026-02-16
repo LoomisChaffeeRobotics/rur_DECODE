@@ -281,13 +281,26 @@ public class Indexer {
         colorSensor1.setGain(gain);
         Color.colorToHSV(colors1.toColor(), hsvValues1);
             if (hsvValues1[0] >= 151 && hsvValues1[0] <= 170) {
+
+                if (SensedColorAll.get(0) != SensedColor.GREEN) {
+                    coloracc.reset();
+                }
+
                 SensedColorAll.set(0, SensedColor.GREEN);
                 return 1;
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 290) { //MUST BE CHANGED ASAPPPPPPPPP // UPDATED 1/29 TO EMMA'S NUMBERS
                 SensedColorAll.set(0, SensedColor.PURPLE);
+
+                if (SensedColorAll.get(0) != SensedColor.PURPLE) {
+                    coloracc.reset();
+                }
                 return 2;
             }
             else {
+
+                if (SensedColorAll.get(0) != SensedColor.NEITHER) {
+                    coloracc.reset();
+                }
 
                 // CHECK TO MAKE SURE THE FOLLOWING WORKS:
 

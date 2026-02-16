@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+@TeleOp
 public class ColorSensorAccuracyTesting extends OpMode {
 
     Indexer indexClass;
@@ -18,6 +20,7 @@ public class ColorSensorAccuracyTesting extends OpMode {
     @Override
     public void loop() {
         accCount++;
+        indexClass.sensecolor();
         if (indexClass.sensecolor() == 0 && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
             wrongCount++;
         }
@@ -25,6 +28,11 @@ public class ColorSensorAccuracyTesting extends OpMode {
         emptyAccuracy = wrongCount/accCount;
 
         telemetry.addData("confidence % that front ball is empty", Math.round(emptyAccuracy * 10000)/100);
+        telemetry.addData("empty count", wrongCount);
+        telemetry.addData("is sense", indexClass.sensecolor() == 0);
+        telemetry.addData("is list not equal", indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER);
+        telemetry.addData("sensed color list", indexClass.SensedColorAll);
+        telemetry.addData("color that was sensed: ", indexClass.hsvValues1[0]);
         telemetry.update();
 
         if (gamepad1.aWasPressed()) {
