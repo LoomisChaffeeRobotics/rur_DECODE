@@ -174,14 +174,16 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             coloracc.update();
         }
 
-        telemetry.addData("motor up speed", launcher2.getVelocity());
-        telemetry.addData("motor down speed", launcher.getVelocity());
-        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
-        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
-        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
-        telemetry.addData("NEITHER sense confidence %", coloracc.emptyAccuracy);
-        telemetry.addData("NEITHER sense count", coloracc.wrongCount);
-        telemetry.addData("is list not neither", indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER);
+//        telemetry.addData("motor up speed", launcher2.getVelocity());
+//        telemetry.addData("motor down speed", launcher.getVelocity());
+//        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
+//        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
+//        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+//        telemetry.addData("NEITHER sense confidence %", coloracc.emptyAccuracy);
+//        telemetry.addData("NEITHER sense count", coloracc.wrongCount);
+//        telemetry.addData("is list not neither", indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER);
+        telemetry.addData("Atseen", limeLightTurretSystem.ATSeen);
+        telemetry.addData("index", limeLightTurretSystem.index);
 //        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.addData("resuurretSystem.getDistance_from_apriltag(true))[0]);
 //        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
@@ -192,7 +194,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //        telemetry.addData("higherpower", launchClass.upper_motor_interporation_result*(15.0/7.0));
 
 //        telemetry.addData("distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.4);
-//        telemetry.addData("current distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.9);
+//        telemetry.addData("current distance", limeLightTurretSystem.getDistance_from_apriltag(!isRed) + 0.9)
+
 
         //  INTAKE - gp1 RT, gp2 RB
         if ((gamepad1.right_trigger > 0.2) || gamepad2.right_bumper /*this is for testing maybe will keep*/ /*nevermind keep this*/) {
@@ -256,7 +259,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
 
 //         Driving
-//        autoTurn();
+        autoTurn();
         fieldCentricDriving();
         if (gamepad1.start){
             imu.resetYaw();
@@ -362,8 +365,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         return false;
     }
     public void autoTurn(){ // Done?
-        limeLightTurretSystem.turntoAT(!isRed);
-
+        double tx =limeLightTurretSystem.turntoAT(!isRed);
+        telemetry.addData("tx", tx);
     }
     public void turretTurnTo(double angle){ //not using
         //turns to angle TODO: turn
