@@ -58,6 +58,7 @@ public class LimeLightTurretSystem {
     boolean ATSeen = false;
     SparkFunOTOS.Pose2D roboPoseRelativeToAT;
     int index = -1;
+    double turretPosition = 0;
 
     double encoderDegreesPerTick = 0.008772; //THIS IS THE CORRECT COEFFICIANT!!!!!!!!!
 
@@ -94,33 +95,23 @@ public class LimeLightTurretSystem {
 
 
     }
-    public void turntoAT(boolean isBlue) { //COMPLETE RE-DO USING SFA3B!!!!!
+    public double turntoAT(boolean isBlue) { //COMPLETE RE-DO USING SFA3B!!!!!
 
-        double turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
-        ATSeen = update(isBlue);
-        List<LLResultTypes.FiducialResult> results = result.getFiducialResults();;
-
-        if(index != -1){
+        List<LLResultTypes.FiducialResult> results = result.getFiducialResults();
+        turretFineControl.setTargetPosition(0);
+        turretControl.updatePosition(turretPosition );
+        turretControl.setTargetPosition(-roboPoseRelativeToAT.h - Math.toDegrees(Math.atan(roboPoseRelativeToAT.x/roboPoseRelativeToAT.y)));
+        double turretControllRun = turretControl.run();
+        if(index != -1 && Math.signum(results.get(index).getTargetXDegrees()) * turretPosition > -30 ){
             turretFineControl.updatePosition(results.get(index).getTargetXDegrees());
-            turretFineControl.setTargetPosition(0);
-            if (Math.abs(roboPoseRelativeToAT.h) < 20 ) {
-                turretSpin.setPower(turretFineControl.run());
-            } else {
-                turretControl.updatePosition(turretPosition);
-                if (Math.abs(roboPoseRelativeToAT.h) < 30) {
-                    turretControl.setTargetPosition(-roboPoseRelativeToAT.h);
-                }
-                turretSpin.setPower(turretControl.run());
-            }
+            turretSpin.setPower(turretFineControl.run());
+            return results.get(index).getTargetXDegrees();
+        } else if (Math.abs(roboPoseRelativeToAT.h + Math.toDegrees(Math.atan(roboPoseRelativeToAT.x/roboPoseRelativeToAT.y))) < 30 && turretControllRun == turretControllRun) {
+            turretSpin.setPower(turretControllRun);
+        } else{
+            turretSpin.setPower(0);
         }
-        else {
-            SparkFunOTOS.Pose2D roboPoseRelativeToAT = sparkfun.myOtos.getPosition();
-
-            turretControl.updatePosition(turretPosition);
-            if (Math.abs(roboPoseRelativeToAT.h) < 30 ) {turretControl.setTargetPosition(-roboPoseRelativeToAT.h);}
-            turretSpin.setPower(turretControl.run());
-        }
-
+        return turretControllRun;
     }
 
     public void turnToNotAT(double power){
@@ -128,31 +119,32 @@ public class LimeLightTurretSystem {
     }
 
     public boolean update(boolean isBlue){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
-        double turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
+        turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
         result = limelight.getLatestResult();
-        List<LLResultTypes.FiducialResult> results = new ArrayList<LLResultTypes.FiducialResult>();
-
-        boolean seen =  (result.getBotpose().getPosition().x != 0);
+        List<LLResultTypes.FiducialResult> results;
+        results = result.getFiducialResults();
+        ATSeen = (result.getBotpose().getPosition().x != 0);
         index = -1; // -1 means the specific AT not seen
-        if (seen){
-            results = result.getFiducialResults();
+        if (ATSeen){
+
             for(int i = 0; i < results.size(); i++ ){
                 if (results.get(i).getFiducialId() == (isBlue? 20: 24)){
                     index = i;
                     break;
                 }
             }
-            ATSeen = true;
             botpose = result.getBotpose();
             Pose2D ATSeenRoboPose = getPositionCenterRelative(isBlue);
             roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.INCH), ATSeenRoboPose.getY(DistanceUnit.INCH), ATSeenRoboPose.getHeading(AngleUnit.DEGREES) - turretPosition);
             sparkfun.myOtos.setPosition(roboPoseRelativeToAT); // the problem could be due to the turning
 
+        } else{
+
+            roboPoseRelativeToAT = sparkfun.myOtos.getPosition();
         }
-        ATSeen = false;
         botposeangle = botpose.getOrientation().getYaw();
 
-        return seen;
+        return (index != -1);
     }
 
     public double getDistance_from_apriltag(boolean isBlue) {
