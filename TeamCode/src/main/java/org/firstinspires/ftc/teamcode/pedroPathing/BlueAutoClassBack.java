@@ -47,13 +47,13 @@ public class BlueAutoClassBack extends OpMode {
     Pose pickupPose1 = new Pose (42.20,35.27, Math.PI); //this is the one that changes
     Pose intakePose1 = new Pose(11.44, 35.27, Math.PI);//this too
 
-    Pose controlPoint2 = new Pose(68.80518,58.5278,Math.PI);
-    Pose pickupPose2 = new Pose (42.5,61.09273570324575, Math.PI);
+    Pose controlPoint2 = new Pose(58.80,58.5278,Math.PI);
+    Pose pickupPose2 = new Pose (42.5,58.37, Math.PI);
     Pose intake2Pose = new Pose(9.137, 61.092735, Math.PI);
     Pose controlPoint3 = new Pose(64.5429, 54.37311, Math.PI);
 
     Pose leavePose = new Pose(56.34, 33.55, Math.toRadians(90));
-    private PathChain detectAT, scorePreload, pickup1,intake1, launch1, pickup2, intake2, launch2, leave;
+    PathChain scorePreload, pickup1,intake1, launch1, pickup2, intake2, launch2, leave;
     public void buildPaths() {
 
         scorePreload = follower.pathBuilder()
