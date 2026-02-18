@@ -21,7 +21,7 @@ public class ColorSensorAccuracyTesting extends OpMode {
     public void loop() {
         accCount++;
         indexClass.sensecolor();
-        if (indexClass.sensecolor() == 0 && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
+        if (indexClass.sensecolor() == Indexer.SensedColor.NEITHER && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
             wrongCount++;
         }
 
@@ -29,7 +29,7 @@ public class ColorSensorAccuracyTesting extends OpMode {
 
         telemetry.addData("confidence % that front ball is empty", Math.round(emptyAccuracy * 10000)/100);
         telemetry.addData("empty count", wrongCount);
-        telemetry.addData("is sense", indexClass.sensecolor() == 0);
+        telemetry.addData("is sense", indexClass.sensecolor() == Indexer.SensedColor.NEITHER);
         telemetry.addData("is list not equal", indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER);
         telemetry.addData("sensed color list", indexClass.SensedColorAll);
         telemetry.addData("color that was sensed: ", indexClass.hsvValues1[0]);

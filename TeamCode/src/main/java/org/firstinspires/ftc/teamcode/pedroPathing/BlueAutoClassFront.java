@@ -131,9 +131,9 @@ public class BlueAutoClassFront extends OpMode {
                 break;
 
             case 1:
-                if (actionTimer.getElapsedTime() > 1576.7) {//time for turret to spin up - change
+                if (launcher.checkIfSpunUp()) {
 
-                    flipper.setPosition(0);
+                    flipper.setPosition(0.42);
                     actionTimer.resetTimer();
                     shootingState = 2;
                 }
@@ -141,7 +141,7 @@ public class BlueAutoClassFront extends OpMode {
 
             case 2:
                 if (actionTimer.getElapsedTime() > 676.7) {//time for flipper to finish going up
-                    flipper.setPosition(0.3778);
+                    flipper.setPosition(0.8117);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 3;
@@ -149,7 +149,7 @@ public class BlueAutoClassFront extends OpMode {
                 break;
 
             case 3:
-                if (actionTimer.getElapsedTime() > 700) { //time for flipper to move down
+                if (actionTimer.getElapsedTime() > 500) { //time for flipper to move down
                     turningthing.turnBasedOffColor(patternArray[1]);
                     launcher.shoot(shootingDistance);
                     actionTimer.resetTimer();
@@ -158,8 +158,8 @@ public class BlueAutoClassFront extends OpMode {
                 break;
 
             case 4:
-                if (actionTimer.getElapsedTime() > 1276.7) { // time to let indexer turn
-                    flipper.setPosition(0);
+                if (actionTimer.getElapsedTime() > 576.7) { // time to let indexer turn
+                    flipper.setPosition(0.42);
                     actionTimer.resetTimer();
                     shootingState = 5;
                 }
@@ -167,7 +167,7 @@ public class BlueAutoClassFront extends OpMode {
 
             case 5:
                 if (actionTimer.getElapsedTime() > 676.7) { //time to flipper go up
-                    flipper.setPosition(0.3778);
+                    flipper.setPosition(0.8117);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 6;
@@ -175,7 +175,7 @@ public class BlueAutoClassFront extends OpMode {
                 break;
 
             case 6:
-                if (actionTimer.getElapsedTime() > 800) { //time for flipper to go down
+                if (actionTimer.getElapsedTime() > 500) { //time for flipper to go down
                     turningthing.turnBasedOffColor(patternArray[2]);
                     actionTimer.resetTimer();
                     shootingState = 7;
@@ -183,8 +183,8 @@ public class BlueAutoClassFront extends OpMode {
                 break;
 
             case 7:
-                if (actionTimer.getElapsedTime() > 1276.7) { //indexer turn itme
-                    flipper.setPosition(0);
+                if (actionTimer.getElapsedTime() > 576.7) { //indexer turn itme
+                    flipper.setPosition(0.42);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 8;
@@ -192,59 +192,13 @@ public class BlueAutoClassFront extends OpMode {
                 break;
 
             case 8:
-                if (actionTimer.getElapsedTime() > 676.7) { //flipper down time
-                    flipper.setPosition(0.3778);
+                if (actionTimer.getElapsedTime() > 506.7) { //flipper down time
+                    flipper.setPosition(0.8117);
                     isShooting = false;
                     shootingState = 9;
                 }
                 break;
         }
-    }
-    public void shootingMacro(double shootingdistance) { //can replace turnbasedoffcolor to just turn() if needed
-
-        turningthing.turnBasedOffColor(patternArray[0]);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 776.7) { //fix times
-            launcher.shoot(shootingdistance);
-            turningthing.removefirst(turningthing.SensedColorAll);
-        }
-        flipper.setPosition(0);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //this is probably okay
-        }
-        flipper.setPosition(0.3778);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 400) {
-        }
-        turningthing.turnBasedOffColor(patternArray[1]);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7) { //fix timings
-            turningthing.indexerUpdate();
-            launcher.shoot(shootingdistance);
-            turningthing.removefirst(turningthing.SensedColorAll);
-        }
-
-        flipper.setPosition(0);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //should probably be same as 2nd
-        }
-        flipper.setPosition(0.3778);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 400) {
-        }
-        turningthing.turnBasedOffColor(patternArray[2]);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7) { //fix
-            launcher.shoot(shootingdistance);
-            turningthing.indexerUpdate();
-
-            turningthing.removefirst(turningthing.SensedColorAll);
-        }
-        flipper.setPosition(0);
-        actionTimer.resetTimer();
-        while (actionTimer.getElapsedTime() < 676.7){ //same as 2nd
-        }
-        flipper.setPosition(0.3778);
     }
     public void autoUpdate() {
         switch (pathState) {
@@ -387,7 +341,7 @@ public class BlueAutoClassFront extends OpMode {
     @Override
     public void loop() {
         if (pathState == 1 || pathState == 2) {
-            limelightclass.update(true);
+            limelightclass.updateAuto(true);
             results = limelightclass.result.getFiducialResults(); //might break
             if (results != null) {
                 for (LLResultTypes.FiducialResult result : results) {
@@ -409,6 +363,7 @@ public class BlueAutoClassFront extends OpMode {
         shootingUpdate();
 //        limelightclass.turntoAT(20);
         autoUpdate();
+        telemetry.addData("indexererror", turningthing.error);
         telemetry.addData("path state", pathState);
         telemetry.addData("Hue value", turningthing.hsvValues1[0]);
         telemetry.addData("patterna rray", Arrays.toString(patternArray));

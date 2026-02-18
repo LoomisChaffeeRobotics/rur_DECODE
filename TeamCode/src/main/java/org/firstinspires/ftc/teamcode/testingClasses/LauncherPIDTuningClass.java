@@ -52,12 +52,16 @@ public class LauncherPIDTuningClass extends OpMode {
 //            leftRear.setPower(gamepad1.left_stick_y);
         }
         if (gamepad1.dpadUpWasPressed()) {
-            top_velocity = 3000;
+            top_velocity = 1200;
             top_motor.setVelocity(top_velocity * 7.0 / 15.0);
+            bottom_velocity = 3000;
+            bottom_motor.setVelocity(bottom_velocity * 7.0/15.0);
         }
         if (gamepad1.dpadDownWasPressed()) {
             top_velocity = 0;
             top_motor.setVelocity(top_velocity);
+            bottom_velocity = 0;
+            bottom_motor.setVelocity(bottom_velocity * 7.0/15.0);
 
         }
         t2.addData("Upper set value", top_velocity);

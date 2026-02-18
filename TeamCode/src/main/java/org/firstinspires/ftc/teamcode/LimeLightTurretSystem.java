@@ -5,7 +5,6 @@ import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -21,10 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Config
 public class LimeLightTurretSystem {
@@ -99,23 +95,52 @@ public class LimeLightTurretSystem {
 
         List<LLResultTypes.FiducialResult> results = result.getFiducialResults();
         turretFineControl.setTargetPosition(0);
-        turretControl.updatePosition(turretPosition );
         turretControl.setTargetPosition(-roboPoseRelativeToAT.h - Math.toDegrees(Math.atan(roboPoseRelativeToAT.x/roboPoseRelativeToAT.y)));
-        double turretControllRun = turretControl.run();
-        if(index != -1 && Math.signum(results.get(index).getTargetXDegrees()) * turretPosition > -30 ){
+
+        if(index != -1 && Math.signum(results.get(index).getTargetXDegrees()) * turretPosition > -60 ){
             turretFineControl.updatePosition(results.get(index).getTargetXDegrees());
             turretSpin.setPower(turretFineControl.run());
             return results.get(index).getTargetXDegrees();
-        } else if (Math.abs(roboPoseRelativeToAT.h + Math.toDegrees(Math.atan(roboPoseRelativeToAT.x/roboPoseRelativeToAT.y))) < 30 && turretControllRun == turretControllRun) {
-            turretSpin.setPower(turretControllRun);
+        } else if (Math.abs(roboPoseRelativeToAT.h + Math.toDegrees(Math.atan(roboPoseRelativeToAT.x/roboPoseRelativeToAT.y))) < 60) {
+            turretControl.updatePosition(turretPosition );
+            turretSpin.setPower(turretControl.run());
         } else{
             turretSpin.setPower(0);
         }
-        return turretControllRun;
+        return 0;
     }
 
     public void turnToNotAT(double power){
         turretSpin.setPower(power);
+    }
+
+    public boolean updateAuto(boolean isBlue){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
+        turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
+        result = limelight.getLatestResult();
+        List<LLResultTypes.FiducialResult> results;
+        results = result.getFiducialResults();
+        ATSeen = (result.getBotpose().getPosition().x != 0);
+        index = -1; // -1 means the specific AT not seen
+        if (ATSeen){
+
+            for(int i = 0; i < results.size(); i++ ){
+                if (results.get(i).getFiducialId() == (isBlue? 20: 24)){
+                    index = i;
+                    break;
+                }
+            }
+            botpose = result.getBotpose();
+            Pose2D ATSeenRoboPose = getPositionCenterRelative(isBlue);
+            roboPoseRelativeToAT = new SparkFunOTOS.Pose2D(ATSeenRoboPose.getX(DistanceUnit.INCH), ATSeenRoboPose.getY(DistanceUnit.INCH), ATSeenRoboPose.getHeading(AngleUnit.DEGREES) - turretPosition);
+//            sparkfun.myOtos.setPosition(roboPoseRelativeToAT); // the problem could be due to the turning
+
+        } else{
+
+            roboPoseRelativeToAT = sparkfun.myOtos.getPosition();
+        }
+        botposeangle = botpose.getOrientation().getYaw();
+
+        return (index != -1);
     }
 
     public boolean update(boolean isBlue){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
@@ -146,7 +171,6 @@ public class LimeLightTurretSystem {
 
         return (index != -1);
     }
-
     public double getDistance_from_apriltag(boolean isBlue) {
         //BLUEEEEEEEEE
         positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + (isBlue? 1.413: -1.413), 0, 0);

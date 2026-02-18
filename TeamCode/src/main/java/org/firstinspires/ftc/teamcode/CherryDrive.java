@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.control.PIDFController;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,11 +12,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import java.util.Timer;
 
 //import com.pedropathing.util.Timer;
 
@@ -52,6 +46,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
     /** weather or not we turn the turret automatically (do we want ts?) */
     boolean autoTurn = true;
+
     /** if this isn't self-explanatory re-do you are 5th grade education */
     com.pedropathing.util.Timer flipperUp;
     // whether we're red alliance or not - can be set
@@ -167,10 +162,13 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //        telemetry.addData("motor up speed", launcher2.getVelocity());
 //        telemetry.addData("motor down speed", launcher.getVelocity());
 //        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
-//        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
-//        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
-//        telemetry.addData("NEITHER sense confidence %", coloracc.emptyAccuracy);
-//        telemetry.addData("NEITHER sense count", coloracc.wrongCount);
+        telemetry.addData("sensed color", indexClass.hsvValues1[0]);
+        telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
+        telemetry.addData("NEITHER sense confidence %", coloracc.emptyAccuracy);
+        telemetry.addData("NEITHER sense count", coloracc.wrongCount);
+        telemetry.addData("oldest color accuracy val", coloracc.lastWrongArray[0]);
+        telemetry.addData("newest color accuracy val", coloracc.lastWrongArray[124]);
+        telemetry.addData("reset times", indexClass.reset_times);
 //        telemetry.addData("is list not neither", indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER);
         telemetry.addData("Atseen", limeLightTurretSystem.ATSeen);
         telemetry.addData("index", limeLightTurretSystem.index);
@@ -326,14 +324,15 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
             launcher.setPower(0);
             launcher2.setPower(0);
         } else {
-            launchClass.shoot(limeLightTurretSystem.getDistance_from_apriltag(!isRed));/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
+            double distance = limeLightTurretSystem.getDistance_from_apriltag(!isRed);
+            launchClass.shoot( distance+ (distance>2? 0.5:0));/*0.17 to get distance to center of turret + 0.23 to get to the center of the goal*/
         }
     }
     public void flipper(boolean up){ // Done!
         //flip
 
         double flipDown = 0.8117;
-        double flipUP = 0.4694; //monday feb 16th values
+        double flipUP = 0.42; //monday feb 16th values
         flipper.setPosition(up? flipUP : flipDown);
         telemetry.addData("flipper upness: ", up);
     }
@@ -355,8 +354,15 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         return false;
     }
     public void autoTurn(){ // Done?
-        double tx =limeLightTurretSystem.turntoAT(!isRed);
-        telemetry.addData("tx", tx);
+        if (gamepad2.dpadDownWasPressed()){
+            autoTurn = !autoTurn;
+        }
+        if (autoTurn) {
+            double tx = limeLightTurretSystem.turntoAT(!isRed);
+            telemetry.addData("tx", tx);
+        } else{
+            limeLightTurretSystem.turnToNotAT(0);
+        }
     }
     public void turretTurnTo(double angle){ //not using
         //turns to angle TODO: turn

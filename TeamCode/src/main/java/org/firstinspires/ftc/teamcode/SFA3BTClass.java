@@ -3,28 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.control.PIDFCoefficients;
-import com.pedropathing.control.PIDFController;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Vector;
 
 @TeleOp
 
@@ -84,7 +70,7 @@ public class SFA3BTClass extends OpMode {
     @Override
     public void loop() {
 
-        limelight.update(true);
+        limelight.updateAuto(true);
         limelight.turretControl.setCoefficients(new PIDFCoefficients(SFKp, SFKi, SFKd, SFKf));
         limelight.turretFineControl.setCoefficients(new PIDFCoefficients(TXKp, TXKi, TXKd, TXKf));
         double thing = limelight.turntoAT(true);

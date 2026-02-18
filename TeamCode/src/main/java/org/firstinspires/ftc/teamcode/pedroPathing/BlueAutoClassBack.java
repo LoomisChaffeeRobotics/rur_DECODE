@@ -45,11 +45,11 @@ public class BlueAutoClassBack extends OpMode {
     public Indexer.SensedColor[] patternArray = {
             Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN
     };
-    Pose startPose = new Pose(56,9, Math.toRadians(90)); //heading in radians
+    Pose startPose = new Pose(56,11, Math.toRadians(90)); //heading in radians
     Pose launchPoseMain = new Pose(56.22,17.72, Math.toRadians(120));
     Pose controlPoint1 = new Pose(56.46,37.98,Math.PI);
-    Pose pickupPose1 = new Pose (42.20,35.27, Math.PI); //this is the one that changes
-    Pose intakePose1 = new Pose(11.44, 35.27, Math.PI);//this too
+    Pose pickupPose1 = new Pose (42.20,36.27, Math.PI); //this is the one that changes
+    Pose intakePose1 = new Pose(11.44, 36.27, Math.PI);//this too
 
 
     Pose controlPoint2 = new Pose(58.80,58.5278,Math.PI);
@@ -126,16 +126,16 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 1:
-                if (actionTimer.getElapsedTime() > 1476.7) {//time for turret to spin up - change
+                if (launcher.checkIfSpunUp()) {
 
-                    flipper.setPosition(0.4694);
+                    flipper.setPosition(0.42);
                     actionTimer.resetTimer();
                     shootingState = 2;
                 }
                 break;
 
             case 2:
-                if (actionTimer.getElapsedTime() > 676.7) {//time for flipper to finish going up
+                if (actionTimer.getElapsedTime() > 876.7) {//time for flipper to finish going up
                     flipper.setPosition(0.8117);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
@@ -144,7 +144,7 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 3:
-                if (actionTimer.getElapsedTime() > 700) { //time for flipper to move down ???
+                if (actionTimer.getElapsedTime() > 500) { //time for flipper to move down
                     turningthing.turnBasedOffColor(patternArray[1]);
                     launcher.shoot(shootingDistance);
                     actionTimer.resetTimer();
@@ -153,15 +153,15 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 4:
-                if (actionTimer.getElapsedTime() >1476.7) { // time to let indexer turn
-                    flipper.setPosition(0.4694);
+                if (actionTimer.getElapsedTime() > 576.7) { // time to let indexer turn
+                    flipper.setPosition(0.42);
                     actionTimer.resetTimer();
                     shootingState = 5;
                 }
                 break;
 
             case 5:
-                if (actionTimer.getElapsedTime() > 676.7) { //time to flipper go up
+                if (actionTimer.getElapsedTime() > 876.7) { //time to flipper go up
                     flipper.setPosition(0.8117);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
@@ -170,7 +170,7 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 6:
-                if (actionTimer.getElapsedTime() > 800) { //time for flipper to go down
+                if (actionTimer.getElapsedTime() > 500) { //time for flipper to go down
                     turningthing.turnBasedOffColor(patternArray[2]);
                     actionTimer.resetTimer();
                     shootingState = 7;
@@ -178,8 +178,8 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 7:
-                if (actionTimer.getElapsedTime() > 1476.7) { //indexer turn itme
-                    flipper.setPosition(0.4694);
+                if (actionTimer.getElapsedTime() > 576.7) { //indexer turn itme
+                    flipper.setPosition(0.42);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 8;
@@ -187,7 +187,7 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 8:
-                if (actionTimer.getElapsedTime() > 676.7) { //flipper down time
+                if (actionTimer.getElapsedTime() > 506.7) { //flipper down time
                     flipper.setPosition(0.8117);
                     isShooting = false;
                     shootingState = 9;
@@ -208,13 +208,14 @@ public class BlueAutoClassBack extends OpMode {
                 if (pathTimer.getElapsedTime() > 100) {
                     intake.setPower(-0.5);
                     follower.followPath(scorePreload, true);
-                    launcher.shoot(3.1);
+                    launcher.shoot(3.3);
                     setPathState(2);
                 }
                 break;
             case 2:
                 if (!follower.isBusy()) {
-                    startShooting(3.1);
+                    limelightclass.limelight.close();
+                    startShooting(3.3);
                     setPathState(3);
                 }
                 break;
@@ -229,14 +230,14 @@ public class BlueAutoClassBack extends OpMode {
             case 4:
                 if (!follower.isBusy()){
                     intake.setPower(-1);
-                    follower.followPath(intake1, 0.3, true);
+                    follower.followPath(intake1, 0.5, true);
 
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
-                    launcher.shoot(3.1);
+                    launcher.shoot(3.3);
                     intake.setPower(0);
                     follower.followPath(launch1, true);
                     setPathState(6);
@@ -245,7 +246,7 @@ public class BlueAutoClassBack extends OpMode {
             case 6:
                 if (!follower.isBusy()) {
                     intake.setPower(-0.5);
-                    startShooting(3.1);
+                    startShooting(3.3);
                     setPathState(7);
                 }
                 break;
@@ -329,7 +330,7 @@ public class BlueAutoClassBack extends OpMode {
     @Override
     public void loop() {
         if (pathState == 0 || pathState == 1) {
-            limelightclass.update(true);
+            limelightclass.updateAuto(true);
             results = limelightclass.result.getFiducialResults(); //might break
             if (results != null) {
                 for (LLResultTypes.FiducialResult result : results) {
@@ -346,6 +347,7 @@ public class BlueAutoClassBack extends OpMode {
         if (!turningthing.indexer_is_moving) {
             turningthing.sensecolor();
         }
+        turningthing.errorCalc();
         turningthing.indexerUpdate();
         follower.update();
         shootingUpdate();

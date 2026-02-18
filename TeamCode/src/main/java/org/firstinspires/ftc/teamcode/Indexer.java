@@ -85,6 +85,7 @@ public class Indexer {
     ///  I removed "currentColor" because it was useless. we only need one list.
     public List<SensedColor> SensedColorAll = new ArrayList<>(Arrays.asList(SensedColor.NEITHER, SensedColor.NEITHER, SensedColor.NEITHER));
 
+    public int reset_times = 0;
 
     public enum SensedColor {
         PURPLE, GREEN, NEITHER
@@ -116,6 +117,7 @@ public class Indexer {
     }
 
     public void indexerUpdate(){
+        error = targetPosition - intake.getCurrentPosition();
         curPose = intake.getCurrentPosition();
         double absError = Math.abs(error);
 
@@ -167,6 +169,8 @@ public class Indexer {
     public void turn(boolean direction) { // true is right
 
         coloracc.reset();
+
+//        reset_times++;
 
 //        sensecolor();
 
@@ -275,7 +279,7 @@ public class Indexer {
         light = hardwareMap.get(Servo.class,"light");
 
     }
-    public int sensecolor() { //must be run at all times. Senses the color
+    public SensedColor sensecolor() { //must be run at all times. Senses the color
         colors1 = colorSensor1.getNormalizedColors();
 
         colorSensor1.setGain(gain);
@@ -284,20 +288,22 @@ public class Indexer {
 
                 if (SensedColorAll.get(0) != SensedColor.GREEN) {
                     coloracc.reset();
+                    reset_times++;
                 }
 
                 SensedColorAll.set(0, SensedColor.GREEN);
-                return 1;
+                return SensedColor.GREEN;
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 290) { //MUST BE CHANGED ASAPPPPPPPPP // UPDATED 1/29 TO EMMA'S NUMBERS
 
                 if (SensedColorAll.get(0) != SensedColor.PURPLE) {
                     coloracc.reset();
+                    reset_times++;
                 }
 
                 SensedColorAll.set(0, SensedColor.PURPLE);
 
 
-                return 2;
+                return SensedColor.PURPLE;
             }
             else {
 
@@ -307,12 +313,13 @@ public class Indexer {
 
                 // CHECK TO MAKE SURE THE FOLLOWING WORKS:
 
-                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 60) {
+                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 100) {
                     coloracc.reset();
+                    reset_times++;
                     SensedColorAll.set(0, SensedColor.NEITHER);
                 }
 
-                return 0;
+                return SensedColor.NEITHER;
             }
 
 //            } else {

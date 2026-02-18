@@ -48,19 +48,26 @@ public class ColorSensorAccuracyClass {
 
     public void update() {
 
+        if (can_reset) {
+            can_reset = false;
 
+            accCount = 1;
+            wrongCount = 0;
+            emptyAccuracy = 0;
+        }
 
         if (!indexClass.indexer_is_moving) {
-            if (accCount >= 125) {update_wrong_array();}
-            else {accCount++;}
+//            if (accCount >= 125) {update_wrong_array();}
+//            else {accCount++;}
+            accCount++;
             //        indexClass.sensecolor();
-            if (indexClass.sensecolor() == 0 && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
+            if (indexClass.sensecolor() == Indexer.SensedColor.NEITHER && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
                 wrongCount++;
 
-                lastWrongArray[(int)accCount-1] = true;
+//                lastWrongArray[(int)accCount-1] = true;
 
             }
-            else {lastWrongArray[(int)accCount-1] = false;}
+//            else {lastWrongArray[(int)accCount-1] = false;}
 
             emptyAccuracy = wrongCount / accCount;
         }
@@ -74,13 +81,7 @@ public class ColorSensorAccuracyClass {
 //            emptyAccuracy = 0;
 //        }
 
-        if (can_reset) {
-            can_reset = false;
 
-            accCount = 1;
-            wrongCount = 0;
-            emptyAccuracy = 0;
-        }
 
     }
 
