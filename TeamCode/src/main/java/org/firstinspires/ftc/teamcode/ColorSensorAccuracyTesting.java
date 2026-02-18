@@ -41,5 +41,14 @@ public class ColorSensorAccuracyTesting extends OpMode {
             emptyAccuracy = 0;
         }
 
+        if (emptyAccuracy > .8 && wrongCount > 100) {
+
+            accCount = 0;
+            wrongCount = 0;
+            emptyAccuracy = 0;
+
+            indexClass.SensedColorAll.set(0, Indexer.SensedColor.NEITHER);
+        }
+
     }
 }

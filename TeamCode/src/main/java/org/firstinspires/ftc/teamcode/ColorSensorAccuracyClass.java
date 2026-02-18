@@ -11,6 +11,7 @@ public class ColorSensorAccuracyClass {
     public double emptyAccuracy = 0;
     public double accCount = 1;
     public double wrongCount = 0;
+    boolean can_reset = false;
 
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -40,13 +41,19 @@ public class ColorSensorAccuracyClass {
 //            emptyAccuracy = 0;
 //        }
 
+        if (can_reset) {
+            can_reset = false;
+
+            accCount = 1;
+            wrongCount = 0;
+            emptyAccuracy = 0;
+        }
+
     }
 
     public void reset() {
 
-        accCount = 1;
-        wrongCount = 0;
-        emptyAccuracy = 0;
+        can_reset = true;
 
     }
 

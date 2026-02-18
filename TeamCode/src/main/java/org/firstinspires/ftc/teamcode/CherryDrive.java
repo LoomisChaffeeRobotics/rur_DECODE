@@ -149,16 +149,6 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 
     }
     @Override
-    public void init_loop() {
-        if (gamepad1.aWasPressed()) {
-            isRed = true;
-        } else if (gamepad1.yWasPressed()) {
-            isRed = false;
-        }
-        telemetry.addLine("Hit A if red, Y if blue");
-        telemetry.addData("isRed: ", isRed);
-    }
-    @Override
     public void start() {
         indexClass.intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }

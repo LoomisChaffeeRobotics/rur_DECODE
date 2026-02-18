@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -13,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Indexer;
 import org.firstinspires.ftc.teamcode.Launcher;
 import org.firstinspires.ftc.teamcode.LimeLightTurretSystem;
@@ -27,6 +29,8 @@ import java.util.List;
 @Autonomous
 public class BlueAutoClassBack extends OpMode {
     public List<LLResultTypes.FiducialResult> results;
+    FtcDashboard dash = FtcDashboard.getInstance();
+    Telemetry t2 = dash.getTelemetry();
     DcMotor intake;
     Servo flipper;
     LimeLightTurretSystem limelightclass;
@@ -47,9 +51,10 @@ public class BlueAutoClassBack extends OpMode {
     Pose pickupPose1 = new Pose (42.20,35.27, Math.PI); //this is the one that changes
     Pose intakePose1 = new Pose(11.44, 35.27, Math.PI);//this too
 
+
     Pose controlPoint2 = new Pose(58.80,58.5278,Math.PI);
-    Pose pickupPose2 = new Pose (42.5,58.37, Math.PI);
-    Pose intake2Pose = new Pose(9.137, 61.092735, Math.PI);
+    Pose pickupPose2 = new Pose (42.55,58.37, Math.PI);
+    Pose intake2Pose = new Pose(11.44, 58.37, Math.PI);
     Pose controlPoint3 = new Pose(64.5429, 54.37311, Math.PI);
 
     Pose leavePose = new Pose(56.34, 33.55, Math.toRadians(90));
@@ -121,9 +126,9 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 1:
-                if (actionTimer.getElapsedTime() > 5576.7) {//time for turret to spin up - change
+                if (actionTimer.getElapsedTime() > 1476.7) {//time for turret to spin up - change
 
-                    flipper.setPosition(0);
+                    flipper.setPosition(0.4694);
                     actionTimer.resetTimer();
                     shootingState = 2;
                 }
@@ -131,7 +136,7 @@ public class BlueAutoClassBack extends OpMode {
 
             case 2:
                 if (actionTimer.getElapsedTime() > 676.7) {//time for flipper to finish going up
-                    flipper.setPosition(0.3778);
+                    flipper.setPosition(0.8117);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 3;
@@ -139,7 +144,7 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 3:
-                if (actionTimer.getElapsedTime() > 700) { //time for flipper to move down
+                if (actionTimer.getElapsedTime() > 700) { //time for flipper to move down ???
                     turningthing.turnBasedOffColor(patternArray[1]);
                     launcher.shoot(shootingDistance);
                     actionTimer.resetTimer();
@@ -148,8 +153,8 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 4:
-                if (actionTimer.getElapsedTime() >5776.7) { // time to let indexer turn
-                    flipper.setPosition(0);
+                if (actionTimer.getElapsedTime() >1476.7) { // time to let indexer turn
+                    flipper.setPosition(0.4694);
                     actionTimer.resetTimer();
                     shootingState = 5;
                 }
@@ -157,7 +162,7 @@ public class BlueAutoClassBack extends OpMode {
 
             case 5:
                 if (actionTimer.getElapsedTime() > 676.7) { //time to flipper go up
-                    flipper.setPosition(0.3778);
+                    flipper.setPosition(0.8117);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 6;
@@ -173,8 +178,8 @@ public class BlueAutoClassBack extends OpMode {
                 break;
 
             case 7:
-                if (actionTimer.getElapsedTime() > 5776.7) { //indexer turn itme
-                    flipper.setPosition(0);
+                if (actionTimer.getElapsedTime() > 1476.7) { //indexer turn itme
+                    flipper.setPosition(0.4694);
                     turningthing.removefirst(turningthing.SensedColorAll);
                     actionTimer.resetTimer();
                     shootingState = 8;
@@ -183,7 +188,7 @@ public class BlueAutoClassBack extends OpMode {
 
             case 8:
                 if (actionTimer.getElapsedTime() > 676.7) { //flipper down time
-                    flipper.setPosition(0.3778);
+                    flipper.setPosition(0.8117);
                     isShooting = false;
                     shootingState = 9;
                 }
@@ -196,67 +201,62 @@ public class BlueAutoClassBack extends OpMode {
             //it can also be used to get the X value of the robot's position
             //IE: if(follower.getPose().getX() > 36) {}
             case 0:
-                intake.setPower(-0.5);
-                follower.followPath(scorePreload, true);
-                launcher.shoot(3.1);
+                pathTimer.resetTimer();
                 setPathState(1);
                 break;
             case 1:
-                if (!follower.isBusy()) {
-                    startShooting(3.1);
+                if (pathTimer.getElapsedTime() > 100) {
+                    intake.setPower(-0.5);
+                    follower.followPath(scorePreload, true);
+                    launcher.shoot(3.1);
                     setPathState(2);
                 }
                 break;
             case 2:
-                if (shootingState == 9) {
-                    launcher.shoot(0);
-                    intake.setPower(0);
-                    follower.followPath(pickup1, true);
+                if (!follower.isBusy()) {
+                    startShooting(3.1);
                     setPathState(3);
                 }
                 break;
             case 3:
-                if (!follower.isBusy()){
-                    intake.setPower(-1);
-                    follower.followPath(intake1, 0.3, true);
-
+                if (shootingState == 9) {
+                    launcher.shoot(0);
+                    intake.setPower(0);
+                    follower.followPath(pickup1, true);
                     setPathState(4);
                 }
                 break;
             case 4:
-                if (!follower.isBusy()) {
-                    launcher.shoot(3.1);
-                    intake.setPower(0);
-                    follower.followPath(launch1, true);
+                if (!follower.isBusy()){
+                    intake.setPower(-1);
+                    follower.followPath(intake1, 0.3, true);
+
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
-                    intake.setPower(-0.5);
-                    startShooting(3.1);
+                    launcher.shoot(3.1);
+                    intake.setPower(0);
+                    follower.followPath(launch1, true);
                     setPathState(6);
                 }
                 break;
             case 6:
-                if (shootingState == 9) {
-                    intake.setPower(0);
-                    follower.followPath(leave, true);
+                if (!follower.isBusy()) {
+                    intake.setPower(-0.5);
+                    startShooting(3.1);
                     setPathState(7);
                 }
                 break;
-////
-//            case 7:
-//                if (!follower.isBusy()) {
 //
-//                    intake.setPower(-0.5);
-////                    shootingMacro(limelightclass.getDistance_from_apriltag(true));
-//                    startShooting(1.2);
-//
-////                    follower.followPath(leave1);
-//                    setPathState(8);
-//                }
-//                break;
+            case 7:
+                if (shootingState == 9) {
+                    intake.setPower(0);
+                    follower.followPath(leave, true);
+                    setPathState(8);
+                }
+                break;
 //            case 8:
 //                if (shootingState == 9) {
 //                    launcher.shoot(0);
@@ -351,6 +351,13 @@ public class BlueAutoClassBack extends OpMode {
         shootingUpdate();
 //        limelightclass.turntoAT(20);
         autoUpdate();
+        t2.addData("path state", pathState);
+        t2.addData("shooting state", shootingState);
+        t2.addData("roboX", follower.getPose().getX());
+        t2.addData("roboY", follower.getPose().getY());
+        t2.addData("robot heading", follower.getPose().getHeading());
+        t2.addData("SensedCOlorAll", turningthing.SensedColorAll);
+        t2.update();
         telemetry.addData("path state", pathState);
         telemetry.addData("Hue value", turningthing.hsvValues1[0]);
         telemetry.addData("patterna rray", Arrays.toString(patternArray));

@@ -16,9 +16,9 @@ public class Launcher {
     public double MotorVelocity;
     public DcMotorEx launcher2;
     public DcMotorEx launcher;
-    public static double launcherF = 7;
-    public static double launcherP = 50;
-    public static double launcherI = 1;
+    public static double launcherF = 14;
+    public static double launcherP = 100.67;
+    public static double launcherI = 0.03;
     public static double launcherD = 0;
     public PIDFCoefficients launcherPIDF;
 
@@ -89,8 +89,8 @@ public class Launcher {
         double scale = (7.0/15.0);
         // If interpolation hasn't run yet return false or 0 = 0
         if (upper_motor_interporation_result == 0 && lower_motor_interporation_result == 0) return false;
-        return Math.abs(upperVel - upper_motor_interporation_result * scale) < 40
-                && Math.abs(lowerVel - lower_motor_interporation_result * scale) < 40;
+        return Math.abs(upperVel - (upper_motor_interporation_result * scale)) < 67
+                && Math.abs(lowerVel - (lower_motor_interporation_result * scale)) < 67;
     }
 
 
