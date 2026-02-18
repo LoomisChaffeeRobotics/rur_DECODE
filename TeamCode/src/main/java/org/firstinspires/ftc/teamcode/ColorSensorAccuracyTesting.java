@@ -41,7 +41,7 @@ public class ColorSensorAccuracyTesting extends OpMode {
             emptyAccuracy = 0;
         }
 
-        if (emptyAccuracy > .8 && wrongCount > 100) {
+        if (emptyAccuracy > .8 && wrongCount > 60) {
 
             accCount = 0;
             wrongCount = 0;

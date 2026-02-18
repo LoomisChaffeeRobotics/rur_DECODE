@@ -307,7 +307,7 @@ public class Indexer {
 
                 // CHECK TO MAKE SURE THE FOLLOWING WORKS:
 
-                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 100) {
+                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 60) {
                     coloracc.reset();
                     SensedColorAll.set(0, SensedColor.NEITHER);
                 }

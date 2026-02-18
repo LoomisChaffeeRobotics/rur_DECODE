@@ -11,7 +11,13 @@ public class ColorSensorAccuracyClass {
     public double emptyAccuracy = 0;
     public double accCount = 1;
     public double wrongCount = 0;
+
+    public double new_wrong = 0;
     boolean can_reset = false;
+
+    int test_wrong = 0;
+
+    public boolean[] lastWrongArray = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -19,15 +25,42 @@ public class ColorSensorAccuracyClass {
         indexClass.init(hardwareMap, telemetry);
     }
 
+    void update_wrong_array() {
+
+        test_wrong = 0;
+
+        for (int i = 0; i < 124; ++i) {
+
+            lastWrongArray[i] = lastWrongArray[i + 1];
+
+            if (lastWrongArray[i]) {
+                test_wrong++;
+            }
+
+        }
+
+        lastWrongArray[124] = false;
+
+        wrongCount = test_wrong;
+
+    }
+
 
     public void update() {
 
+
+
         if (!indexClass.indexer_is_moving) {
-            accCount++;
+            if (accCount >= 125) {update_wrong_array();}
+            else {accCount++;}
             //        indexClass.sensecolor();
             if (indexClass.sensecolor() == 0 && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
                 wrongCount++;
+
+                lastWrongArray[(int)accCount-1] = true;
+
             }
+            else {lastWrongArray[(int)accCount-1] = false;}
 
             emptyAccuracy = wrongCount / accCount;
         }
