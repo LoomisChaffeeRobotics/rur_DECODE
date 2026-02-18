@@ -348,7 +348,11 @@ public class Indexer {
                 light.setPosition(0.500);
             }
         } else {
-            light.setPosition(0);
+            if (turretGood && Math.abs(error) < 100){
+                light.setPosition(0.333);
+            } else {
+                light.setPosition(0);
+            }
         }
 
     }
