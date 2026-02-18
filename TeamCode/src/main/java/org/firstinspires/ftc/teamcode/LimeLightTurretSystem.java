@@ -75,8 +75,8 @@ public class LimeLightTurretSystem {
         limelight.start();
         // so botpose is never null
         botpose = new Pose3D(new Position(), new YawPitchRollAngles(AngleUnit.DEGREES,0,0,0,0));
-        turretControl = new PIDFController(new PIDFCoefficients(0.02, 0, 0, 0.00));
-        turretFineControl = new PIDFController(new PIDFCoefficients(0.05,0, 0.0002, 0));
+        turretControl = new PIDFController(new PIDFCoefficients(0.05, 0, 0.002, 0.00));
+        turretFineControl = new PIDFController(new PIDFCoefficients(0.05,0, 0.002, 0));
         turretControl.setTargetPosition(0);
         turretFineControl.setTargetPosition(0);
 
