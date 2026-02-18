@@ -36,9 +36,9 @@ public class SFA3BTClass extends OpMode {
     public static double SFKi = 0;
     public static double SFKd = 0.0;
     public static double TXKf = 0;
-    public static double TXKp = 0.05;
+    public static double TXKp = 0.04;
     public static double TXKi = 0;
-    public static double TXKd = 0.0002;
+    public static double TXKd = 0.001;
     FtcDashboard dash = FtcDashboard.getInstance();
     Telemetry t2 = dash.getTelemetry();
 
@@ -87,7 +87,7 @@ public class SFA3BTClass extends OpMode {
         limelight.update(true);
         limelight.turretControl.setCoefficients(new PIDFCoefficients(SFKp, SFKi, SFKd, SFKf));
         limelight.turretFineControl.setCoefficients(new PIDFCoefficients(TXKp, TXKi, TXKd, TXKf));
-        limelight.turntoAT(true);
+        double thing = limelight.turntoAT(true);
 
         t2.addData("encoder postiton", limelight.encoder.getCurrentPosition());
         t2.addData("turret power", limelight.turretSpin.getPower());
@@ -96,7 +96,10 @@ public class SFA3BTClass extends OpMode {
         t2.addData("current thing", limelight.limelight.getLatestResult().getTx());
         t2.addData("turret pos", limelight.turretPosition);
         t2.addData("heading", -limelight.roboPoseRelativeToAT.h - Math.toDegrees(Math.atan(limelight.roboPoseRelativeToAT.x/limelight.roboPoseRelativeToAT.y)));
+        t2.addData("thing", thing);
         telemetry.addData("atseen", limelight.ATSeen);
+        telemetry.addData("pos", limelight.turretControl.getTargetPosition());
+        telemetry.addData("pos", limelight.turretPosition);
         t2.update();
 
         fieldCentricDriving();
