@@ -7,23 +7,22 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class ColorSensorAccuracyClass {
 
 
-    Indexer indexClass;
+//    Indexer indexClass;
     public double emptyAccuracy = 0;
     public double accCount = 1;
     public double wrongCount = 0;
 
     public double new_wrong = 0;
-    boolean can_reset = false;
+    public boolean can_reset = false;
 
     int test_wrong = 0;
 
     public boolean[] lastWrongArray = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
 
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        indexClass = new Indexer();
-        indexClass.init(hardwareMap, telemetry);
-    }
+//    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+//        indexClass = new Indexer();
+//    }
 
     void update_wrong_array() {
 
@@ -46,7 +45,7 @@ public class ColorSensorAccuracyClass {
     }
 
 
-    public void update() {
+    public void update(int indexColorVal, int listColorVal) {
 
         if (can_reset) {
             can_reset = false;
@@ -56,21 +55,21 @@ public class ColorSensorAccuracyClass {
             emptyAccuracy = 0;
         }
 
-        if (!indexClass.indexer_is_moving) {
-//            if (accCount >= 125) {update_wrong_array();}
-//            else {accCount++;}
-            accCount++;
+//        if (!indexClass.indexer_is_moving) {
+            if (accCount >= 125) {update_wrong_array();}
+            else {accCount++;}
+//            accCount++;
             //        indexClass.sensecolor();
-            if (indexClass.sensecolor() == Indexer.SensedColor.NEITHER && indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER) {
+            if (indexColorVal == 0 && listColorVal != 0) {
                 wrongCount++;
 
-//                lastWrongArray[(int)accCount-1] = true;
+                lastWrongArray[(int)accCount-1] = true;
 
             }
-//            else {lastWrongArray[(int)accCount-1] = false;}
+            else {lastWrongArray[(int)accCount-1] = false;}
 
             emptyAccuracy = wrongCount / accCount;
-        }
+//        }
 
 //        telemetry.addData("confidence % that front ball is empty", Math.round(emptyAccuracy * 10000)/100);
 //        telemetry.update();

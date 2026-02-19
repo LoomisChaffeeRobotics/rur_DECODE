@@ -35,7 +35,7 @@ public class LauncherMotorSpeedTestingClass extends OpMode {
     @Override
     public void init() {
         coloracc = new ColorSensorAccuracyClass();
-        coloracc.init(hardwareMap, telemetry);
+//        coloracc.init(hardwareMap, telemetry);
         indexClass = new Indexer();
         indexClass.init(hardwareMap, telemetry);
         flipper = hardwareMap.get(Servo.class, "flipper");
@@ -51,7 +51,7 @@ public class LauncherMotorSpeedTestingClass extends OpMode {
 
         indexClass.sensecolor();
 
-        coloracc.update();
+//        coloracc.update();
 
         launcherPIDF = new PIDFCoefficients(Launcher.launcherP, Launcher.launcherI, Launcher.launcherD, Launcher.launcherF);
         top_motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, launcherPIDF);

@@ -70,7 +70,7 @@ public class SFA3BTClass extends OpMode {
     @Override
     public void loop() {
 
-        limelight.updateAuto(true);
+        limelight.update(true);
         limelight.turretControl.setCoefficients(new PIDFCoefficients(SFKp, SFKi, SFKd, SFKf));
         limelight.turretFineControl.setCoefficients(new PIDFCoefficients(TXKp, TXKi, TXKd, TXKf));
         double thing = limelight.turntoAT(true);

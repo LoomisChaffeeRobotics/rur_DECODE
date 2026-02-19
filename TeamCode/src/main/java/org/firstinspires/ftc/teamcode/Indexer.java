@@ -264,7 +264,7 @@ public class Indexer {
         limelightclass.init(hardwareMap, telemetry);
         imu = hardwareMap.get(IMU.class, "imu2");
         coloracc = new ColorSensorAccuracyClass();
-
+//        coloracc.init(hardwareMap, telemetry, );
         indexer = hardwareMap.get(CRServo.class, "indexer");
         colorSensor1 = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         intake = hardwareMap.get(DcMotor.class, "intake");
@@ -279,7 +279,7 @@ public class Indexer {
         light = hardwareMap.get(Servo.class,"light");
 
     }
-    public SensedColor sensecolor() { //must be run at all times. Senses the color
+    public int sensecolor() { //must be run at all times. Senses the color
         colors1 = colorSensor1.getNormalizedColors();
 
         colorSensor1.setGain(gain);
@@ -292,7 +292,7 @@ public class Indexer {
                 }
 
                 SensedColorAll.set(0, SensedColor.GREEN);
-                return SensedColor.GREEN;
+                return 1;
             } else if (hsvValues1[0] >= 200 && hsvValues1[0] <= 290) { //MUST BE CHANGED ASAPPPPPPPPP // UPDATED 1/29 TO EMMA'S NUMBERS
 
                 if (SensedColorAll.get(0) != SensedColor.PURPLE) {
@@ -303,7 +303,7 @@ public class Indexer {
                 SensedColorAll.set(0, SensedColor.PURPLE);
 
 
-                return SensedColor.PURPLE;
+                return 2;
             }
             else {
 
@@ -313,13 +313,13 @@ public class Indexer {
 
                 // CHECK TO MAKE SURE THE FOLLOWING WORKS:
 
-                if (coloracc.emptyAccuracy > 0.8 && coloracc.accCount > 100) {
+                if (coloracc.emptyAccuracy > 0.85 && coloracc.accCount > 50) {
                     coloracc.reset();
                     reset_times++;
                     SensedColorAll.set(0, SensedColor.NEITHER);
                 }
 
-                return SensedColor.NEITHER;
+                return 0;
             }
 
 //            } else {

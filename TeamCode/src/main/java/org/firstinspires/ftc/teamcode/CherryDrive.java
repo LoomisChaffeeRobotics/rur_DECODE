@@ -25,8 +25,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     //name of indexer is indexer
     //uncomment out the stuff later
 
-    FtcDashboard dash = FtcDashboard.getInstance();
-    Telemetry t2 = dash.getTelemetry();
+//    FtcDashboard dash = FtcDashboard.getInstance();
+//    Telemetry t2 = dash.getTelemetry();
 
 
 
@@ -92,8 +92,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         indexClass.init(hardwareMap, telemetry);
         launchClass = new Launcher();
         launchClass.init(hardwareMap, telemetry);
-        coloracc = new ColorSensorAccuracyClass();
-        coloracc.init(hardwareMap,telemetry);
+        coloracc = indexClass.coloracc;
+//        coloracc.init(hardwareMap,telemetry);
 //        launcherLegacy = new LauncherLegacy();
 //        launcherLegacy.init(hardwareMap, telemetry);
         //Setting the motors
@@ -154,9 +154,12 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
         startdepressed = gamepad2.start;
         limeLightTurretSystem.update(!isRed);
-        if (!indexClass.indexer_is_moving) {
+        if (Math.abs(indexClass.error) < 1500) {
             indexClass.sensecolor();
-            coloracc.update();
+            coloracc.update(indexClass.sensecolor(),
+                    (indexClass.SensedColorAll.get(0) == Indexer.SensedColor.GREEN ? 1 :
+                            (indexClass.SensedColorAll.get(0) == Indexer.SensedColor.PURPLE? 2 : 0))
+            );
         }
 
 //        telemetry.addData("motor up speed", launcher2.getVelocity());
@@ -166,12 +169,13 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
         telemetry.addData("NEITHER sense confidence %", coloracc.emptyAccuracy);
         telemetry.addData("NEITHER sense count", coloracc.wrongCount);
-        telemetry.addData("oldest color accuracy val", coloracc.lastWrongArray[0]);
-        telemetry.addData("newest color accuracy val", coloracc.lastWrongArray[124]);
-        telemetry.addData("reset times", indexClass.reset_times);
+//        telemetry.addData("oldest color accuracy val", coloracc.lastWrongArray[0]);
+//        telemetry.addData("newest color accuracy val", coloracc.lastWrongArray[124]);
+//        telemetry.addData("reset times", indexClass.reset_times);
+        telemetry.addData("can reset", coloracc.can_reset);
 //        telemetry.addData("is list not neither", indexClass.SensedColorAll.get(0) != Indexer.SensedColor.NEITHER);
-        telemetry.addData("Atseen", limeLightTurretSystem.ATSeen);
-        telemetry.addData("index", limeLightTurretSystem.index);
+//        telemetry.addData("Atseen", limeLightTurretSystem.ATSeen);
+//        telemetry.addData("index", limeLightTurretSystem.index);
 //        telemetry.addData("flipper", flipperUp.getElapsedTime());
 //        telemetry.addData("resuurretSystem.getDistance_from_apriltag(true))[0]);
 //        telemetry.addData("result 1",launchClass.find_closest_x(limeLightTurretSystem.getDistance_from_apriltag(true))[1]);
@@ -262,13 +266,13 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
         telemetry.addData("error", indexClass.error);
 
-        t2.addData("inner cur velo", launchClass.launcher.getVelocity());
-        t2.addData("outer cur velo", launchClass.launcher2.getVelocity());
-        t2.addData("inner targ velo", launchClass.lower_motor_interporation_result * (7.0/15.0));
-        t2.addData("outer targ velo", launchClass.upper_motor_interporation_result* (7.0/15.0));
-        t2.addData("indexerpos", indexClass.intake.getCurrentPosition());
-        t2.addData("indexertargpos", indexClass.targetPosition);
-        t2.update();
+//        t2.addData("inner cur velo", launchClass.launcher.getVelocity());
+//        t2.addData("outer cur velo", launchClass.launcher2.getVelocity());
+//        t2.addData("inner targ velo", launchClass.lower_motor_interporation_result * (7.0/15.0));
+//        t2.addData("outer targ velo", launchClass.upper_motor_interporation_result* (7.0/15.0));
+//        t2.addData("indexerpos", indexClass.intake.getCurrentPosition());
+//        t2.addData("indexertargpos", indexClass.targetPosition);
+//        t2.update();
         telemetry.update();
 
     }
@@ -334,7 +338,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         double flipDown = 0.8117;
         double flipUP = 0.42; //monday feb 16th values
         flipper.setPosition(up? flipUP : flipDown);
-        telemetry.addData("flipper upness: ", up);
+//        telemetry.addData("flipper upness: ", up);
     }
     public void turnSpinner(boolean direction) {
         indexClass.sensecolor();
@@ -350,7 +354,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         else {
             indexClass.turnBasedOffColor(color);
         }
-        telemetry.addData("color switched: ", color);
+//        telemetry.addData("color switched: ", color);
         return false;
     }
     public void autoTurn(){ // Done?
