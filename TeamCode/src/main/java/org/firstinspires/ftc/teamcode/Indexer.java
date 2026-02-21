@@ -78,6 +78,8 @@ public class Indexer {
     public double prevRotationRate = 0;
     public double power;
 
+    public int shift_queue = 0;
+
     public Servo light = null;
 
     public boolean indexer_is_moving = false;
@@ -151,6 +153,23 @@ public class Indexer {
         indexer_is_moving = absError >= 100;
 
 
+        if (Math.abs(error) < 1800 && shift_queue != 0) {
+
+            if (shift_queue > 0) {
+
+                shift_list(SensedColorAll, false);
+                shift_queue--;
+
+            }
+            else {
+                shift_list(SensedColorAll, true);
+                shift_queue++;
+            }
+
+
+        }
+
+
         panlesTelem.addData("product: ", indexerP);
         panlesTelem.addData("sum: ", indexerI);
         panlesTelem.addData("derivitive: ", indexerD);
@@ -192,12 +211,16 @@ public class Indexer {
 
         if (direction) {
             targetPosition += 8192/3;
-            shift_list(SensedColorAll, !direction);
+            shift_queue++;
+//            shift_list(SensedColorAll, !direction);
 
         } else {
             targetPosition -= 8192/3;
-            shift_list(SensedColorAll, !direction);
+            shift_queue--;
+//            shift_list(SensedColorAll, !direction);
         }
+
+
 
 //        if (Math.abs((intake.getCurrentPosition() % 8192/3) - (8192/3)) > 50 || unitsTraveled < 30) {
 //            unitsTraveled++;
@@ -313,7 +336,7 @@ public class Indexer {
 
                 // CHECK TO MAKE SURE THE FOLLOWING WORKS:
 
-                if (coloracc.emptyAccuracy > 0.85 && coloracc.accCount > 50) {
+                if (coloracc.emptyAccuracy > 0.95 && coloracc.accCount > 60) {
                     coloracc.reset();
                     reset_times++;
                     SensedColorAll.set(0, SensedColor.NEITHER);

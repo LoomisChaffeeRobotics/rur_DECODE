@@ -92,7 +92,7 @@ public class BlueAutoClassFront extends OpMode {
                 .build();
         intake2chain = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose2, intake2))
-                .setConstantHeadingInterpolation(Math.PI)
+                .setConstantHeadingInterpolation(pickupPose2.getHeading())
                 .addParametricCallback(0.35, () -> turningthing.turn(true))
                 .addParametricCallback(0.65, () -> turningthing.turn(true))
                 

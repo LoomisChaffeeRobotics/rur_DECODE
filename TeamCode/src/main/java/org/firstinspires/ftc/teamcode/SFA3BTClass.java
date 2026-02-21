@@ -84,8 +84,9 @@ public class SFA3BTClass extends OpMode {
         t2.addData("heading", -limelight.roboPoseRelativeToAT.h - Math.toDegrees(Math.atan(limelight.roboPoseRelativeToAT.x/limelight.roboPoseRelativeToAT.y)));
         t2.addData("thing", thing);
         telemetry.addData("atseen", limelight.ATSeen);
-        telemetry.addData("pos", limelight.turretControl.getTargetPosition());
+        telemetry.addData("postarg", limelight.turretControl.getTargetPosition());
         telemetry.addData("pos", limelight.turretPosition);
+        telemetry.addData("thing", thing);
         t2.update();
 
         fieldCentricDriving();

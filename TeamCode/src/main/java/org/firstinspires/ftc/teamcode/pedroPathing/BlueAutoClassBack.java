@@ -75,7 +75,7 @@ public class BlueAutoClassBack extends OpMode {
 
         intake1 = follower.pathBuilder()
                 .addPath(new BezierLine(pickupPose1, intakePose1))
-                .setConstantHeadingInterpolation(Math.PI)
+                .setConstantHeadingInterpolation(pickupPose1.getHeading())
                 .addParametricCallback(0.25, () -> turningthing.turn(true)) //adjust these t values when needed
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
                 .build();
@@ -93,7 +93,7 @@ public class BlueAutoClassBack extends OpMode {
                 .build();
         intake2 = follower.pathBuilder()
                 .addPath(new BezierCurve(pickupPose2, intake2Pose))
-                .setConstantHeadingInterpolation(Math.PI)
+                .setConstantHeadingInterpolation(pickupPose2.getHeading())
                 .addParametricCallback(0.3, () -> turningthing.turn(true))
                 .addParametricCallback(0.6, () -> turningthing.turn(true))
 

@@ -63,7 +63,7 @@ public class LauncherMotorSpeedTestingClass extends OpMode {
 //            leftFront.setPower(gamepad1.left_stick_y);
         }
         if (gamepad1.b) {
-            flipper.setPosition(0.4694); // up
+            flipper.setPosition(0.42); // up
 //            leftRear.setPower(gamepad1.left_stick_y);
         }
         if (gamepad1.dpad_up) {

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
@@ -94,16 +96,17 @@ public class LimeLightTurretSystem {
     public double turntoAT(boolean isBlue) { //COMPLETE RE-DO USING SFA3B!!!!!
 
         List<LLResultTypes.FiducialResult> results = result.getFiducialResults();
-        turretFineControl.setTargetPosition(0);
+        double distance = getDistance_from_apriltag(isBlue);
+        turretFineControl.setTargetPosition(distance>2.74? 5: 0);
         turretControl.setTargetPosition(-roboPoseRelativeToAT.h - Math.toDegrees(Math.atan(roboPoseRelativeToAT.x/roboPoseRelativeToAT.y)));
 
-        if(index != -1 && Math.signum(results.get(index).getTargetXDegrees()) * turretPosition > -60 ){
+        if(index != -1 && Math.signum(results.get(index).getTargetXDegrees()) * turretPosition > -60){
             turretFineControl.updatePosition(results.get(index).getTargetXDegrees());
             turretSpin.setPower(turretFineControl.run());
             return results.get(index).getTargetXDegrees();
-        } else if (Math.abs(roboPoseRelativeToAT.h + Math.toDegrees(Math.atan(roboPoseRelativeToAT.x/roboPoseRelativeToAT.y))) < 60) {
-            turretControl.updatePosition(turretPosition );
-            turretSpin.setPower(turretControl.run());
+//        } else if (Math.abs(roboPoseRelativeToAT.h + Math.toDegrees(Math.atan(roboPoseRelativeToAT.x/roboPoseRelativeToAT.y))) < 60) {
+//            turretControl.updatePosition(turretPosition);
+//            turretSpin.setPower(turretControl.run());
         } else{
             turretSpin.setPower(0);
         }
@@ -111,7 +114,10 @@ public class LimeLightTurretSystem {
     }
 
     public void turnToNotAT(double power){
-        turretSpin.setPower(power);
+        turretPosition = encoder.getCurrentPosition() * -0.00877192982456;
+        turretControl.setTargetPosition(0);
+        turretControl.updatePosition(turretPosition);
+        turretSpin.setPower(turretControl.run());
     }
 
     public boolean updateAuto(boolean isBlue){ /// RUN THIS AT THE START OF EVERY LOOP!!!!!!!!
@@ -171,14 +177,12 @@ public class LimeLightTurretSystem {
 
         return (index != -1);
     }
+
     public double getDistance_from_apriltag(boolean isBlue) {
         //BLUEEEEEEEEE
-        positionrelativetoapriltag = new Position(DistanceUnit.METER, botpose.getPosition().x + 1.482,botpose.getPosition().y + (isBlue? 1.413: -1.413), 0, 0);
+        positionrelativetoapriltag = new Position(DistanceUnit.METER, roboPoseRelativeToAT.x,roboPoseRelativeToAT.y, 0, 0);
         distance_from_apriltag = Math.sqrt(Math.pow(positionrelativetoapriltag.x, 2)+Math.pow(positionrelativetoapriltag.y, 2));
-
-
-        angleerror = targetangle - botposeangle;
-        return distance_from_apriltag;
+        return (distance_from_apriltag - 10)/39.37;
     }
 
     /** returns degrees rotated clockwise in range [0,360).

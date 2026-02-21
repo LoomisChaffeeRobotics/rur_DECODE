@@ -154,7 +154,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
         startdepressed = gamepad2.start;
         limeLightTurretSystem.update(!isRed);
-        if (Math.abs(indexClass.error) < 1500) {
+        if (Math.abs(indexClass.error) < 400 || Math.abs(indexClass.error) > 2400) {
             indexClass.sensecolor();
             coloracc.update(indexClass.sensecolor(),
                     (indexClass.SensedColorAll.get(0) == Indexer.SensedColor.GREEN ? 1 :
@@ -165,6 +165,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
 //        telemetry.addData("motor up speed", launcher2.getVelocity());
 //        telemetry.addData("motor down speed", launcher.getVelocity());
 //        telemetry.addData("is indexer moving", indexClass.indexer_is_moving);
+        telemetry.addData("indexer shift queue", indexClass.shift_queue);
         telemetry.addData("sensed color", indexClass.hsvValues1[0]);
         telemetry.addData("SensedColorAll", indexClass.SensedColorAll);
         telemetry.addData("NEITHER sense confidence %", coloracc.emptyAccuracy);
@@ -200,8 +201,8 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
         if (gamepad2.dpad_up){ //reverse launcher gp2 DIP-DUP
-            launcher.setPower(-0.2);
-            launcher2.setPower(-0.2);
+            launcher.setPower(-0.25);
+            launcher2.setPower(-0.25);
         } else
 
 
