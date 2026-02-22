@@ -46,27 +46,27 @@ public class RedAutoClassFront extends OpMode {
     Pose launchPoseMain = new Pose(144-40.40340030911901,102.706336939721788, Math.toRadians(43));
     Pose launchPose1 = new Pose(144-45.40340030911901,97.706336939721788, Math.toRadians(96));
     Pose controlPoint1 = new Pose(144-66.7958,83.5325,0);
-    Pose pickupPose1 = new Pose (144-43.5,84.6, 0); //this is the one that changes
-    Pose intakePose1 = new Pose(144-18, 84.6, 0);//this too
+    Pose pickupPose1 = new Pose (144-43.5,83.1, 0); //this is the one that changes
+    Pose intakePose1 = new Pose(144-18, 83.1, 0);//this too
     Pose leavePose = new Pose(144-35.40340030911901, 127, Math.toRadians(90));
     Pose controlPoint2 = new Pose(144-68.80518,58.5278,0);
     Pose pickupPose2 = new Pose (144-42.5,60.09273570324575, 0);
-    Pose intake2 = new Pose(144-9.137, 60.092735,0);
+    Pose intake2 = new Pose(144-11.137, 60.092735,0);
     Pose controlPoint3 = new Pose(144-64.5429, 54.37311, 0);
     private Path detectAT, scorePreload, pickup1, launch1, leave1, pickup2, launch2;
     private PathChain intake1chain, launch1chain, pickup2chain, leavechain, launch2chain, intake2chain;
     public void buildPaths() {
 
         detectAT = new Path(new BezierCurve(startPose, detectPose));
-        detectAT.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(45));
+        detectAT.setLinearHeadingInterpolation(startPose.getHeading(), detectPose.getHeading());
 
         scorePreload = new Path(new BezierCurve(detectPose, launchPoseMain));
-        scorePreload.setLinearHeadingInterpolation(Math.toRadians(65), Math.toRadians(137), 0.8);
+        scorePreload.setLinearHeadingInterpolation(detectPose.getHeading(), launchPoseMain.getHeading(), 0.8);
         pickup1 =  new Path(new BezierCurve(launchPoseMain, controlPoint1, pickupPose1));
-        pickup1.setLinearHeadingInterpolation(Math.toRadians(137), Math.toRadians(178));
+        pickup1.setLinearHeadingInterpolation(launchPoseMain.getHeading(), pickupPose1.getHeading());
 
         launch1 =  new Path(new BezierCurve(intakePose1, launchPoseMain));
-        launch1.setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(137));
+        launch1.setLinearHeadingInterpolation(intakePose1.getHeading(), launchPoseMain.getHeading());
 
         intake1chain = follower.pathBuilder()
                 .addPath(new BezierLine(pickupPose1, intakePose1))
@@ -80,7 +80,7 @@ public class RedAutoClassFront extends OpMode {
                 .build();
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
-        pickup2.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
+        pickup2.setLinearHeadingInterpolation(launchPoseMain.getHeading(), pickupPose2.getHeading());
 
         pickup2chain = follower.pathBuilder()
                 .addPath(pickup2)

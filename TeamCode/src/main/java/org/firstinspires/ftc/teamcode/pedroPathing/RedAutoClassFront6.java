@@ -25,7 +25,7 @@ import java.util.List;
 
 
 @Autonomous
-public class BlueAutoClassFront extends OpMode {
+public class RedAutoClassFront6 extends OpMode {
     public List<LLResultTypes.FiducialResult> results;
     DcMotor intake;
     Servo flipper;
@@ -41,32 +41,32 @@ public class BlueAutoClassFront extends OpMode {
     public Indexer.SensedColor[] patternArray = {
             Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE
     };
-    Pose startPose = new Pose(21.36630602782071,123.52395672333849, Math.toRadians(143)); //heading in radians
-    Pose detectPose = new Pose(34.7,107.7, Math.toRadians(45)); //to detect apriltag, same as launchposeMain but different heading
-    Pose launchPoseMain = new Pose(40.40340030911901,102.706336939721788, Math.toRadians(137));
-    Pose launchPose1 = new Pose(45.40340030911901,97.706336939721788, Math.toRadians(84));
-    Pose controlPoint1 = new Pose(66.7958,83.5325,Math.PI);
-    Pose pickupPose1 = new Pose (43.5,83.1, Math.PI); //this is the one that changes
-    Pose intakePose1 = new Pose(18, 83.1, Math.PI);//this too
-    Pose leavePose = new Pose(35.40340030911901, 127, Math.toRadians(90));
-    Pose controlPoint2 = new Pose(68.80518,58.5278,Math.PI);
-    Pose pickupPose2 = new Pose (42.5,60.09273570324575, Math.PI);
-    Pose intake2 = new Pose(9.137, 60.092735, Math.PI);
-    Pose controlPoint3 = new Pose(64.5429, 54.37311, Math.PI);
+    Pose startPose = new Pose(144-21.36630602782071,123.52395672333849, Math.toRadians(37)); //heading in radians
+    Pose detectPose = new Pose(144-34.7,107.7, Math.toRadians(135)); //to detect apriltag, same as launchposeMain but different heading
+    Pose launchPoseMain = new Pose(144-40.40340030911901,102.706336939721788, Math.toRadians(43));
+    Pose launchPose1 = new Pose(144-45.40340030911901,97.706336939721788, Math.toRadians(96));
+    Pose controlPoint1 = new Pose(144-66.7958,83.5325,0);
+    Pose pickupPose1 = new Pose (144-43.5,83.1, 0); //this is the one that changes
+    Pose intakePose1 = new Pose(144-18, 83.1, 0);//this too
+    Pose leavePose = new Pose(144-35.40340030911901, 127, Math.toRadians(90));
+    Pose controlPoint2 = new Pose(144-68.80518,58.5278,0);
+    Pose pickupPose2 = new Pose (144-42.5,60.09273570324575, 0);
+    Pose intake2 = new Pose(144-11.137, 60.092735,0);
+    Pose controlPoint3 = new Pose(144-64.5429, 54.37311, 0);
     private Path detectAT, scorePreload, pickup1, launch1, leave1, pickup2, launch2;
     private PathChain intake1chain, launch1chain, pickup2chain, leavechain, launch2chain, intake2chain;
     public void buildPaths() {
 
         detectAT = new Path(new BezierCurve(startPose, detectPose));
-        detectAT.setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(45));
+        detectAT.setLinearHeadingInterpolation(startPose.getHeading(), detectPose.getHeading());
 
         scorePreload = new Path(new BezierCurve(detectPose, launchPoseMain));
-        scorePreload.setLinearHeadingInterpolation(Math.toRadians(65), Math.toRadians(137), 0.8);
+        scorePreload.setLinearHeadingInterpolation(detectPose.getHeading(), launchPoseMain.getHeading(), 0.8);
         pickup1 =  new Path(new BezierCurve(launchPoseMain, controlPoint1, pickupPose1));
-        pickup1.setLinearHeadingInterpolation(Math.toRadians(137), Math.toRadians(178));
+        pickup1.setLinearHeadingInterpolation(launchPoseMain.getHeading(), pickupPose1.getHeading());
 
         launch1 =  new Path(new BezierCurve(intakePose1, launchPoseMain));
-        launch1.setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(137));
+        launch1.setLinearHeadingInterpolation(intakePose1.getHeading(), launchPoseMain.getHeading());
 
         intake1chain = follower.pathBuilder()
                 .addPath(new BezierLine(pickupPose1, intakePose1))
@@ -80,7 +80,7 @@ public class BlueAutoClassFront extends OpMode {
                 .build();
 
         pickup2 = new Path(new BezierCurve(launchPoseMain, controlPoint2, pickupPose2));
-        pickup2.setLinearHeadingInterpolation(Math.toRadians(137), Math.PI);
+        pickup2.setLinearHeadingInterpolation(launchPoseMain.getHeading(), pickupPose2.getHeading());
 
         pickup2chain = follower.pathBuilder()
                 .addPath(pickup2)
@@ -95,7 +95,7 @@ public class BlueAutoClassFront extends OpMode {
                 .setConstantHeadingInterpolation(pickupPose2.getHeading())
                 .addParametricCallback(0.35, () -> turningthing.turn(true))
                 .addParametricCallback(0.65, () -> turningthing.turn(true))
-                
+
                 .build();
 
         launch2 = new Path(new BezierCurve(intake2, controlPoint3, launchPoseMain));
@@ -215,7 +215,7 @@ public class BlueAutoClassFront extends OpMode {
                     pathTimer.resetTimer();
                     setPathState(2);
                 }
-                    break;
+                break;
             case 2:
                 if (pathTimer.getElapsedTime() > 200) {
                     intake.setPower(-1);
@@ -223,9 +223,9 @@ public class BlueAutoClassFront extends OpMode {
                     follower.followPath(scorePreload);
                     setPathState(3);
                 }
-                    break;
+                break;
             case 3:
-                    if (!follower.isBusy()){
+                if (!follower.isBusy()){
                     intake.setPower(-0.5);
                     limelightclass.limelight.close();
                     setPathState(4);
@@ -259,7 +259,7 @@ public class BlueAutoClassFront extends OpMode {
                     turningthing.SensedColorAll.set(0, Indexer.SensedColor.GREEN);
                     turningthing.SensedColorAll.set(1, Indexer.SensedColor.PURPLE);
                     turningthing.SensedColorAll.set(2, Indexer.SensedColor.PURPLE);
-                    intake.setPower(0);
+                    intake.setPower(-0.5);
                     startShooting(1.3);
 
                     setPathState(8);
@@ -267,41 +267,41 @@ public class BlueAutoClassFront extends OpMode {
                 break;
             case 8:
                 if (shootingState == 9) {
-                    follower.followPath(pickup2chain, true);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if (!follower.isBusy()) {
-                    intake.setPower(-1);
-                    follower.followPath(intake2chain, 0.5, true);
-                    setPathState(10);
-                }
-                break;
-            case 10:
-                if (!follower.isBusy()) {
-                    follower.followPath(launch2chain, true);
-                    intake.setPower(0.2);
-                    launcherTimer.resetTimer();
-                    setPathState(11);
-                }
-                break;
-            case 11:
-                if (launcherTimer.getElapsedTime() > 1676) {
-                    turningthing.SensedColorAll.set(0, Indexer.SensedColor.PURPLE);
-                    turningthing.SensedColorAll.set(1, Indexer.SensedColor.PURPLE);
-                    turningthing.SensedColorAll.set(2, Indexer.SensedColor.GREEN);
-                    intake.setPower(0);
-                    startShooting(1.3);
-                    setPathState(12);
-                }
-                break;
-            case 12:
-                if (shootingState == 9) {
                     follower.followPath(leavechain, true);
                     setPathState(-1);
                 }
                 break;
+//            case 9:
+//                if (!follower.isBusy()) {
+//                    intake.setPower(-1);
+//                    follower.followPath(intake2chain, 0.5, true);
+//                    setPathState(10);
+//                }
+//                break;
+//            case 10:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(launch2chain, true);
+//                    intake.setPower(0.2);
+//                    launcherTimer.resetTimer();
+//                    setPathState(11);
+//                }
+//                break;
+//            case 11:
+//                if (launcherTimer.getElapsedTime() > 1676) {
+//                    turningthing.SensedColorAll.set(0, Indexer.SensedColor.PURPLE);
+//                    turningthing.SensedColorAll.set(1, Indexer.SensedColor.PURPLE);
+//                    turningthing.SensedColorAll.set(2, Indexer.SensedColor.GREEN);
+//                    intake.setPower(0);
+//                    startShooting(1.3);
+//                    setPathState(12);
+//                }
+//                break;
+//            case 12:
+//                if (shootingState == 9) {
+//                    follower.followPath(leavechain, true);
+//                    setPathState(-1);
+//                }
+//                break;
 //            case 9:
 //                if (!follower.isBusy()) {
 //                    setPathState(-1);
@@ -341,7 +341,7 @@ public class BlueAutoClassFront extends OpMode {
     @Override
     public void loop() {
         if (pathState == 1 || pathState == 2) {
-            limelightclass.updateAuto(true);
+            limelightclass.updateAuto(false);
             results = limelightclass.result.getFiducialResults(); //might break
             if (results != null) {
                 for (LLResultTypes.FiducialResult result : results) {

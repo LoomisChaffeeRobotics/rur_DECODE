@@ -24,9 +24,9 @@ public class FlipperTestingClass extends OpMode{
 
     @Override
     public void loop() {
-        if(gamepad1.aWasPressed()){
+        if(gamepad1.a){
             turretSpin.setPosition(turretSpin.getPosition() +0.001);
-        } else if(gamepad1.bWasPressed()){
+        } else if(gamepad1.b){
             turretSpin.setPosition(turretSpin.getPosition() -0.001);
         } else {turretSpin.setPosition(turretSpin.getPosition());}
 

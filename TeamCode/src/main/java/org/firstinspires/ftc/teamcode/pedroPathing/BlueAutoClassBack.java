@@ -49,7 +49,7 @@ public class BlueAutoClassBack extends OpMode {
             Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN
     };
     Pose startPose = new Pose(56,11, Math.toRadians(90)); //heading in radians
-    Pose launchPoseMain = new Pose(54.22,17.72, Math.toRadians(115));
+    Pose launchPoseMain = new Pose(54.22,17.72, Math.toRadians(112));
     Pose controlPoint1 = new Pose(56.46,37.98,Math.PI);
     Pose pickupPose1 = new Pose (42.20,37.77, Math.PI); //this is the one that changes
     Pose intakePose1 = new Pose(8.44, 37.77, Math.PI);//this too

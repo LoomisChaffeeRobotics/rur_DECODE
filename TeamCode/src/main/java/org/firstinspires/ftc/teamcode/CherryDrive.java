@@ -215,7 +215,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
         }
 
         //  FLIPPER - gp2 RT
-        if (gamepad2.right_trigger > 0.2 && Math.abs(indexClass.error) < 200 && launchClass.checkIfSpunUp()){
+        if (gamepad2.right_trigger > 0.2 && ((Math.abs(indexClass.error) < 200 && launchClass.checkIfSpunUp()) || flipperUp.getElapsedTime() <= 10)){
             flipperUp.resetTimer();
             flipper(true);
             indexClass.removefirst(indexClass.SensedColorAll);
@@ -336,7 +336,7 @@ public class CherryDrive extends OpMode { //this clas is called CherryDrive beca
     public void flipper(boolean up){ // Done!
         //flip
 
-        double flipDown = 0.8117;
+        double flipDown = 0.79;
         double flipUP = 0.42; //monday feb 16th values
         flipper.setPosition(up? flipUP : flipDown);
 //        telemetry.addData("flipper upness: ", up);

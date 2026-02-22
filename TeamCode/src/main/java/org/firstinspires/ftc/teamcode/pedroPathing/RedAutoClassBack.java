@@ -49,7 +49,7 @@ public class RedAutoClassBack extends OpMode {
             Indexer.SensedColor.PURPLE, Indexer.SensedColor.PURPLE, Indexer.SensedColor.GREEN
     };
     Pose startPose = new Pose(144-56,11, Math.toRadians(90)); //heading in radians
-    Pose launchPoseMain = new Pose(144-54.22,17.72, Math.toRadians(65));
+    Pose launchPoseMain = new Pose(144-54.22,17.72, Math.toRadians(73.5));
     Pose controlPoint1 = new Pose(144-56.46,37.98,0);
     Pose pickupPose1 = new Pose (144-42.20,37.77, 0); //this is the one that changes
     Pose intakePose1 = new Pose(144-8.44, 37.77, 0);//this too
@@ -247,7 +247,7 @@ public class RedAutoClassBack extends OpMode {
                 break;
             case 6:
                 if (launcherTimer.getElapsedTime() > 1300) {
-                    intake.setPower(0);
+                    intake.setPower(-0.5);
                     startShooting(3.5);
                     setPathState(7);
                 }
@@ -280,7 +280,7 @@ public class RedAutoClassBack extends OpMode {
                 break;
             case 10:
                 if (launcherTimer.getElapsedTime() > 1700) {
-                    intake.setPower(0);
+                    intake.setPower(-0.5);
                     startShooting(3.5);
                     setPathState(11);
                 }
